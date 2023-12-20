@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Picklist() {
   const [fields, setFields] = useState([]);
+  const [picklist, setPicklist] = useState([]);
   const formRef = useRef();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function Picklist() {
       body: JSON.stringify([...formData.entries()])
     })
       .then(resp => resp.json())
-      .then(data => console.log(data));
+      .then(picklist => setPicklist(picklist));
   }
 
   function Weights() {
@@ -48,6 +49,15 @@ export default function Picklist() {
         {/* TODO: add team exclusion */}
         <button>Reload Picklist</button>
       </form>
+      <table>
+        <tr><th>Team</th><th>Score</th></tr>
+        {picklist.map((teamData, index) => (
+          <tr key={index}>
+            <td>{teamData.team}</td>
+            <td>{teamData.score}</td>
+          </tr>
+        ))}
+      </table>
     </div>
   )
 }
