@@ -1,6 +1,6 @@
 ## Getting Started
 
-First, install the dependencies and run the development server:
+First, install the dependencies:
 
 ```bash
 npm install
@@ -38,6 +38,8 @@ VALUES
 (4, 'Scout 4', 7, 3, 4, 18, 1),
 (5, 'Scout 5', 8, 3, 5, 19, 1);
 ```
+
+Next, import your database passwords from vercel to your local machine (copy the .env.local file).
 
 Finally, execute the following command to run the code:
 
