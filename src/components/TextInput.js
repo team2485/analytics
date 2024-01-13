@@ -1,8 +1,8 @@
-export default function TextInput ({ inputName }) {
+export default function TextInput ({ visibleName, internalName }) {
     return (
         <div>
-            <label>{inputName}</label>
-            <input type="text"></input>
+            <label htmlFor={internalName}>{visibleName}</label>
+            <input type="text" id={internalName}></input>
         </div>
     )
 }
