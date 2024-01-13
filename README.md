@@ -9,16 +9,46 @@ npm install
 Next, set up the database on Vercel with test data.
 ```sql
 CREATE TABLE test_matches (
- id serial PRIMARY KEY,
- match INT,
- scout_name VARCHAR ( 255 ),
- scout_team INT,
- team INT,
- auto_score INT,
- tele_score INT,
- maneuverability INT,
- comments VARCHAR ( 255 )
+   ID serial PRIMARY KEY,
+   ScoutName VARCHAR (255),
+   ScoutTeam INT,
+   Team INT,
+   Match INT,
+   Breakdown BOOLEAN,
+   NoShow BOOLEAN,
+   Leave BOOLEAN,
+   AutoAmpScored INT,
+   AutoAmpFailed INT,
+   AutoSpeakerScored INT,
+   AutoSpeakerFailed INT,
+   TeleAmpScored INT,
+   TeleAmpFailed INT,
+   TeleNAmpedSpeakerScored INT,
+   TeleAmpedSpeakerScored INT,
+   TeleSpeakerFailed INT,
+   EndLocation INT,
+   Harmony BOOLEAN,
+   TrapScored INT,
+   TrapFailed INT,
+   Maneuverability INT,
+   Aggression INT,
+   DefenseEvasion INT,
+   SpeakerSpeed INT,
+   AmplifierSpeed INT,
+   IntakeSpeed INT,
+   GndIntake BOOLEAN,
+   SrcIntake BOOLEAN,
+   StageHazard INT,
+   TrapSpeed INT,
+   OnStageSpeed INT,
+   HarmonySpeed INT,
+   GeneralComments VARCHAR (255),
+   BreakdownComments VARCHAR (255),
+   DefenseComments VARCHAR (255)
 );
+
+
+--INCORRECT CODE FOLLOWS... TODO:
 
 INSERT INTO test_matches (match, scout_name, scout_team, team, auto_score, tele_score, maneuverability)
 VALUES
