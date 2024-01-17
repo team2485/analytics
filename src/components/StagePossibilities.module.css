@@ -1,0 +1,4 @@
+.stagePossibilities {
+    display: flex;
+    flex-direction: column;
+}

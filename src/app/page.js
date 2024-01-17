@@ -8,10 +8,10 @@ import CommentBox from '@/components/CommentBox';
 
 export default function Home() {
   return (
-    <div>
+    <div className='scoutingForm'>
       <h1>Scouting Form</h1>
+      <Header headerName={"Match Info"}/>
         <div className='matchInfo'>
-          <Header headerName={"Match Info"}/>
           <TextInput visibleName={"Scout Name:"} internalName={"ScoutName"}/>
           <TextInput visibleName={"Team #:"} internalName={"TeamNum"}/>
           <TextInput visibleName={"Team # Scouted:"} internalName={"TeamNumScouted"}/>
@@ -21,21 +21,23 @@ export default function Home() {
         <div className='auto'>
           <Header headerName={"Auto"}/>
           <Checkbox visibleName={"Leave"} internalName={"Leave"}/>
-            <div className='autoNotes'>
-              <NumericInput visibleName={"Speaker Success"} internalName={"AutoSpeakerSuccess"}/>
-              <NumericInput visibleName={"Amp Success"} internalName={"AutoAmpSuccess"}/>
-              <NumericInput visibleName={"Speaker Fail"} internalName={"AutoSpeakerFail"}/>
-              <NumericInput visibleName={"Amp Fail"} internalName={"AutoAmpFail"}/>
-            </div>
+          <div className='autoNotes'>
+            <NumericInput visibleName={"Speaker Success"} internalName={"AutoSpeakerSuccess"}/>
+            <NumericInput visibleName={"Speaker Fail"} internalName={"AutoSpeakerFail"}/>
+            <NumericInput visibleName={"Amp Success"} internalName={"AutoAmpSuccess"}/>
+            <NumericInput visibleName={"Amp Fail"} internalName={"AutoAmpFail"}/>
+          </div>
         </div>
         <div className='tele'>
           <Header headerName={"TeleOp"}/>
           <div className='teleNotes'>
+            <div>
               <NumericInput visibleName={"Speaker Success"} internalName={"TeleSpeakerSuccess"}/>
               <NumericInput visibleName={"Amplified Speaker Success"} internalName={"TeleAmplifiedSpeakerSuccess"}/>
-              <NumericInput visibleName={"Amp Success"} internalName={"TeleAmpSuccess"}/>
-              <NumericInput visibleName={"Speaker Fail"} internalName={"TeleSpeakerFail"}/>
-              <NumericInput visibleName={"Amp Fail"} internalName={"TeleAmpFail"}/>
+            </div>
+            <NumericInput visibleName={"Speaker Fail"} internalName={"TeleSpeakerFail"}/>
+            <NumericInput visibleName={"Amp Success"} internalName={"TeleAmpSuccess"}/>
+            <NumericInput visibleName={"Amp Fail"} internalName={"TeleAmpFail"}/>
             </div>
         </div>
         <div className='endgame'>
