@@ -5,10 +5,11 @@ import NumericInput from '@/components/NumericInput';
 import StagePossibilities from '@/components/StagePossibilities';
 import Qualitative from '@/components/Qualitative';
 import CommentBox from '@/components/CommentBox';
+import styles from './page.module.css';
 
 export default function Home() {
   return (
-    <div className='scoutingForm'>
+    <div className={styles.MainDiv}>
       <h1>Scouting Form</h1>
       <Header headerName={"Match Info"}/>
         <div className='matchInfo'>
