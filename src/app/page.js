@@ -12,7 +12,7 @@ export default function Home() {
     <div className={styles.MainDiv}>
       <h1>Scouting Form</h1>
       <Header headerName={"Match Info"}/>
-        <div className='matchInfo'>
+        <div className={styles.MatchInfo}>
           <TextInput visibleName={"Scout Name:"} internalName={"ScoutName"}/>
           <TextInput visibleName={"Team #:"} internalName={"TeamNum"}/>
           <TextInput visibleName={"Team # Scouted:"} internalName={"TeamNumScouted"}/>
@@ -22,7 +22,7 @@ export default function Home() {
         <div className='auto'>
           <Header headerName={"Auto"}/>
           <Checkbox visibleName={"Leave"} internalName={"Leave"}/>
-          <div className='autoNotes'>
+          <div className={styles.AutoNotes}>
             <NumericInput visibleName={"Speaker Success"} internalName={"AutoSpeakerSuccess"}/>
             <NumericInput visibleName={"Speaker Fail"} internalName={"AutoSpeakerFail"}/>
             <NumericInput visibleName={"Amp Success"} internalName={"AutoAmpSuccess"}/>
@@ -31,7 +31,7 @@ export default function Home() {
         </div>
         <div className='tele'>
           <Header headerName={"TeleOp"}/>
-          <div className='teleNotes'>
+          <div className={styles.TeleNotes}>
             <div>
               <NumericInput visibleName={"Speaker Success"} internalName={"TeleSpeakerSuccess"}/>
               <NumericInput visibleName={"Amplified Speaker Success"} internalName={"TeleAmplifiedSpeakerSuccess"}/>
@@ -41,10 +41,10 @@ export default function Home() {
             <NumericInput visibleName={"Amp Fail"} internalName={"TeleAmpFail"}/>
             </div>
         </div>
-        <div className='endgame'>
+        <div className={styles.Endgame}>
           <Header headerName={"Endgame"}/>
           <StagePossibilities />
-          <div className='trapNotes'>
+          <div className={styles.TrapNotes}>
             <NumericInput visibleName={"Trap Success"} internalName={"TrapSuccess"}/>
             <NumericInput visibleName={"Trap Fail"} internalName={"TrapFail"}/>
           </div>

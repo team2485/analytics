@@ -1,3 +1,23 @@
 .MainDiv {
     background: black;
+    color: white;
 }
+
+.MatchInfo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+  
+  .AutoNotes, .TeleNotes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  .TrapNotes {
+    display: flex;
+    flex-direction: row;
+  }
