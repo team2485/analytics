@@ -8,18 +8,56 @@ npm install
 
 Next, set up the database on Vercel with test data.
 ```sql
+
+CREATE TABLE TestMatches (
+   ID serial PRIMARY KEY,
+   ScoutName VARCHAR (255),
+   ScoutTeam INT,
+   Team INT,
+   Match INT,
+   Breakdown BOOLEAN,
+   NoShow BOOLEAN,
+   Leave BOOLEAN,
+   AutoAmpScored INT,
+   AutoAmpFailed INT,
+   AutoSpeakerScored INT,
+   AutoSpeakerFailed INT,
+   TeleAmpScored INT,
+   TeleAmpFailed INT,
+   TeleNAmpedSpeakerScored INT,
+   TeleAmpedSpeakerScored INT,
+   TeleSpeakerFailed INT,
+   EndLocation INT,
+   Harmony BOOLEAN,
+   TrapScored INT,
+   TrapFailed INT,
+   Maneuverability INT,
+   Aggression INT,
+   DefenseEvasion INT,
+   SpeakerSpeed INT,
+   AmplifierSpeed INT,
+   IntakeSpeed INT,
+   GndIntake BOOLEAN,
+   SrcIntake BOOLEAN,
+   StageHazard INT,
+   TrapSpeed INT,
+   OnStageSpeed INT,
+   HarmonySpeed INT,
+   GeneralComments VARCHAR (255),
+   BreakdownComments VARCHAR (255),
+   DefenseComments VARCHAR (255)
+);
+
 INSERT INTO TestMatches (ScoutName, ScoutTeam, Team, Match, Breakdown, NoShow, Leave, AutoAmpScored, AutoAmpFailed, AutoSpeakerScored, AutoSpeakerFailed, TeleAmpScored, TeleAmpFailed, TeleNAmpedSpeakerScored, TeleAmpedSpeakerScored, TeleSpeakerFailed, EndLocation, Harmony, TrapScored, TrapFailed, Maneuverability, Aggression, DefenseEvasion, SpeakerSpeed, AmplifierSpeed, IntakeSpeed, GndIntake, SrcIntake, StageHazard, TrapSpeed, OnStageSpeed, HarmonySpeed, GeneralComments, BreakdownComments, DefenseComments)
 VALUES 
 
 ('John Doe ', 2475, 9, 1, FALSE, FALSE, FALSE, 1, 0, 4, 1, 2, 0, 4, 8, 3, 7, TRUE, 4, 6, 10, 3, 1, 9, 4, 8, FALSE, FALSE, 4, 3, 1, 2, 'Very maneuverable', NULL, 'Very good at getting in other’s way, able to effectively slow down other alliance.'), 
-
 
 ('Milan Gupta', 2485, 11, 1, FALSE, FALSE, FALSE, 0, 3, 5, 2, 5, 2, 3, 1, 0, 5, FALSE, 5, 1, 8, 7, 9, 6, 7, 3, TRUE, FALSE, 2, 7, 5, 4, 'Reliable scorer with consistent performance', NULL, 'Solid wall defense against high-scoring robots'),
 
 ('Preston Seay', 2495, 10, 1, FALSE, FALSE, FALSE, 2, 1, 2, 0, 3, 1, 0, 2, 2, 4, TRUE, 3, 0, 7, 5, 6, 5, 6, 4, FALSE, FALSE, 3, 5, 4, 7, 'Creative playmaker with unexpected maneuvers', 'Strategic use of stage hazards to disrupt opponents', NULL),
 
 ('John Doe', 2475, 9, 2, FALSE, FALSE, FALSE, 2, 2, 3, 0, 4, 1, 1, 5, 2, 6, TRUE, 3, 4, 9, 2, 5, 8, 5, 6, FALSE, TRUE, 2, 5, 3, 4, 'Solid defense with opportunistic scoring', NULL, 'Effective at drawing penalties with strategic maneuvering'),
-
 
 ('Milan Gupta', 2485, 11, 2, FALSE, FALSE, FALSE, 3, 0, 2, 3, 2, 1, 2, 3, 1, 4, FALSE, 2, 2, 7, 6, 8, 5, 4, 4, TRUE, FALSE, 3, 4, 7, 3, 'Consistent climber with strong field awareness', NULL, 'Anticipatory defense against climbing-focused robots'),
 
