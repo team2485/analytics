@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 import styles from "./NavBar.module.css";
 
@@ -9,6 +10,9 @@ export default function NavBar() {
             <Link href="/team-view">Team View</Link>
             <Link href="/match-view">Match View</Link>
             <Link href="/picklist">Picklist</Link>
+            {localStorage && localStorage.getItem('sudo') == 'true' && 
+                <Link href='/sudo'>Sudo</Link>
+            }
         </div>
     </nav>
 }
