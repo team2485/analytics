@@ -1,0 +1,15 @@
+.textinput {
+    font-family: 'Teko', sans-serif;
+    background-color: #cdf3ff;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 25px;
+    caret-color: black;
+    border: 1px solid #008ede;
+    height: 40px;
+    width: 150px;
+}
+.font {
+    font-family: 'Teko', sans-serif;
+    font-size: 25px;
+}
