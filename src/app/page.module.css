@@ -12,12 +12,16 @@
   
   .AutoNotes, .TeleNotes {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-evenly;
   }
 
   .TrapNotes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .TeleSpeakerSuccesses {
     display: flex;
     flex-direction: row;
   }

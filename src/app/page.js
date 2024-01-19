@@ -6,6 +6,7 @@ import StagePossibilities from '@/components/StagePossibilities';
 import Qualitative from '@/components/Qualitative';
 import CommentBox from '@/components/CommentBox';
 import styles from './page.module.css';
+import SubHeader from '@/components/SubHeader';
 
 export default function Home() {
   return (
@@ -23,38 +24,44 @@ export default function Home() {
           <Header headerName={"Auto"}/>
           <Checkbox visibleName={"Leave"} internalName={"Leave"}/>
           <div className={styles.AutoNotes}>
-            <NumericInput visibleName={"Speaker Success"} internalName={"AutoSpeakerSuccess"}/>
-            <NumericInput visibleName={"Speaker Fail"} internalName={"AutoSpeakerFail"}/>
-            <NumericInput visibleName={"Amp Success"} internalName={"AutoAmpSuccess"}/>
-            <NumericInput visibleName={"Amp Fail"} internalName={"AutoAmpFail"}/>
+            <SubHeader subHeaderName={"Speaker"}/>
+            <NumericInput visibleName={"Success"} internalName={"AutoSpeakerSuccess"}/>
+            <NumericInput visibleName={"Fail"} internalName={"AutoSpeakerFail"}/>
+            <SubHeader subHeaderName={"Amp"}/>
+            <NumericInput visibleName={"Success"} internalName={"AutoAmpSuccess"}/>
+            <NumericInput visibleName={"Fail"} internalName={"AutoAmpFail"}/>
           </div>
         </div>
         <div className='tele'>
           <Header headerName={"TeleOp"}/>
           <div className={styles.TeleNotes}>
-            <div>
-              <NumericInput visibleName={"Speaker Success"} internalName={"TeleSpeakerSuccess"}/>
-              <NumericInput visibleName={"Amplified Speaker Success"} internalName={"TeleAmplifiedSpeakerSuccess"}/>
+            <SubHeader subHeaderName={"Speaker"}/>
+            <div className={styles.TeleSpeakerSuccesses}>
+              <NumericInput visibleName={"Success"} internalName={"TeleSpeakerSuccess"}/>
+              <NumericInput visibleName={"Amplified Success"} internalName={"TeleAmplifiedSpeakerSuccess"}/>
             </div>
-            <NumericInput visibleName={"Speaker Fail"} internalName={"TeleSpeakerFail"}/>
-            <NumericInput visibleName={"Amp Success"} internalName={"TeleAmpSuccess"}/>
-            <NumericInput visibleName={"Amp Fail"} internalName={"TeleAmpFail"}/>
-            </div>
+            <NumericInput visibleName={"Fail"} internalName={"TeleSpeakerFail"}/>
+            <SubHeader subHeaderName={"Amp"}/>
+            <NumericInput visibleName={"Success"} internalName={"TeleAmpSuccess"}/>
+            <NumericInput visibleName={"Fail"} internalName={"TeleAmpFail"}/>
+          </div>
         </div>
         <div className={styles.Endgame}>
           <Header headerName={"Endgame"}/>
+          <SubHeader subHeaderName={"Stage"}/>
           <StagePossibilities />
           <div className={styles.TrapNotes}>
-            <NumericInput visibleName={"Trap Success"} internalName={"TrapSuccess"}/>
-            <NumericInput visibleName={"Trap Fail"} internalName={"TrapFail"}/>
+            <SubHeader subHeaderName={"Trap"}/>
+            <NumericInput visibleName={"Success"} internalName={"TrapSuccess"}/>
+            <NumericInput visibleName={"Fail"} internalName={"TrapFail"}/>
           </div>
         </div>
         <div className={styles.PostMatch}>
           <Header headerName={"Post Match"}/>
           <Qualitative visibleName={"Maneuverability"} internalName={"Maneuverability"}/>
-          <Qualitative visibleName={"Aggression"} internalName={"Aggression"}/>
+          <Qualitative visibleName={"Aggression"} internalName={"Aggression"} symbol={"ⵔ"}/>
           <Qualitative visibleName={"Defense Evasion"} internalName={"DefenseEvasion"}/>
-          <Qualitative visibleName={"Stage Hazard"} internalName={"StageHazard"}/>
+          <Qualitative visibleName={"Stage Hazard"} internalName={"StageHazard"} symbol={"ⵔ"}/>
           <Qualitative visibleName={"Amp Speed"} internalName={"AmpSpeed"}/>
           <Qualitative visibleName={"Speaker Speed"} internalName={"SpeakerSpeed"}/>
           <Qualitative visibleName={"Trap Speed"} internalName={"TrapSpeed"}/>
