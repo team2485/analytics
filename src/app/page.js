@@ -49,7 +49,7 @@ export default function Home() {
             <NumericInput visibleName={"Trap Fail"} internalName={"TrapFail"}/>
           </div>
         </div>
-        <div className='postMatch'>
+        <div className={styles.PostMatch}>
           <Header headerName={"Post Match"}/>
           <Qualitative visibleName={"Maneuverability"} internalName={"Maneuverability"}/>
           <Qualitative visibleName={"Aggression"} internalName={"Aggression"}/>
