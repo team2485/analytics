@@ -1,0 +1,13 @@
+.svg {
+    width: 40px;
+}
+
+.numericInput {
+    text-align: center;
+    font-size: 25px;
+    height: 40px;
+    width: 150px;
+    border: 1px solid #008ede;
+    background-color: #cdf3ff;
+}
+

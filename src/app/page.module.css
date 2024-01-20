@@ -10,18 +10,36 @@
     justify-content: space-evenly;
   }
   
-  .AutoNotes, .TeleNotes {
+  .AutoNotes, .TeleNotes, .TrapNotes {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-  }
-
-  .TrapNotes {
-    display: flex;
-    flex-direction: column;
+    align-items: center;
   }
 
   .TeleSpeakerSuccesses {
     display: flex;
     flex-direction: row;
   }
+
+  .MainDiv input[type=text], .MainDiv textarea {
+    font-family: 'Teko', sans-serif;
+    background-color: #cdf3ff;
+    border-radius: 5px;
+    caret-color: black;
+    border: 1px solid #008ede;
+  }
+
+  .MainDiv button[type=submit] {
+    background-color: #FFD900;
+    height: 50px;
+    width: 120px;
+    border-radius: 5px;
+    border: 1px solid #ffa200;
+    font-size: 30px;
+  }
+
+  .MainDiv label {
+    font-size: 25px;
+  }
+

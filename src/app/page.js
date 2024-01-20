@@ -20,7 +20,7 @@ export default function Home() {
           <TextInput visibleName={"Match #:"} internalName={"MatchNum"}/>
           <Checkbox visibleName={"No Show"} internalName={"NoShow"}/>
         </div>
-        <div className='auto'>
+        <div className={styles.Auto}>
           <Header headerName={"Auto"}/>
           <Checkbox visibleName={"Leave"} internalName={"Leave"}/>
           <div className={styles.AutoNotes}>
@@ -32,7 +32,7 @@ export default function Home() {
             <NumericInput visibleName={"Fail"} internalName={"AutoAmpFail"}/>
           </div>
         </div>
-        <div className='tele'>
+        <div className={styles.Tele}>
           <Header headerName={"TeleOp"}/>
           <div className={styles.TeleNotes}>
             <SubHeader subHeaderName={"Speaker"}/>
