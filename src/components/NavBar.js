@@ -10,7 +10,7 @@ export default function NavBar() {
             <Link href="/team-view">Team View</Link>
             <Link href="/match-view">Match View</Link>
             <Link href="/picklist">Picklist</Link>
-            {localStorage && localStorage.getItem('sudo') == 'true' && 
+            {typeof window !== "undefined" && localStorage.getItem('sudo') == 'true' && 
                 <Link href='/sudo'>Sudo</Link>
             }
         </div>
