@@ -1,4 +1,4 @@
-.textinput {
+.TextInput input {
     text-align: center;
     font-size: 25px;
     height: 40px;
@@ -8,4 +8,8 @@
 .font {
     font-family: 'Teko', sans-serif;
     font-size: 25px;
+}
+
+.TextInput {
+    text-align: center;
 }

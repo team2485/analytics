@@ -1,4 +1,28 @@
-.qual {
+.ratings {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+}
+
+.symbol {
+    color: white;
+    font-size: 50px;
+}
+
+.symbol:hover {
+    color: #FFD90f;
+}
+
+.qual {
+    width: 200px;
+    align-items: center;
+    text-align: center;
+}
+
+.qual button {
+    background-color: red;
+    color: white;
+    width: 80px;
+    height: 50px;
+    font-size: 25px;
 }

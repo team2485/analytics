@@ -4,6 +4,7 @@ export default function SubHeader ({ subHeaderName }) {
     return (
         <div className={styles.subHeader}>
             <span>{subHeaderName}</span>
+            <hr></hr>
         </div>
     )
 }

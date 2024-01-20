@@ -27,7 +27,7 @@
     background-color: #cdf3ff;
     border-radius: 5px;
     caret-color: black;
-    border: 1px solid #008ede;
+    border: 2px solid black;
   }
 
   .MainDiv button[type=submit] {
@@ -41,5 +41,16 @@
 
   .MainDiv label {
     font-size: 25px;
+  }
+
+  .Qual {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+
+  .MainDiv input[type=checkbox] {
+    justify-content: center;
   }
 

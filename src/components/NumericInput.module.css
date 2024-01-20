@@ -2,12 +2,34 @@
     width: 40px;
 }
 
-.numericInput {
+.svg:hover {
+    color: #FFD90f;
+    
+}
+
+.Success {
+    background-color: #69C94A;
     text-align: center;
     font-size: 25px;
     height: 40px;
     width: 150px;
-    border: 1px solid #008ede;
-    background-color: #cdf3ff;
+    border-radius: 5px;
+    border: 2px solid #238c00;
 }
 
+.Fail {
+    background-color: #ff5d58;
+    text-align: center;
+    font-size: 25px;
+    height: 40px;
+    width: 150px;
+    border-radius: 5px;
+    border: 2px solid #db3b35;
+}
+
+.NumericInput label {
+    margin-right: 10px;
+    width: 200px;
+    text-align: right;
+    display: inline-block;
+}
