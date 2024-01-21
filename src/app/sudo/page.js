@@ -189,6 +189,14 @@ export default function Sudo() {
     "DefenseComments",
   ].map((element) => {
     if (typeof element == "object") return element;
+    if (element.includes("Comments")) {
+      return {
+        title: element,
+        dataIndex: element.toLowerCase(),
+        key: element.toLowerCase(),
+        ellipsis: true
+      }
+    }
     return {
       title: element,
       dataIndex: element.toLowerCase(),
@@ -203,10 +211,6 @@ export default function Sudo() {
         let style = {};
         if (text == 0) {
           style = { color: "red" };
-        }
-        //scroll overflow if comment
-        if (element.includes("Comments")) {
-          style = { height: "2.5em", overflowY: "scroll" };
         }
         return <div style={style}>{visibleValue}</div>;
       },
