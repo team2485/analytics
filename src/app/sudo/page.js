@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Table, Button, Checkbox } from "antd";
+import { Table, Button, Checkbox, Switch } from "antd";
 
 export default function Sudo() {
   const [data, setData] = useState([]);
@@ -156,7 +156,19 @@ export default function Sudo() {
       simple: true,
     },
     "ScoutTeam",
-    "Breakdown",
+    {
+      title: "Breakdown",
+      dataIndex: "breakdown",
+      key: "breakdown",
+      render: (value, record) => {
+        if (value == true) {
+          return <>💥</>
+        } else {
+          return <>No</>
+        }
+      },
+      simple: true,
+    },
     "NoShow",
     "Leave",
     "AutoAmpScored",
@@ -246,9 +258,9 @@ export default function Sudo() {
           margin: "auto",
         }}
       >
-        <Checkbox onChange={(e) => setSimplified(e.target.checked)}>
-          Simple
-        </Checkbox>
+        <br/>
+        <Switch checkedChildren="Simple View" unCheckedChildren="Complex View" onChange={setSimplified}/>
+        <br/>
         <Table
           columns={columns}
           dataSource={data}
