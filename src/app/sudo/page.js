@@ -196,6 +196,29 @@ export default function Sudo() {
     "TrapSpeed",
     "OnStageSpeed",
     "HarmonySpeed",
+    {
+      title: "Speed*",
+      key: "speed",
+      render: (record) => {
+        let arr = [record.speakerspeed, record.ampspeed, record.intakespeed, record.trapspeed, record.onstagespeed, record.harmonyspeed];
+        console.log(arr);
+        let {total, sum} = arr.filter(a => a != null).reduce((prev, cur) => {return {sum: prev.sum + cur, total: prev.total+1};}, {sum: 0, total: 0});
+        let rounded = Math.round(sum*100/total)/100;
+        return <>{rounded}</>
+      },
+      simple: true
+    },
+    {
+      title: "Movement*",
+      key: "movement",
+      render: (record) => {
+        let arr = [record.maneuverability, 4-record.aggression, record.defenseEvasion, 4-record.stagehazard];
+        let {total, sum} = arr.filter(a => a != null).reduce((prev, cur) => {return {sum: prev.sum + cur, total: prev.total+1};}, {sum: 0, total: 0});
+        let rounded = Math.round(sum*100/total)/100;
+        return <>{rounded}</>
+      },
+      simple: true
+    },
     "GeneralComments",
     "BreakdownComments",
     "DefenseComments",
