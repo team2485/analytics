@@ -1,6 +1,7 @@
 .MainDiv {
     background: black;
     color: white;
+    padding: 5px 40px;
 }
 
 .MatchInfo {
@@ -20,9 +21,20 @@
   .TeleSpeakerSuccesses {
     display: flex;
     flex-direction: row;
+    gap: 20px;
   }
 
-  .MainDiv input[type=text], .MainDiv textarea {
+  .TeleSpeakerSuccesses input {
+    width: 100px;
+  }
+
+  .Stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .MainDiv input[type=text] {
     font-family: 'Teko', sans-serif;
     background-color: #cdf3ff;
     border-radius: 5px;
@@ -37,6 +49,9 @@
     border-radius: 5px;
     border: 1px solid #ffa200;
     font-size: 30px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
   }
 
   .MainDiv label {
@@ -48,9 +63,17 @@
     flex-direction: row;
     justify-content: space-evenly;
     flex-wrap: wrap;
+    gap: 10px;
   }
 
   .MainDiv input[type=checkbox] {
     justify-content: center;
   }
 
+.Intake {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px;
+}

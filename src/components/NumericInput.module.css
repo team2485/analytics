@@ -27,9 +27,18 @@
     border: 2px solid #db3b35;
 }
 
-.NumericInput label {
-    margin-right: 10px;
-    width: 200px;
-    text-align: right;
-    display: inline-block;
+.NumericInput {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.input {
+    display: flex;
+    flex-direction: row;
+}
+
+.NumericInput label.label {
+    margin-bottom: 5px;
+    font-size: 18px;
 }

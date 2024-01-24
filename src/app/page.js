@@ -19,6 +19,7 @@ export default function Home() {
           <TextInput visibleName={"Team # Scouted:"} internalName={"TeamNumScouted"}/>
           <TextInput visibleName={"Match #:"} internalName={"MatchNum"}/>
         </div>
+        <br></br>
         <Checkbox visibleName={"No Show"} internalName={"NoShow"}/>
         <div className={styles.Auto}>
           <Header headerName={"Auto"}/>
@@ -37,8 +38,8 @@ export default function Home() {
           <div className={styles.TeleNotes}>
             <SubHeader subHeaderName={"Speaker"}/>
             <div className={styles.TeleSpeakerSuccesses}>
-              <NumericInput noteType={"Success"} visibleName={"Success"} internalName={"TeleSpeakerSuccess"}/>
-              <NumericInput noteType={"Success"} visibleName={"Amplified Success"} internalName={"TeleAmplifiedSpeakerSuccess"}/>
+              <NumericInput noteType={"Success"} visibleName={"Non-Amplified"} internalName={"TeleSpeakerSuccess"}/>
+              <NumericInput noteType={"Success"} visibleName={"Amplified"} internalName={"TeleAmplifiedSpeakerSuccess"}/>
             </div>
             <NumericInput noteType={"Fail"} visibleName={"Fail"} internalName={"TeleSpeakerFail"}/>
             <SubHeader subHeaderName={"Amp"}/>
@@ -48,8 +49,12 @@ export default function Home() {
         </div>
         <div className={styles.Endgame}>
           <Header headerName={"Endgame"}/>
-          <SubHeader subHeaderName={"Stage"}/>
-          <StagePossibilities />
+          <br></br>
+          <div className={styles.Stage}>
+            <SubHeader subHeaderName={"Stage"}/>
+            <StagePossibilities />
+          </div>
+          <br></br>
           <div className={styles.TrapNotes}>
             <SubHeader subHeaderName={"Trap"}/>
             <NumericInput noteType={"Success"} visibleName={"Success"} internalName={"TrapSuccess"}/>
@@ -58,6 +63,7 @@ export default function Home() {
         </div>
         <div className={styles.PostMatch}>
           <Header headerName={"Post Match"}/>
+          <br></br>
           <div className={styles.Qual}>
             <Qualitative visibleName={"Maneuverability"} internalName={"Maneuverability"}/>
             <Qualitative visibleName={"Aggression"} internalName={"Aggression"} symbol={"ⵔ"}/>
@@ -70,8 +76,12 @@ export default function Home() {
             <Qualitative visibleName={"Harmony Speed"} internalName={"HarmonySpeed"}/>
             <Qualitative visibleName={"Intake Speed"} internalName={"IntakeSpeed"}/>
           </div>
-          <Checkbox visibleName={"Ground Intake"} internalName={"GroundIntake"}/>
-          <Checkbox visibleName={"Human Player Intake"} internalName={"HumanPlayerIntake"}/>
+          <br></br>
+          <br></br>
+          <div className={styles.Intake}>
+            <Checkbox visibleName={"Ground Intake"} internalName={"GroundIntake"}/>
+            <Checkbox visibleName={"Human Player Intake"} internalName={"HumanPlayerIntake"}/>
+          </div>
           <Checkbox visibleName={"Breakdown"} internalName={"Breakdown"}/>
           <CommentBox visibleName={"Breakdown Elaboration"} internalName={"BreakdownElaboration"}/>
           <Checkbox visibleName={"Played Defense"} internalName={"Defense"}/>

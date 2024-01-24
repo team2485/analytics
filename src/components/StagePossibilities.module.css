@@ -1,4 +1,44 @@
 .stagePossibilities {
     display: flex;
     flex-direction: column;
+    justify-content: right;
+    background-color:#3d3d3d;
+    color: black;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 3px;
+}
+
+.option {
+    display: flex;
+    justify-content: left;
+    background-color:#cdf3ff;
+    color: black;
+    border: 2px solid #888484;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 15px;
+    margin: 5px;
+}
+
+.checkOption {
+    display: flex;
+    justify-content: left;
+    background-color:#cdf3ff;
+    color: black;
+    border: 2px solid #888484;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 15px;
+    margin: 5px auto;
+}
+
+.option label, .checkOption label {
+    margin-left: 10px;
+}
+
+.stagePlacement {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }

@@ -11,6 +11,8 @@ export default function Qualitative ({ visibleName, internalName, symbol="★"})
                 <div className={styles.symbol}>{symbol}</div>
                 <div className={styles.symbol}>{symbol}</div>
                 <div className={styles.symbol}>{symbol}</div>
+                <div className={styles.symbol}>{symbol}</div>
+                <div className={styles.symbol}>{symbol}</div>
             </div>
             <button>Clear</button>
         </div>

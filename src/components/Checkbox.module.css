@@ -1,19 +1,29 @@
 .box {
-    display: flex;
-    background-color: #f0ecec;
+    background-color:#cdf3ff;
     color: black;
     padding: 1rem;
     border: 2px solid #888484;
     border-radius: 5px;
-    width: 120px;
-    margin: 0 auto;
     cursor: pointer;
+    padding: 5px 15px;
+    margin: 10px auto;
+    display: inline-block;
 }
 .box:hover,
 .box:focus {
-    background-color: #e0dcdc;
+    background-color: #8de3fc;
 }
 .box:active {
     border: 2px solid #088404;
     background-color: #b0fcbc;
+}
+
+.box label {
+    margin-left: 10px;
+}
+
+.boxContainer {
+    display: flex;
+    align-content: center;
+    flex-grow: 1;
 }
