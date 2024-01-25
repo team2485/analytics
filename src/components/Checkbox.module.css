@@ -13,7 +13,7 @@
 .box:focus {
     background-color: #8de3fc;
 }
-.box:active {
+.box.checked {
     border: 2px solid #088404;
     background-color: #b0fcbc;
 }

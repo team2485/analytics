@@ -7,10 +7,16 @@
 .symbol {
     color: white;
     font-size: 50px;
+    cursor: pointer;
+}
+.symbol.selected {
+    color: #ffD90f;
+    text-shadow: 0px 0px 15px yellow;
 }
 
 .symbol:hover {
-    color: #FFD90f;
+    color: yellow;
+    text-shadow: 0px 0px 15px yellow;
 }
 
 .qual {
