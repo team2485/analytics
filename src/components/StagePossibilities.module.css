@@ -21,6 +21,10 @@
     margin: 5px;
 }
 
+.option.checked, .checkOption.checked {
+    background: #9de387;
+}
+
 .checkOption {
     display: flex;
     justify-content: left;

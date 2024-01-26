@@ -2,6 +2,8 @@
     background: black;
     color: white;
     padding: 5px 40px;
+    padding-bottom: 50px;
+    min-height: calc(100vh - 45px);
 }
 
 .MatchInfo {
@@ -9,6 +11,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    gap: 5px;
   }
   
   .AutoNotes, .TeleNotes, .TrapNotes {
@@ -18,13 +21,13 @@
     align-items: center;
   }
 
-  .TeleSpeakerSuccesses {
+  .HBox {
     display: flex;
     flex-direction: row;
     gap: 20px;
   }
 
-  .TeleSpeakerSuccesses input {
+  .HBox input {
     width: 100px;
   }
 
@@ -69,6 +72,17 @@
   .MainDiv input[type=checkbox] {
     justify-content: center;
   }
+
+span.subsubheading {
+  display: block;
+  text-align: center;
+  font-size: 25px;
+}
+
+hr.subsubheading {
+  margin: 0px 20px;
+  background-color: white;
+}
 
 .Intake {
   display: flex;
