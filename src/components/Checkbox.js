@@ -7,7 +7,7 @@ export default function Checkbox ({ visibleName, internalName, changeListener })
     return (
         <div className={styles.boxContainer}>
             <div className={styles.box + (checked ? " " + styles.checked : "")}>
-                <input type="checkbox" id={internalName} checked={checked} onChange={(e) => {
+                <input type="checkbox" id={internalName} name={internalName} checked={checked} onChange={(e) => {
                     setChecked(e.target.checked);
                     if (changeListener) changeListener(e);
                 }}></input>

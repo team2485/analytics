@@ -5,7 +5,7 @@ export default function CommentBox ({ visibleName, internalName}) {
         <div>
             <label htmlFor={internalName}>{visibleName}:</label>
             <br></br>
-            <textarea className={styles.textarea} id={internalName}></textarea>
+            <textarea className={styles.textarea} id={internalName} name={internalName}></textarea>
         </div>
     )
 }

@@ -5,10 +5,6 @@ import styles from './Qualitative.module.css'
 export default function Qualitative ({ visibleName, internalName, symbol="★"}) {
     const [rating, setRating] = useState(-1);
 
-    useEffect(() => {
-        console.log(rating);
-    }, [rating])
-
     return (
         <div className={styles.qual}>
             <br></br>
