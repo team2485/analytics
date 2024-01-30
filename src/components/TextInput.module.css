@@ -1,0 +1,15 @@
+.TextInput input {
+    text-align: center;
+    font-size: 25px;
+    height: 40px;
+    width: 150px;
+}
+
+.font {
+    font-family: 'Teko', sans-serif;
+    font-size: 25px;
+}
+
+.TextInput {
+    text-align: center;
+}
