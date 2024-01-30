@@ -36,7 +36,7 @@ export default function Home() {
         data[name] = true;
       } else {
         if (!isNaN(value)) {
-          data[name] = 1*value;
+          data[name] = +value;
         } else {
           data[name] = value;
         }
