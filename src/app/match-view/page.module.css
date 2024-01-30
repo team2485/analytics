@@ -1,0 +1,13 @@
+.matches {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.matchTeam {
+    flex-grow: 1;
+    /* border: 1px solid black; */
+}
+
+.matchTeam h1, .matchTeam h2 {
+    text-align: center;
+}
