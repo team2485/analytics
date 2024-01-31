@@ -9,6 +9,7 @@ import CommentBox from "@/components/CommentBox";
 import styles from "./page.module.css";
 import SubHeader from "@/components/SubHeader";
 import { useRef, useState } from "react";
+import PopUp from "@/components/PopUp";
 
 export default function Home() {
   const [noShow, setNoShow] = useState(false);
@@ -29,6 +30,36 @@ export default function Home() {
     setDefense(checked);
   }
   function submit(e) {
+    let submitButton = document.querySelector("#submit");
+    function resetSubmit() {
+      submitButton.disabled = false;
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+    function clearInputs () {
+      [...document.querySelectorAll("input")].forEach((input) => {
+        let name = input.name;
+        if (!["scoutname", "scoutteam", "team", "match", "noshow"].includes(name)) {
+          if(input.type == "text") {
+            input.value = "";
+          } else if (input.type == "number") {
+            input.value = 0;
+          } else if (input.type == "checkbox") {
+            input.checked = false;
+          }
+        }
+      });
+      
+      document.querySelectorAll('.Clear').forEach(button => {button.click()});
+
+
+      let checkedEndLocation = document.querySelector('#None');
+      checkedEndLocation.click();
+    }
+
     e.preventDefault();
     let data = {noshow: false, leave: false, harmony: false, gndintake: false, srcintake: false, breakdown: false, defense: false};
     [...new FormData(form.current).entries()].forEach(([name, value]) => {
@@ -45,12 +76,24 @@ export default function Home() {
     data.breakdown = undefined;
     data.defense = undefined;
 
-    //todo: add confirmation
+    if (confirm("Are you sure you want to submit?") == true) {
+      submitButton.disbaled = true;
+      fetch('/api/add-match-data', {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+        if(Response.status !== 200) {
+          alert("There was a problem submitting... please try again.")
+          resetSubmit();
+          return;
+        }
+      alert("Thank you!");
+      resetSubmit();
+      clearInputs();
+    } else {
+      clearInputs();
+    };
 
-    fetch('/api/add-match-data', {
-      method: "POST",
-      body: JSON.stringify(data)
-    });
     //todo: handle response to display message (and if 200, clear form)
     //todo: in the meantime, lock up form
   }
@@ -60,13 +103,22 @@ export default function Home() {
       <form ref={form} name="Scouting Form" onSubmit={submit}>
         <Header headerName={"Match Info"} />
         <div className={styles.MatchInfo}>
-          <TextInput visibleName={"Scout Name:"} internalName={"scoutname"} />
-          <TextInput visibleName={"Team #:"} internalName={"scoutteam"} />
+          <TextInput 
+            visibleName={"Scout Name:"} 
+            internalName={"scoutname"} 
+          />
+          <TextInput 
+            visibleName={"Team #:"} 
+            internalName={"scoutteam"} 
+          />
           <TextInput
             visibleName={"Team Scouted:"}
             internalName={"team"}
           />
-          <TextInput visibleName={"Match #:"} internalName={"match"} />
+          <TextInput 
+            visibleName={"Match #:"} 
+            internalName={"match"} 
+          />
         </div>
         <Checkbox
           visibleName={"No Show"}
@@ -238,7 +290,7 @@ export default function Home() {
             </div>
           </>
         )}
-        <button type="submit">Submit</button>
+        <button id="submit" type="submit">Submit</button>
       </form>
     </div>
   );
