@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell } from 'recharts';
+import { VictoryPie } from "victory";
 
 
 export default function MatchView() {
@@ -39,55 +40,74 @@ export default function MatchView() {
   }
 
   function TeamDisplay({teamData}) {
+
+    const COLORS = ['#aa4444', '#f9952a', '#c1c46b', '#95c46b'];
+
+    const endgameData = [{ x: 'None', y: teamData.endgame.none },
+              { x: 'Park', y: teamData.endgame.park },
+              { x: 'Onstage', y: teamData.endgame.onstage },
+              { x: 'Onstage Harmony', y: teamData.endgame.onstageHarmony }];
+
+
+
     return <div className={styles.matchTeam}>
       <h1>{teamData.team}</h1>
       <h2>{teamData.teamName}</h2>
       <div className={styles.scoreBreakdownContainer}>
         <div className={styles.espmBox}>{teamData.auto + teamData.tele + teamData.end}</div>
         <div className={styles.espmBreakdown}>
-          <div>{teamData.auto}</div>
-          <div>{teamData.tele}</div>
-          <div>{teamData.end}</div>
+          <div>a: {teamData.auto}</div>
+          <div>t: {teamData.tele}</div>
+          <div>e: {teamData.end}</div>
         </div>
       </div>
       <br></br>
       <div className={styles.chartContainer}>
         <h2>Average Note Placement</h2>
         <ResponsiveContainer width="100%">
-        <BarChart
-          height={100}
-          data={[{
-            place: "Speaker",
-            value: teamData.avgNotes.speaker
-          },
-          {
-            place: "Amp'd Speaker",
-            value: teamData.avgNotes.ampedSpeaker
-          },
-          {
-            place: "Amp",
-            value: teamData.avgNotes.amp
-          },
-          {
-            place: "Trap",
-            value: teamData.avgNotes.trap
-          }]}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="place" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="value" fill="#66c" activeBar={<Rectangle fill="gold" stroke="purple" />} />
-        </BarChart>
-      </ResponsiveContainer>
+          <BarChart
+            data={[{
+              place: "Speaker",
+              value: teamData.avgNotes.speaker
+            },
+            {
+              place: "⬆️ Spkr",
+              value: teamData.avgNotes.ampedSpeaker
+            },
+            {
+              place: "Amp",
+              value: teamData.avgNotes.amp
+            },
+            {
+              place: "Trap",
+              value: teamData.avgNotes.trap
+            }]}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 30,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="place" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="value" fill="#66c" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-
+      <br></br>
+      <div className={styles.chartContainer}>
+        <h2>Endgame %</h2>
+        <VictoryPie
+          data={endgameData}
+          colorScale={["#92BDF1", "#839CE3", "#757BD5", "#665AC7"]}
+          labels={({ datum }) => `${datum.x}: ${datum.y}%`}
+        />
+      </div>
+      <br></br>
+      <br></br>
     </div>
   }
 
