@@ -16,7 +16,7 @@ export default function Qualitative ({ visibleName, internalName, symbol="★"})
                     return <div className={styles.symbol + (ratingValue <= rating ? " " + styles.selected : "")} key={ratingValue} onClick={() => setRating(ratingValue)}>{symbol}</div>
                 })}
             </div>
-            <button className="Clear" onClick={() => setRating(-1)}>Clear</button>
+            <button type="button" className="Clear" onClick={() => setRating(-1)}>Clear</button>
         </div>
     )
 }

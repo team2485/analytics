@@ -10,6 +10,7 @@ import styles from "./page.module.css";
 import SubHeader from "@/components/SubHeader";
 import { useRef, useState } from "react";
 import PopUp from "@/components/PopUp";
+import { get, isUndefined } from "lodash";
 
 export default function Home() {
   const [noShow, setNoShow] = useState(false);
@@ -29,6 +30,18 @@ export default function Home() {
     let checked = e.target.checked;
     setDefense(checked);
   }
+  if (typeof document !== 'undefined')  {
+    let ScoutName = document.querySelector("input[name='scoutname']").value;
+    let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
+    let Match = document.querySelector("input[name='match']").value;
+    let ScoutProfile = { 
+      scoutname: ScoutName, 
+      scoutteam: ScoutTeam, 
+      match: Number(Match)+1 
+    };
+    localStorage.setItem("ScoutProfile", JSON.stringify(ScoutProfile));
+  }
+  
   function submit(e) {
     let submitButton = document.querySelector("#submit");
     function resetSubmit() {
@@ -38,26 +51,6 @@ export default function Home() {
         left: 0,
         behavior: "smooth",
       });
-    }
-    function clearInputs () {
-      [...document.querySelectorAll("input")].forEach((input) => {
-        let name = input.name;
-        if (!["scoutname", "scoutteam", "team", "match", "noshow"].includes(name)) {
-          if(input.type == "text") {
-            input.value = "";
-          } else if (input.type == "number") {
-            input.value = 0;
-          } else if (input.type == "checkbox") {
-            input.checked = false;
-          }
-        }
-      });
-      
-      document.querySelectorAll('.Clear').forEach(button => {button.click()});
-
-
-      let checkedEndLocation = document.querySelector('#None');
-      checkedEndLocation.click();
     }
 
     e.preventDefault();
@@ -89,9 +82,10 @@ export default function Home() {
         }
       alert("Thank you!");
       resetSubmit();
-      clearInputs();
+      location.reload();
     } else {
-      clearInputs();
+      let newScoutProfile = localStorage.getItem("ScoutProfile");
+      console.log(JSON.parse(newScoutProfile));
     };
 
     //todo: handle response to display message (and if 200, clear form)
