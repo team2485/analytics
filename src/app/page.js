@@ -8,7 +8,7 @@ import Qualitative from "@/components/Qualitative";
 import CommentBox from "@/components/CommentBox";
 import styles from "./page.module.css";
 import SubHeader from "@/components/SubHeader";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PopUp from "@/components/PopUp";
 import { get, isUndefined } from "lodash";
 
@@ -16,7 +16,14 @@ export default function Home() {
   const [noShow, setNoShow] = useState(false);
   const [breakdown, setBreakdown] = useState(false);
   const [defense, setDefense] = useState(false);
+  const [scoutProfile, setScoutProfile] = useState(null);
   const form = useRef();
+
+  useEffect(()=> {
+    if(typeof window !== "undefined") {
+      setScoutProfile(JSON.parse(localStorage.ScoutProfile))
+    }
+  }, [])
 
   function onNoShowChange(e) {
     let checked = e.target.checked;
@@ -29,17 +36,6 @@ export default function Home() {
   function onDefenseChange(e) {
     let checked = e.target.checked;
     setDefense(checked);
-  }
-  if (typeof document !== 'undefined')  {
-    let ScoutName = document.querySelector("input[name='scoutname']").value;
-    let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
-    let Match = document.querySelector("input[name='match']").value;
-    let ScoutProfile = { 
-      scoutname: ScoutName, 
-      scoutteam: ScoutTeam, 
-      match: Number(Match)+1 
-    };
-    localStorage.setItem("ScoutProfile", JSON.stringify(ScoutProfile));
   }
   
   function submit(e) {
@@ -69,23 +65,46 @@ export default function Home() {
     data.breakdown = undefined;
     data.defense = undefined;
 
+    if (typeof document !== 'undefined')  {
+      let ScoutName = document.querySelector("input[name='scoutname']").value;
+      let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
+      let Match = document.querySelector("input[name='match']").value;
+      let scoutProfile = { 
+        scoutname: ScoutName, 
+        scoutteam: ScoutTeam, 
+        match: Number(Match)+1 
+      };
+      localStorage.setItem("ScoutProfile", JSON.stringify(scoutProfile));
+    }
+
     if (confirm("Are you sure you want to submit?") == true) {
       submitButton.disbaled = true;
       fetch('/api/add-match-data', {
         method: "POST",
         body: JSON.stringify(data)
-      })
-        if(Response.status !== 200) {
-          alert("There was a problem submitting... please try again.")
-          resetSubmit();
-          return;
+      }).then((response)=> {
+        if(response.status === 200) {
+          return response.json();
+        } else {
+          return response.json().then(err => Promise.reject(err.message));
         }
-      alert("Thank you!");
-      resetSubmit();
-      location.reload();
+      }) 
+      .then(data => {
+        alert("Thank you!");
+        resetSubmit();
+  
+        location.reload();
+      })
+      .catch(error => alert(error));
+      
+      
+      // if(status !== 200) {
+      //     alert("There was a problem submitting... please try again.")
+      //     resetSubmit();
+      //     return;
+      //   }
     } else {
-      let newScoutProfile = localStorage.getItem("ScoutProfile");
-      console.log(JSON.parse(newScoutProfile));
+      
     };
 
     //todo: handle response to display message (and if 200, clear form)
@@ -100,10 +119,12 @@ export default function Home() {
           <TextInput 
             visibleName={"Scout Name:"} 
             internalName={"scoutname"} 
+            defaultValue={scoutProfile?.scoutname || ""}
           />
           <TextInput 
             visibleName={"Team #:"} 
             internalName={"scoutteam"} 
+            defaultValue={scoutProfile?.scoutteam || ""}
           />
           <TextInput
             visibleName={"Team Scouted:"}
@@ -112,6 +133,7 @@ export default function Home() {
           <TextInput 
             visibleName={"Match #:"} 
             internalName={"match"} 
+            defaultValue={scoutProfile?.match || ""}
           />
         </div>
         <Checkbox
