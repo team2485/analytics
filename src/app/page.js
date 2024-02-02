@@ -65,18 +65,6 @@ export default function Home() {
     data.breakdown = undefined;
     data.defense = undefined;
 
-    if (typeof document !== 'undefined')  {
-      let ScoutName = document.querySelector("input[name='scoutname']").value;
-      let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
-      let Match = document.querySelector("input[name='match']").value;
-      let scoutProfile = { 
-        scoutname: ScoutName, 
-        scoutteam: ScoutTeam, 
-        match: Number(Match)+1 
-      };
-      localStorage.setItem("ScoutProfile", JSON.stringify(scoutProfile));
-    }
-
     if (confirm("Are you sure you want to submit?") == true) {
       submitButton.disbaled = true;
       fetch('/api/add-match-data', {
@@ -92,7 +80,17 @@ export default function Home() {
       .then(data => {
         alert("Thank you!");
         resetSubmit();
-  
+        if (typeof document !== 'undefined')  {
+          let ScoutName = document.querySelector("input[name='scoutname']").value;
+          let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
+          let Match = document.querySelector("input[name='match']").value;
+          let scoutProfile = { 
+            scoutname: ScoutName, 
+            scoutteam: ScoutTeam, 
+            match: Number(Match)+1 
+          };
+          localStorage.setItem("ScoutProfile", JSON.stringify(scoutProfile));
+        }
         location.reload();
       })
       .catch(error => alert(error));
