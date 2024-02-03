@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function MatchView() {
   const [allData, setAllData] = useState(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(false);
   const searchParams = useSearchParams();
   const COLORS = [
     ["#B7F7F2", "#A1E7E1", "#75C6BF", "#5EB5AE"],
@@ -110,7 +110,7 @@ export default function MatchView() {
     </div>
   }
 
-  function AllianceBoard({t1, t2, t3, colors}) {
+  function AllianceButtons({t1, t2, t3, colors}) {
     return <div className={styles.allianceBoard}>
       <Link href={"/team-view?team=" + t1.team}>
         <button style={{background: colors[0][1]}}>{t1.team}</button>
@@ -197,8 +197,9 @@ export default function MatchView() {
   return (
     <div>
       <div className={styles.matchOverview}>
-        <AllianceBoard t1={data.team1} t2={data.team2} t3={data.team3} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceBoard>
-        <AllianceBoard t1={data.team4} t2={data.team5} t3={data.team6} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceBoard>
+        <AllianceButtons t1={data.team1} t2={data.team2} t3={data.team3} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceButtons>
+        <Link href="/match-view?team1=2485"><button style={{background: "#ffff88", color: "black"}}>Back</button></Link>
+        <AllianceButtons t1={data.team4} t2={data.team5} t3={data.team6} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
       </div>
       <div className={styles.matches}>
         <TeamDisplay teamData={data.team1} colors={COLORS[0]}></TeamDisplay>
