@@ -1,3 +1,61 @@
+.teamForm {
+    margin: 20px;
+    padding: 25px;
+    background: #eee;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teamForm label {
+    margin-top: 10px;
+    margin-bottom: -5px;
+    font-size: 40px;
+    font-family: "Teko", sans-serif;
+}
+
+.teamForm input {
+    padding: 5px;
+    border: none;
+    background: white;
+    box-shadow: 0px 0px 5px rgba(255, 255, 0, 0.8);
+}
+
+.teamForm button {
+    padding: 10px;
+    min-width: 30%;
+    background: linear-gradient(70deg, rgb(255, 242, 142), rgb(129, 216, 136));
+    font-size: 40px;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+}
+
+.matchOverview {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 10px;
+    gap: 5px;
+}
+
+.allianceBoard {
+    display: flex;
+    justify-content: space-evenly;
+    flex-grow: 1;
+}
+
+.allianceBoard button {
+    border: 1px solid black;
+    padding: 3px 15px;
+    padding-bottom: 0px;
+    border-radius: 5px;
+    font-size: 45px;
+    font-family: "Teko", sans-serif;
+}
+
+
 .matches {
     display: flex;
     flex-direction: row;
