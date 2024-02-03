@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export async function POST(req){
    let body = await req.json();
-
+   console.log(body);
    //check pre-match
    if (!(_.isString(body.scoutname) && _.isNumber(body.scoutteam) && _.isNumber(body.team) && _.isNumber(body.match))) {
       return NextResponse.json({message: "Invalid Pre-Match Data!"}, {status: 400});
@@ -11,7 +11,6 @@ export async function POST(req){
 
    //if noshow add row
    if(body.noshow){
-      console.log(body);
       return NextResponse.json({message: "Success!"}, {status: 200});
    }
 
@@ -25,15 +24,15 @@ export async function POST(req){
    }
 
    //check end
-   if(!(_.isNumber(body.endlocation)&&_.isNumber(body.stageplacement)&&_.isBoolean(body.harmony)&&_.isNumber(body.trapScored)&&_.isNumber(body.trapFailed0))){
+   if(!(_.isNumber(body.endlocation)&&_.isNumber(body.stageplacement)&&_.isBoolean(body.harmony)&&_.isNumber(body.trapscored)&&_.isNumber(body.trapfailed))){
       return NextResponse.json({message: "Invalid Endgame Data!"}, {status: 400});
    }
    //check qualitative
-   if(!(_.isNumber(body.maneuverability)&&_.isNumber(body.aggression)&&_.isNumber(body.defenseevasion)&&_.isNumber(body.speakerspeed)&&_.isNumber(body.ampspeed)&&_.isBoolean(body.gndintake)&&_.isBoolean(body.srcintake)&&_.isNumber(body.isstagehazard)&&_.isNumber(body.trapspeed)&&_.isNumber(body.onstagespeed)&&_.isNumber(harmonyspeed))){
+   if(!(_.isNumber(body.maneuverability)&&_.isNumber(body.aggression)&&_.isNumber(body.defenseevasion)&&_.isNumber(body.speakerspeed)&&_.isNumber(body.ampspeed)&&_.isBoolean(body.gndintake)&&_.isBoolean(body.srcintake)&&_.isNumber(body.stagehazard)&&_.isNumber(body.trapspeed)&&_.isNumber(body.onstagespeed)&&_.isNumber(body.harmonyspeed))){
       return NextResponse.json({message: "Invalid Qualitative Data!"}, {status: 400});
    }
    //check comments
-   if(!(_.isString(body.generalcomments)&&_.isString(body.breakdowncomments)&&_.isString(body.defensecomments))){
+   if((_.isString(body.generalcomments) == false) || ((_.isString(body.breakdowncomments) || _.isNull(body.breakdowncomments)) == false) || ((_.isString(body.defensecomments) || _.isNull(body.defensecomments)) == false)) {
       return NextResponse.json({message: "Invalid Comments!"}, {status: 400});
    }
 

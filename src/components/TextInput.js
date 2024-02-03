@@ -4,7 +4,7 @@ export default function TextInput ({ visibleName, internalName, defaultValue, ty
         <div className={styles.TextInput}>
             <label className={styles.font} htmlFor={internalName}>{visibleName}</label>
             <br></br>
-            <input type={type} id={internalName} name={internalName} defaultValue={defaultValue}></input>
+            <input className="preMatchInput" type={type} id={internalName} name={internalName} defaultValue={defaultValue}></input>
             <br></br>
         </div>
     )
