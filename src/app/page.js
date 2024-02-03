@@ -71,10 +71,14 @@ export default function Home() {
         method: "POST",
         body: JSON.stringify(data)
       }).then((response)=> {
-        if(response.status === 200) {
+        if(response.status === 201) {
           return response.json();
         } else {
-          return response.json().then(err => Promise.reject(err.message));
+          if(TextInput.value = "") {
+            alert("Complete match info!");
+          } else {
+            return response.json().then(err => Promise.reject(err.message));
+          }
         }
       }) 
       .then(data => {
@@ -123,15 +127,18 @@ export default function Home() {
             visibleName={"Team #:"} 
             internalName={"scoutteam"} 
             defaultValue={scoutProfile?.scoutteam || ""}
+            type={"number"}
           />
           <TextInput
             visibleName={"Team Scouted:"}
             internalName={"team"}
+            type={"number"}
           />
           <TextInput 
             visibleName={"Match #:"} 
             internalName={"match"} 
             defaultValue={scoutProfile?.match || ""}
+            type={"number"}
           />
         </div>
         <Checkbox
