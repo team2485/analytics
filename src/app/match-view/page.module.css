@@ -32,7 +32,7 @@
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
 }
 
-.matchOverview {
+.matchNav {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -46,7 +46,7 @@
     flex-grow: 1;
 }
 
-.matchOverview button {
+.matchNav button {
     border: 1px solid black;
     padding: 3px 15px;
     padding-bottom: 0px;
@@ -55,6 +55,34 @@
     font-family: "Teko", sans-serif;
 }
 
+.matchNav button:hover {
+    background: black !important;
+    color: yellow !important;
+}
+
+.allianceESPMs {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+}
+
+.allianceGraphs {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin: 10px;
+    margin-top: 0px;
+    gap: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+    justify-content: center;
+}
+
+.espmOverTimeContainer {
+    min-width: 30%;
+    text-align: center;
+}
 
 .matches {
     display: flex;
@@ -67,17 +95,17 @@
     font-family: 'Teko', sans-serif;
 }
 
-.matchTeam {
+.lightBorderBox {
     flex-grow: 1;
     border-radius: 10px;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
 }
 
-.matchTeam h1, .matchTeam h2 {
+.lightBorderBox h1, .lightBorderBox h2 {
     text-align: center;
 }
 
-.matchTeam h1 {
+.lightBorderBox h1 {
     font-size: 45px;
 }
 

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, LineChart, Line, RadarChart, PolarRadiusAxis, PolarAngleAxis, PolarGrid, Radar, Legend } from 'recharts';
 import { VictoryPie } from "victory";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -28,7 +28,7 @@ export default function MatchView() {
       "2485": {
         team: 2485,
         teamName: "W.A.R. Lords",
-        auto: 30,
+        auto: 15,
         tele: 27,
         end: 5,
         avgNotes: {
@@ -47,8 +47,8 @@ export default function MatchView() {
       "9485": {
         team: 9485,
         teamName: "W.A.R. Lords 2",
-        auto: 10,
-        tele: 17,
+        auto: 0,
+        tele: 45,
         end: 10,
         avgNotes: {
           speaker: 1,
@@ -124,6 +124,22 @@ export default function MatchView() {
     </div>
   }
 
+  function AllianceDisplay({teams, colors}) {
+    let auto = teams[0].auto + teams[1].auto + teams[2].auto;
+    let tele = teams[0].tele + teams[1].tele + teams[2].tele;
+    let end = teams[0].end + teams[1].end + teams[2].end;
+    return <div className={styles.lightBorderBox}>
+      <div className={styles.scoreBreakdownContainer}>
+        <div style={{background: colors[0]}} className={styles.espmBox}>{auto + tele + end}</div>
+        <div className={styles.espmBreakdown}>
+          <div style={{background: colors[1]}}>A: {auto}</div>
+          <div style={{background: colors[1]}}>T: {tele}</div>
+          <div style={{background: colors[1]}}>E: {end}</div>
+        </div>
+      </div>
+    </div>
+  }
+
   function TeamDisplay({teamData, colors}) {
     const endgameData = [{ x: 'None', y: teamData.endgame.none },
               { x: 'Park', y: teamData.endgame.park },
@@ -132,7 +148,7 @@ export default function MatchView() {
 
 
 
-    return <div className={styles.matchTeam}>
+    return <div className={styles.lightBorderBox}>
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
       <h2 style={{color: colors[3]}}>{teamData.teamName}</h2>
       <div className={styles.scoreBreakdownContainer}>
@@ -193,13 +209,72 @@ export default function MatchView() {
     </div>
   }
 
-  //if data is in, show interface
+  //if data is in, show interface...
+
+  //getting espm/time data
+  let get = (alliance, thing) => alliance[0][thing] + alliance[1][thing] + alliance[2][thing];
+  let blueAlliance = [data.team1, data.team2, data.team3];
+  let redAlliance = [data.team4, data.team5, data.team6];
+  let blueScores = [0, get(blueAlliance, "auto")]
+  blueScores.push(blueScores[1] + get(blueAlliance, "tele"))
+  blueScores.push(blueScores[2] + get(blueAlliance, "end"))
+  let redScores = [0, get(redAlliance, "auto")]
+  redScores.push(redScores[1] + get(redAlliance, "tele"))
+  redScores.push(redScores[2] + get(redAlliance, "end"))
+  let espmData = [
+    {name: "Start", blue: 0, red: 0},
+    {name: "Auto", blue: blueScores[1], red: redScores[1]},
+    {name: "Tele", blue: blueScores[2], red: redScores[2]},
+    {name: "End", blue: blueScores[3], red: redScores[3]},
+  ];
   return (
     <div>
-      <div className={styles.matchOverview}>
+      <div className={styles.matchNav}>
         <AllianceButtons t1={data.team1} t2={data.team2} t3={data.team3} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceButtons>
-        <Link href="/match-view?team1=2485"><button style={{background: "#ffff88", color: "black"}}>Back</button></Link>
+        <Link href={`/match-view?team1=${data.team1.team}&team2=${data.team2.team}&team3=${data.team3.team}&team4=${data.team4.team}&team5=${data.team5.team}&team6=${data.team6.team}`}><button style={{background: "#ffff88", color: "black"}}>Back</button></Link>
         <AllianceButtons t1={data.team4} t2={data.team5} t3={data.team6} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
+      </div>
+      <div className={styles.allianceESPMs}>
+        <AllianceDisplay teams={[data.team1, data.team2, data.team3]} colors={["#D3DFFF", "#A9BDFF"]}></AllianceDisplay>
+        <AllianceDisplay teams={[data.team4, data.team5, data.team6]} colors={["#FFE4E9", "#FDC3CA"]}></AllianceDisplay>
+      </div>
+      <div className={styles.allianceGraphs}>
+        <RadarChart outerRadius={90} width={730} height={250} data={[{
+    "subject": "Math",
+    "A": 120,
+    "B": 110,
+    "fullMark": 150
+  },
+  {
+    "subject": "Chinese",
+    "A": 98,
+    "B": 130,
+    "fullMark": 150
+  },
+  {
+    "subject": "English",
+    "A": 86,
+    "B": 130,
+    "fullMark": 150
+  }]}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="subject" />
+          <PolarRadiusAxis angle={30} domain={[0, 150]} />
+          <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+          <Radar name="Lily" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+          <Legend />
+        </RadarChart>
+        <div className={styles.espmOverTimeContainer}>
+          <h2>ESPM / time</h2>
+          <LineChart width={450} height={300} data={espmData}>
+            <XAxis dataKey="name"/>
+            <YAxis/>
+            <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+            <Line type="monotone" dataKey="blue" stroke="#99ADEF" />
+            <Line type="monotone" dataKey="red" stroke="#EDB3BA" />
+            <Tooltip></Tooltip>
+          </LineChart>
+        </div>
       </div>
       <div className={styles.matches}>
         <TeamDisplay teamData={data.team1} colors={COLORS[0]}></TeamDisplay>
