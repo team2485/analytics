@@ -43,6 +43,17 @@ export default function MatchView() {
           onstage: 30,
           onstageHarmony: 60,
         },
+        qualitative: {
+          onstagespeed: 5,
+          harmonyspeed: 1,
+          trapspeed: 1,
+          ampspeed: 1,
+          speakerspeed: 0,
+          stagehazard: 5,
+          defenseevasion: 5,
+          aggression: 1,
+          maneuverability: 5,
+        }
       },
       "9485": {
         team: 9485,
@@ -62,6 +73,17 @@ export default function MatchView() {
           onstage: 30,
           onstageHarmony: 20,
         },
+        qualitative: {
+          onstagespeed: 5,
+          harmonyspeed: 4,
+          trapspeed: 3,
+          ampspeed: 2,
+          speakerspeed: 1,
+          stagehazard: 0,
+          defenseevasion: 1,
+          aggression: 2,
+          maneuverability: 3,
+        }
       },
     })
   }, []);
@@ -227,6 +249,11 @@ export default function MatchView() {
     {name: "Tele", blue: blueScores[2], red: redScores[2]},
     {name: "End", blue: blueScores[3], red: redScores[3]},
   ];
+  //getting radar data
+  let blueRadar = [];
+  for (let qual of Object.keys(data.team1.qualitative)) {
+    blueRadar.push({qual, team1: data.team1.qualitative[qual], team2: data.team2.qualitative[qual], fullMark: 5});
+  }
   return (
     <div>
       <div className={styles.matchNav}>
@@ -239,29 +266,12 @@ export default function MatchView() {
         <AllianceDisplay teams={[data.team4, data.team5, data.team6]} colors={["#FFE4E9", "#FDC3CA"]}></AllianceDisplay>
       </div>
       <div className={styles.allianceGraphs}>
-        <RadarChart outerRadius={90} width={730} height={250} data={[{
-    "subject": "Math",
-    "A": 120,
-    "B": 110,
-    "fullMark": 150
-  },
-  {
-    "subject": "Chinese",
-    "A": 98,
-    "B": 130,
-    "fullMark": 150
-  },
-  {
-    "subject": "English",
-    "A": 86,
-    "B": 130,
-    "fullMark": 150
-  }]}>
+        <RadarChart outerRadius={90} width={730} height={250} data={blueRadar}>
           <PolarGrid />
-          <PolarAngleAxis dataKey="subject" />
-          <PolarRadiusAxis angle={30} domain={[0, 150]} />
-          <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-          <Radar name="Lily" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+          <PolarAngleAxis dataKey="qual" />
+          <PolarRadiusAxis angle={10} domain={[0, 5]} />
+          <Radar name={data.team1.team} dataKey="team1" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+          <Radar name={data.team2.team} dataKey="team2" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
           <Legend />
         </RadarChart>
         <div className={styles.espmOverTimeContainer}>
