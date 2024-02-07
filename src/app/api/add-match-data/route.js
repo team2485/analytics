@@ -12,7 +12,8 @@ export async function POST(req){
 
    //if noshow add row
    if(body.noshow){
-
+      let resp = await sql`INSERT INTO testmatches VALUES(${ScoutTeam}, ${Team},${Match}, ${Breakdown}, ${NoShow}, ${Leave}, ${AutoAmpScored}, ${AutoAmpFailed}, ${AutoSpeakerScored}, ${AutoSpeakerFailed},${TeleAmpScored}, ${TeleAmpFailed}, ${TeleNAmpedSpeakerScored}, ${TeleAmpedSpeakerScored}, ${TeleSpeakerFailed}, ${EndLocation}, ${StagePlacement}, ${Harmony}, ${TrapScored},${TrapFailed}, ${Maneuverablity}, ${Aggression}, ${DefenseEvasion}, ${SpeakerSpeed}, ${AmpSpeed}, ${GndIntake}, ${SrcIntake}, ${StageHazard}, ${TrapSpeed}, ${OnStageSpeed}, ${HarmonySpeed}, ${GeneralComments}, ${BreakdownComments}, ${DefenseComments})`;
+   return NextResponse.json({message: "Success!"}, {status: 200});
    }
 
    //check auto
@@ -38,8 +39,6 @@ export async function POST(req){
    }
 
    //add row
-
-
    let resp = await sql`INSERT INTO testmatches VALUES(${ScoutTeam}, ${Team},${Match}, ${Breakdown}, ${NoShow}, ${Leave}, ${AutoAmpScored}, ${AutoAmpFailed}, ${AutoSpeakerScored}, ${AutoSpeakerFailed},${TeleAmpScored}, ${TeleAmpFailed}, ${TeleNAmpedSpeakerScored}, ${TeleAmpedSpeakerScored}, ${TeleSpeakerFailed}, ${EndLocation}, ${StagePlacement}, ${Harmony}, ${TrapScored},${TrapFailed}, ${Maneuverablity}, ${Aggression}, ${DefenseEvasion}, ${SpeakerSpeed}, ${AmpSpeed}, ${GndIntake}, ${SrcIntake}, ${StageHazard}, ${TrapSpeed}, ${OnStageSpeed}, ${HarmonySpeed}, ${GeneralComments}, ${BreakdownComments}, ${DefenseComments})`;
    return NextResponse.json({message: "Success!"}, {status: 200});
 }
