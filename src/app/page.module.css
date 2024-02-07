@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Philosopher&display=swap');
+
 .MainDiv {
     background: black;
     color: white;
     padding: 5px 40px;
     padding-bottom: 50px;
     min-height: calc(100vh - 45px);
+    font-family: 'Philosopher', sans-serif;
 }
 
 .MatchInfo {
@@ -37,14 +40,6 @@
     align-items: center;
   }
 
-  .MainDiv input[type=text] {
-    font-family: 'Teko', sans-serif;
-    background-color: #cdf3ff;
-    border-radius: 5px;
-    caret-color: black;
-    border: 2px solid black;
-  }
-
   .MainDiv button[type=submit] {
     background-color: #FFD900;
     height: 50px;
@@ -55,6 +50,14 @@
     left: 50%;
     position: relative;
     transform: translateX(-50%);
+  }
+
+  .MainDiv button[type=submit]:hover {
+    background-color: #fcec91;
+  }
+
+  .MainDiv button, .MainDiv input {
+    font-family: 'Philosopher', sans-serif;
   }
 
   .MainDiv label {
@@ -90,4 +93,13 @@ hr.subsubheading {
   flex-wrap: wrap;
   justify-content: center;
   padding: 10px;
+}
+.MainDiv input:focus,
+.MainDiv textarea:focus {
+    border-color: rgb(87, 171, 254);
+    outline: none;
+}
+.MainDiv input:focus:invalid,
+.MainDiv textarea:focus:invalid {
+    border-color: rgb(184, 0, 0);
 }

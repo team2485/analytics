@@ -14,7 +14,7 @@
     height: 40px;
     width: 150px;
     border-radius: 5px;
-    border: 2px solid #116215;
+    border: 2px solid #15771a;
 }
 
 .Fail {
@@ -24,7 +24,7 @@
     height: 40px;
     width: 150px;
     border-radius: 5px;
-    border: 2px solid #a13c3c;
+    border: 2px solid rgb(184, 0, 0);
 }
 
 .NumericInput {

@@ -59,14 +59,12 @@ export default function Home() {
 
     let preMatchInputs = document.querySelectorAll(".preMatchInput");
     for (let preMatchInput of preMatchInputs) {
-      if(preMatchInput.value == "" || preMatchInput.value == "0") {
-        alert("Please complete pre-match data!");
+      if(preMatchInput.value == "" || preMatchInput.value <= "0") {
+        alert("Invalid Pre-Match Data!");
         submitButton.disabled = false;
         return;
       } 
     }
-
-
 
     if (confirm("Are you sure you want to submit?") == true) {
       fetch('/api/add-match-data', {
@@ -303,7 +301,8 @@ export default function Home() {
             </div>
           </>
         )}
-        <button id="submit" type="submit">Submit</button>
+        <br></br>
+        <button id="submit" type="submit">SUBMIT</button>
       </form>
     </div>
   );
