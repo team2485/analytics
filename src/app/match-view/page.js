@@ -69,8 +69,8 @@ export default function MatchView() {
         },
         endgame: {
           none: 5,
-          park: 45,
-          onstage: 30,
+          park: 44,
+          onstage: 31,
           onstageHarmony: 20,
         },
         qualitative: {
@@ -302,7 +302,7 @@ export default function MatchView() {
     <div>
       <div className={styles.matchNav}>
         <AllianceButtons t1={data.team1} t2={data.team2} t3={data.team3} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceButtons>
-        <Link href={`/match-view?team1=${data.team1.team}&team2=${data.team2.team}&team3=${data.team3.team}&team4=${data.team4.team}&team5=${data.team5.team}&team6=${data.team6.team}`}><button style={{background: "#ffff88", color: "black"}}>Back</button></Link>
+        <Link href={`/match-view?team1=${data.team1.team}&team2=${data.team2.team}&team3=${data.team3.team}&team4=${data.team4.team}&team5=${data.team5.team}&team6=${data.team6.team}`}><button style={{background: "#ffff88", color: "black"}}>Edit</button></Link>
         <AllianceButtons t1={data.team4} t2={data.team5} t3={data.team6} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
       </div>
       <div className={styles.allianceESPMs}>
@@ -312,7 +312,7 @@ export default function MatchView() {
       <div className={styles.allianceGraphs}>
         <div className={styles.graphContainer}>
           <h2>Q Ratings</h2>
-          <RadarChart outerRadius={90} width={420} height={270} data={radarData}>
+          <RadarChart outerRadius={90} width={420} height={300} data={radarData}>
             <PolarGrid />
             <PolarAngleAxis dataKey="qual" />
             <PolarRadiusAxis angle={10} domain={[0, 5]} />
@@ -335,7 +335,7 @@ export default function MatchView() {
         </div>
         <div className={styles.graphContainer}>
           <h2>Q Ratings</h2>
-          <RadarChart outerRadius={90} width={420} height={270} data={radarData}>
+          <RadarChart outerRadius={90} width={420} height={300} data={radarData}>
             <PolarGrid />
             <PolarAngleAxis dataKey="qual" />
             <PolarRadiusAxis angle={10} domain={[0, 5]} />
