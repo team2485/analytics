@@ -146,10 +146,41 @@ export default function MatchView() {
     </div>
   }
 
-  function AllianceDisplay({teams, colors}) {
-    let auto = teams[0].auto + teams[1].auto + teams[2].auto;
-    let tele = teams[0].tele + teams[1].tele + teams[2].tele;
-    let end = teams[0].end + teams[1].end + teams[2].end;
+  function AllianceDisplay({teams, opponents, colors}) {
+    //calc alliance espm breakdown
+    const auto = teams[0].auto + teams[1].auto + teams[2].auto;
+    const tele = teams[0].tele + teams[1].tele + teams[2].tele;
+    const end = teams[0].end + teams[1].end + teams[2].end;
+
+    //calc ranking points
+    const RGBColors = {
+      red: "#FF9393",
+      green: "#BFFEC1",
+      yellow: "#FFDD9A"
+    }
+    //win = higher espm than opponents
+    const teamESPM = (team) => team.auto + team.tele + team.end;
+    const opponentsESPM = teamESPM(opponents[0]) + teamESPM(opponents[1]) + teamESPM(opponents[2]);
+    const currentAllianceESPM = auto + tele + end;
+    let RP_WIN = RGBColors.red;
+    if (currentAllianceESPM > opponentsESPM) RP_WIN = RGBColors.green;
+    else if (currentAllianceESPM == opponentsESPM) RP_WIN = RGBColors.yellow;
+
+    //melody = can get 18 notes in speaker & amp (15 is yellow)
+    const teamMelodyNotes = (team) => Math.floor(team.avgNotes.speaker + team.avgNotes.ampedSpeaker + team.avgNotes.amp);
+    const allianceNotes = teamMelodyNotes(teams[0]) + teamMelodyNotes(teams[1]) + teamMelodyNotes(teams[2]);
+    let RP_MELODY = RGBColors.red;
+    if (allianceNotes >= 18) RP_MELODY = RGBColors.green;
+    else if (allianceNotes >= 15) RP_MELODY = RGBColors.yellow;
+
+    //ensemble = 2 teams will probably go onstage & alliance is estimated to get more than 10 points
+    const goesOnstage = (team) => (team.endgame.onstage + team.endgame.onstageHarmony) > 50;
+    const onstageTeamCount = goesOnstage(teams[0]) + goesOnstage(teams[1]) + goesOnstage(teams[2]);
+    const endgamePoints = Math.floor(teams[0].end) + Math.floor(teams[1].end) + Math.floor(teams[2].end);
+    let RP_ENSEMBLE = RGBColors.red;
+    if (onstageTeamCount >= 2 && endgamePoints >= 10) RP_ENSEMBLE = RGBColors.green;
+
+
     return <div className={styles.lightBorderBox}>
       <div className={styles.scoreBreakdownContainer}>
         <div style={{background: colors[0]}} className={styles.espmBox}>{auto + tele + end}</div>
@@ -158,6 +189,12 @@ export default function MatchView() {
           <div style={{background: colors[1]}}>T: {tele}</div>
           <div style={{background: colors[1]}}>E: {end}</div>
         </div>
+      </div>
+      <div className={styles.RPs}>
+        <div style={{background: colors[1]}}>RPs:</div>
+        <div style={{background: RP_MELODY}}>Melody</div>
+        <div style={{background: RP_ENSEMBLE}}>Ensemble</div>
+        <div style={{background: RP_WIN}}>Victory</div>
       </div>
     </div>
   }
@@ -235,8 +272,8 @@ export default function MatchView() {
 
   //getting espm/time data
   let get = (alliance, thing) => alliance[0][thing] + alliance[1][thing] + alliance[2][thing];
-  let blueAlliance = [data.team1, data.team2, data.team3];
-  let redAlliance = [data.team4, data.team5, data.team6];
+  const blueAlliance = [data.team1, data.team2, data.team3];
+  const redAlliance = [data.team4, data.team5, data.team6];
   let blueScores = [0, get(blueAlliance, "auto")]
   blueScores.push(blueScores[1] + get(blueAlliance, "tele"))
   blueScores.push(blueScores[2] + get(blueAlliance, "end"))
@@ -250,9 +287,16 @@ export default function MatchView() {
     {name: "End", blue: blueScores[3], red: redScores[3]},
   ];
   //getting radar data
-  let blueRadar = [];
+  let radarData = [];
   for (let qual of Object.keys(data.team1.qualitative)) {
-    blueRadar.push({qual, team1: data.team1.qualitative[qual], team2: data.team2.qualitative[qual], fullMark: 5});
+    radarData.push({qual, 
+      team1: data.team1.qualitative[qual],
+      team2: data.team2.qualitative[qual],
+      team3: data.team3.qualitative[qual],
+      team4: data.team4.qualitative[qual],
+      team5: data.team5.qualitative[qual],
+      team6: data.team6.qualitative[qual],
+      fullMark: 5});
   }
   return (
     <div>
@@ -262,19 +306,23 @@ export default function MatchView() {
         <AllianceButtons t1={data.team4} t2={data.team5} t3={data.team6} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
       </div>
       <div className={styles.allianceESPMs}>
-        <AllianceDisplay teams={[data.team1, data.team2, data.team3]} colors={["#D3DFFF", "#A9BDFF"]}></AllianceDisplay>
-        <AllianceDisplay teams={[data.team4, data.team5, data.team6]} colors={["#FFE4E9", "#FDC3CA"]}></AllianceDisplay>
+        <AllianceDisplay teams={blueAlliance} opponents={redAlliance} colors={["#D3DFFF", "#A9BDFF"]}></AllianceDisplay>
+        <AllianceDisplay teams={redAlliance} opponents={blueAlliance} colors={["#FFE4E9", "#FDC3CA"]}></AllianceDisplay>
       </div>
       <div className={styles.allianceGraphs}>
-        <RadarChart outerRadius={90} width={730} height={250} data={blueRadar}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="qual" />
-          <PolarRadiusAxis angle={10} domain={[0, 5]} />
-          <Radar name={data.team1.team} dataKey="team1" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-          <Radar name={data.team2.team} dataKey="team2" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
-          <Legend />
-        </RadarChart>
-        <div className={styles.espmOverTimeContainer}>
+        <div className={styles.graphContainer}>
+          <h2>Q Ratings</h2>
+          <RadarChart outerRadius={90} width={420} height={270} data={radarData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="qual" />
+            <PolarRadiusAxis angle={10} domain={[0, 5]} />
+            <Radar name={data.team1.team} dataKey="team1" stroke={COLORS[0][0]} fill={COLORS[0][3]} fillOpacity={0.3} />
+            <Radar name={data.team2.team} dataKey="team2" stroke={COLORS[1][0]} fill={COLORS[1][3]} fillOpacity={0.3} />
+            <Radar name={data.team3.team} dataKey="team3" stroke={COLORS[2][0]} fill={COLORS[2][3]} fillOpacity={0.3} />
+            <Legend />
+          </RadarChart>
+        </div>
+        <div className={styles.graphContainer}>
           <h2>ESPM / time</h2>
           <LineChart width={450} height={300} data={espmData}>
             <XAxis dataKey="name"/>
@@ -284,6 +332,18 @@ export default function MatchView() {
             <Line type="monotone" dataKey="red" stroke="#EDB3BA" />
             <Tooltip></Tooltip>
           </LineChart>
+        </div>
+        <div className={styles.graphContainer}>
+          <h2>Q Ratings</h2>
+          <RadarChart outerRadius={90} width={420} height={270} data={radarData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="qual" />
+            <PolarRadiusAxis angle={10} domain={[0, 5]} />
+            <Radar name={data.team4.team} dataKey="team1" stroke={COLORS[3][0]} fill={COLORS[3][3]} fillOpacity={0.3} />
+            <Radar name={data.team5.team} dataKey="team2" stroke={COLORS[4][0]} fill={COLORS[4][3]} fillOpacity={0.3} />
+            <Radar name={data.team6.team} dataKey="team3" stroke={COLORS[5][0]} fill={COLORS[5][3]} fillOpacity={0.3} />
+            <Legend />
+          </RadarChart>
         </div>
       </div>
       <div className={styles.matches}>

@@ -77,11 +77,35 @@
     border-radius: 10px;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     justify-content: center;
+    align-items: center;
 }
 
-.espmOverTimeContainer {
+.graphContainer {
     min-width: 30%;
     text-align: center;
+}
+
+.RPs {
+    display: flex;
+    margin: 10px 40px;
+    justify-content: space-around;
+}
+
+.RPs > div {
+    display: inline-block;
+    flex-grow: 1;
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+}
+
+.RPs > div:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.RPs > div:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .matches {
