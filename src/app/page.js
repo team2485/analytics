@@ -20,8 +20,8 @@ export default function Home() {
   const form = useRef();
 
   useEffect(()=> {
-    if(typeof window !== "undefined") {
-      setScoutProfile(JSON.parse(localStorage.ScoutProfile))
+    if(typeof window !== "undefined" && window.localStorage && window.localStorage.ScoutProfile) {
+      setScoutProfile(JSON.parse(localStorage?.ScoutProfile))
     }
   }, [])
 
