@@ -20,6 +20,22 @@ export default function MatchView() {
     ["#FFE3D3", "#EBB291", "#E19A70", "#D7814F"],
   ];
 
+  const defaultTeam = {
+    team: -1,
+    teamName: "Invisibotics 👻",
+    auto: 0,
+    tele: 0,
+    end: 0,
+    avgNotes: {
+      speaker: 0,
+      ampedSpeaker: 0,
+      amp: 0,
+      trap: 0,
+    },
+    endgame: { none: 100, park: 0, onstage: 0, onstageHarmony: 0},
+    qualitative: { onstagespeed: 0, harmonyspeed: 0, trapspeed: 0, ampspeed: 0, speakerspeed: 0, stagehazard: 0, defenseevasion: 0, aggression: 0, maneuverability: 0}
+  }
+
   //get data
   useEffect(() => {
     //TODO: Get Data (from localstorage if cached recently)
@@ -148,9 +164,9 @@ export default function MatchView() {
 
   function AllianceDisplay({teams, opponents, colors}) {
     //calc alliance espm breakdown
-    const auto = teams[0].auto + teams[1].auto + teams[2].auto;
-    const tele = teams[0].tele + teams[1].tele + teams[2].tele;
-    const end = teams[0].end + teams[1].end + teams[2].end;
+    const auto = (teams[0]?.auto || 0) + (teams[1]?.auto || 0) + (teams[2]?.auto || 0);
+    const tele = (teams[0]?.tele || 0) + (teams[1]?.tele || 0) + (teams[2]?.tele || 0);
+    const end = (teams[0]?.end || 0) + (teams[1]?.end || 0) + (teams[2]?.end || 0);
 
     //calc ranking points
     const RGBColors = {
@@ -159,7 +175,7 @@ export default function MatchView() {
       yellow: "#FFDD9A"
     }
     //win = higher espm than opponents
-    const teamESPM = (team) => team.auto + team.tele + team.end;
+    const teamESPM = (team) => team ? team.auto + team.tele + team.end : 0;
     const opponentsESPM = teamESPM(opponents[0]) + teamESPM(opponents[1]) + teamESPM(opponents[2]);
     const currentAllianceESPM = auto + tele + end;
     let RP_WIN = RGBColors.red;
@@ -271,9 +287,15 @@ export default function MatchView() {
   //if data is in, show interface...
 
   //getting espm/time data
-  let get = (alliance, thing) => alliance[0][thing] + alliance[1][thing] + alliance[2][thing];
-  const blueAlliance = [data.team1, data.team2, data.team3];
-  const redAlliance = [data.team4, data.team5, data.team6];
+  let get = (alliance, thing) => {
+    let sum = 0;
+    if (alliance[0] && alliance[0][thing]) sum += alliance[0][thing];
+    if (alliance[1] && alliance[1][thing]) sum += alliance[1][thing];
+    if (alliance[2] && alliance[2][thing]) sum += alliance[2][thing];
+    return sum;
+  }
+  const blueAlliance = [data.team1 || defaultTeam, data.team2 || defaultTeam, data.team3 || defaultTeam];
+  const redAlliance = [data.team4 || defaultTeam, data.team5 || defaultTeam, data.team6 || defaultTeam];
   let blueScores = [0, get(blueAlliance, "auto")]
   blueScores.push(blueScores[1] + get(blueAlliance, "tele"))
   blueScores.push(blueScores[2] + get(blueAlliance, "end"))
@@ -288,22 +310,23 @@ export default function MatchView() {
   ];
   //getting radar data
   let radarData = [];
-  for (let qual of Object.keys(data.team1.qualitative)) {
+  for (let qual of ['onstagespeed', 'harmonyspeed', 'trapspeed', 'ampspeed', 'speakerspeed', 'stagehazard', 'defenseevasion', 'aggression', 'maneuverability']) {
     radarData.push({qual, 
-      team1: data.team1.qualitative[qual],
-      team2: data.team2.qualitative[qual],
-      team3: data.team3.qualitative[qual],
-      team4: data.team4.qualitative[qual],
-      team5: data.team5.qualitative[qual],
-      team6: data.team6.qualitative[qual],
+      team1: data?.team1?.qualitative[qual] || 0,
+      team2: data?.team2?.qualitative[qual] || 0,
+      team3: data?.team3?.qualitative[qual] || 0,
+      team4: data?.team4?.qualitative[qual] || 0,
+      team5: data?.team5?.qualitative[qual] || 0,
+      team6: data?.team6?.qualitative[qual] || 0,
       fullMark: 5});
   }
+  console.log(radarData);
   return (
     <div>
       <div className={styles.matchNav}>
-        <AllianceButtons t1={data.team1} t2={data.team2} t3={data.team3} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceButtons>
-        <Link href={`/match-view?team1=${data.team1.team}&team2=${data.team2.team}&team3=${data.team3.team}&team4=${data.team4.team}&team5=${data.team5.team}&team6=${data.team6.team}`}><button style={{background: "#ffff88", color: "black"}}>Edit</button></Link>
-        <AllianceButtons t1={data.team4} t2={data.team5} t3={data.team6} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
+        <AllianceButtons t1={data.team1 || defaultTeam} t2={data.team2 || defaultTeam} t3={data.team3 || defaultTeam} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceButtons>
+        <Link href={`/match-view?team1=${data.team1?.team || ""}&team2=${data.team2?.team || ""}&team3=${data.team3?.team || ""}&team4=${data.team4?.team || ""}&team5=${data.team5?.team || ""}&team6=${data.team6?.team || ""}`}><button style={{background: "#ffff88", color: "black"}}>Edit</button></Link>
+        <AllianceButtons t1={data.team4 || defaultTeam} t2={data.team5 || defaultTeam} t3={data.team6 || defaultTeam} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
       </div>
       <div className={styles.allianceESPMs}>
         <AllianceDisplay teams={blueAlliance} opponents={redAlliance} colors={["#D3DFFF", "#A9BDFF"]}></AllianceDisplay>
@@ -316,9 +339,9 @@ export default function MatchView() {
             <PolarGrid />
             <PolarAngleAxis dataKey="qual" />
             <PolarRadiusAxis angle={10} domain={[0, 5]} />
-            <Radar name={data.team1.team} dataKey="team1" stroke={COLORS[0][0]} fill={COLORS[0][3]} fillOpacity={0.3} />
-            <Radar name={data.team2.team} dataKey="team2" stroke={COLORS[1][0]} fill={COLORS[1][3]} fillOpacity={0.3} />
-            <Radar name={data.team3.team} dataKey="team3" stroke={COLORS[2][0]} fill={COLORS[2][3]} fillOpacity={0.3} />
+            <Radar name={data.team1?.team || "-1"} dataKey="team1" stroke={COLORS[0][0]} fill={COLORS[0][3]} fillOpacity={0.3} />
+            <Radar name={data.team2?.team || "-1"} dataKey="team2" stroke={COLORS[1][0]} fill={COLORS[1][3]} fillOpacity={0.3} />
+            <Radar name={data.team3?.team || "-1"} dataKey="team3" stroke={COLORS[2][0]} fill={COLORS[2][3]} fillOpacity={0.3} />
             <Legend />
           </RadarChart>
         </div>
@@ -339,22 +362,22 @@ export default function MatchView() {
             <PolarGrid />
             <PolarAngleAxis dataKey="qual" />
             <PolarRadiusAxis angle={10} domain={[0, 5]} />
-            <Radar name={data.team4.team} dataKey="team1" stroke={COLORS[3][0]} fill={COLORS[3][3]} fillOpacity={0.3} />
-            <Radar name={data.team5.team} dataKey="team2" stroke={COLORS[4][0]} fill={COLORS[4][3]} fillOpacity={0.3} />
-            <Radar name={data.team6.team} dataKey="team3" stroke={COLORS[5][0]} fill={COLORS[5][3]} fillOpacity={0.3} />
+            <Radar name={data.team4?.team || "-1"} dataKey="team4" stroke={COLORS[3][0]} fill={COLORS[3][3]} fillOpacity={0.3} />
+            <Radar name={data.team5?.team || "-1"} dataKey="team5" stroke={COLORS[4][0]} fill={COLORS[4][3]} fillOpacity={0.3} />
+            <Radar name={data.team6?.team || "-1"} dataKey="team6" stroke={COLORS[5][0]} fill={COLORS[5][3]} fillOpacity={0.3} />
             <Legend />
           </RadarChart>
         </div>
       </div>
       <div className={styles.matches}>
-        <TeamDisplay teamData={data.team1} colors={COLORS[0]}></TeamDisplay>
-        <TeamDisplay teamData={data.team2} colors={COLORS[1]}></TeamDisplay>
-        <TeamDisplay teamData={data.team3} colors={COLORS[2]}></TeamDisplay>
+        <TeamDisplay teamData={data.team1 || defaultTeam} colors={COLORS[0]}></TeamDisplay>
+        <TeamDisplay teamData={data.team2 || defaultTeam} colors={COLORS[1]}></TeamDisplay>
+        <TeamDisplay teamData={data.team3 || defaultTeam} colors={COLORS[2]}></TeamDisplay>
       </div>
       <div className={styles.matches}>
-        <TeamDisplay teamData={data.team4} colors={COLORS[3]}></TeamDisplay>
-        <TeamDisplay teamData={data.team5} colors={COLORS[4]}></TeamDisplay>
-        <TeamDisplay teamData={data.team6} colors={COLORS[5]}></TeamDisplay>
+        <TeamDisplay teamData={data.team4 || defaultTeam} colors={COLORS[3]}></TeamDisplay>
+        <TeamDisplay teamData={data.team5 || defaultTeam} colors={COLORS[4]}></TeamDisplay>
+        <TeamDisplay teamData={data.team6 || defaultTeam} colors={COLORS[5]}></TeamDisplay>
       </div>
     </div>
   )
