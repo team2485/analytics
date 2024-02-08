@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
+import { sql } from '@vercel/postgres';
 
-export function GET(request) {
+export async function GET(request) {
     //TODO: make actually fetch database
-    return NextResponse.json(["ESPM", "Maneuverability"]);
+    let data = await sql`SELECT * FROM TestMatches;`;
+
+    let values = data.rows.map(row => row.Scoutname);  
+    
+    //return NextResponse.json(values)
+    return NextResponse.json(["ESPM", "Auto", "Tele", "End", "Maneuverability", "Aggression", "DefenseEvasion", "IntakeSpeed", "StageHazard", "OnStageSpeed", "HarmonySpeed"]);
 }

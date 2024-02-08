@@ -6,7 +6,7 @@ export default function Picklist() {
   const [fields, setFields] = useState([]);
   const [picklist, setPicklist] = useState([]);
   const formRef = useRef();
-
+  
   useEffect(() => {
     fetch('/api/get-numeric-fields')
       .then(resp => resp.json())
@@ -50,11 +50,13 @@ export default function Picklist() {
         <button>Reload Picklist</button>
       </form>
       <table>
-        <tr><th>Team</th><th>Score</th></tr>
+        <tr><th>Team</th><th>Scout Name</th><th>Score</th><th>ESPM</th></tr>
         {picklist.map((teamData, index) => (
           <tr key={index}>
-            <td>{teamData.team}</td>
+            <td>{teamData}</td>
+            <td>{teamData.scoutname}</td>
             <td>{teamData.score}</td>
+            <td>{teamData.espm}</td>
           </tr>
         ))}
       </table>
