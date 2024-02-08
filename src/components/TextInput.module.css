@@ -3,11 +3,10 @@
     font-size: 25px;
     height: 40px;
     width: 150px;
-}
-
-.font {
-    font-family: 'Teko', sans-serif;
-    font-size: 25px;
+    background-color: #cdf3ff;
+    border-radius: 5px;
+    caret-color: black;
+    border: 2px solid #888484;
 }
 
 .TextInput {

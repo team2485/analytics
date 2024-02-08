@@ -46,3 +46,7 @@
     flex-direction: row;
     justify-content: center;
 }
+
+.option:hover, .checkOption:hover {
+    background-color: #8de3fc;
+}
