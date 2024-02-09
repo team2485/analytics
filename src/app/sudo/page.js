@@ -189,7 +189,6 @@ export default function Sudo() {
     "DefenseEvasion",
     "SpeakerSpeed",
     "AmpSpeed",
-    "IntakeSpeed",
     "GndIntake",
     "SrcIntake",
     "StageHazard",
