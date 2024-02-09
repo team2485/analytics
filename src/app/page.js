@@ -39,9 +39,11 @@ export default function Home() {
   }
   
   function submit(e) {
-    let submitButton = document.querySelector("#submit");
-    submitButton.disabled = true;
     e.preventDefault();
+    //disable submit
+    let submitButton = document.querySelector("#submit");//todo: get changed to a useRef
+    submitButton.disabled = true;
+    //import values from form to data variable
     let data = {noshow: false, leave: false, harmony: false, gndintake: false, srcintake: false, breakdown: false, defense: false, stageplacement: -1, breakdowncomments: null, defensecomments: null };
     [...new FormData(form.current).entries()].forEach(([name, value]) => {
       if (value == 'on') {
@@ -54,10 +56,12 @@ export default function Home() {
         }
       }
     });
+    //clear unneeded checkbox values
     data.breakdown = undefined;
     data.defense = undefined;
 
-    let preMatchInputs = document.querySelectorAll(".preMatchInput");
+    //check pre-match data
+    let preMatchInputs = document.querySelectorAll(".preMatchInput"); //todo: use the data object
     for (let preMatchInput of preMatchInputs) {
       if(preMatchInput.value == "" || preMatchInput.value <= "0") {
         alert("Invalid Pre-Match Data!");
@@ -66,6 +70,7 @@ export default function Home() {
       } 
     }
 
+    //confirm and submit
     if (confirm("Are you sure you want to submit?") == true) {
       fetch('/api/add-match-data', {
         method: "POST",
@@ -79,6 +84,7 @@ export default function Home() {
       }) 
       .then(data => {
         alert("Thank you!");
+        //todo: confetti (https://www.npmjs.com/package/js-confetti)
         if (typeof document !== 'undefined')  {
           let ScoutName = document.querySelector("input[name='scoutname']").value;
           let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
@@ -92,14 +98,15 @@ export default function Home() {
         }
         location.reload();
       })
-      .catch(error => alert(error));
+      .catch(error => {
+        alert(error);
+        submitButton.disabled = false;
+      });
 
     } else {
-      
+      //user didn't want to submit
+      submitButton.disabled = false;
     };
-    submitButton.disabled = false;
-    //todo: handle response to display message (and if 200, clear form)
-    //todo: in the meantime, lock up form
   }
 
   return (
