@@ -1,13 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, LineChart, Line, RadarChart, PolarRadiusAxis, PolarAngleAxis, PolarGrid, Radar, Legend } from 'recharts';
 import { VictoryPie } from "victory";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+export default function MatchViewPage() {
+  return <Suspense>
+    <MatchView></MatchView>
+  </Suspense>
+}
 
-export default function MatchView() {
+function MatchView() {
   const [allData, setAllData] = useState(null);
   const [data, setData] = useState(false);
   const searchParams = useSearchParams();
