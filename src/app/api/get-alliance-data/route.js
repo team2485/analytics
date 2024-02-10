@@ -100,14 +100,14 @@ export async function GET() {
 
 
     //average the arrays
-    const average = (array) => {
+    const average = (array) => {//averages the array and rounds to 1 decimal place
       let count = array.length;
       if (count == 0) return -1;
       let sum = 0;
       for (let value of array) {
         sum+= value;
       }
-      return sum/count;
+      return Math.round(sum*10/count)/10;
     }
 
     for (let team in responseObject) {
