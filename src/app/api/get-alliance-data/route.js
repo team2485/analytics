@@ -37,64 +37,66 @@ export async function GET() {
     //generate arrays of each value
     let responseObject = {};
     rows.forEach((row) => {
-      let auto = calcAuto(row);
-      let tele = calcTele(row);
-      let end = calcEnd(row);
-      if (responseObject[row.team] == undefined) {
-        responseObject[row.team] = {
-          team: row.team, teamName: "[name]",
-          auto: [auto], tele: [tele], end: [end],
-          avgNotes: {
-            speaker: [row.autospeakerscored + row.telenampedspeakerscored],
-            ampedSpeaker: [row.teleampedspeakerscored],
-            amp: [row.autoampscored + row.teleampscored],
-            trap: [row.trapscored],
-          },
-          endgame: {
-            none: row.endlocation <= 0 || row.endlocation > 4 ? 1 : 0,
-            park: row.endlocation == 1 || row.endlocation == 2 ? 1 : 0,
-            onstage: row.endlocation == 3 ? 1 : 0,
-            onstageHarmony: row.endlocation == 4 ? 1 : 0,
-          },
-          qualitative: {
-            onstagespeed: [row.onstagespeed],
-            harmonyspeed: [row.harmonyspeed],
-            trapspeed: [row.trapspeed],
-            ampspeed: [row.ampspeed],
-            speakerspeed: [row.speakerspeed],
-            stagehazard: [row.stagehazard],
-            defenseevasion: [row.defenseevasion],
-            aggression: [row.aggression],
-            maneuverability: [row.maneuverability],
-          }
-        };
-      } else {
-        let teamData = responseObject[row.team];
-        teamData.auto.push(auto);
-        teamData.tele.push(tele);
-        teamData.end.push(end);
-        teamData.avgNotes.speaker.push(row.autospeakerscored + row.telenampedspeakerscored);
-        teamData.avgNotes.ampedSpeaker.push(row.teleampedspeakerscored);
-        teamData.avgNotes.amp.push(row.autoampscored + row.teleampscored);
-        teamData.avgNotes.trap.push(row.trapscored);
-        if (row.endlocation == 1) {
-          teamData.endgame.park++;
-        } else if (row.endlocation == 2 || row.endlocation == 3) {
-          teamData.endgame.onstage++; 
-        } else if (row.endlocation == 4) {
-          teamData.endgame.onstageHarmony++;
+      if (!row.noshow) {
+        let auto = calcAuto(row);
+        let tele = calcTele(row);
+        let end = calcEnd(row);
+        if (responseObject[row.team] == undefined) {
+          responseObject[row.team] = {
+            team: row.team, teamName: "[name]",
+            auto: [auto], tele: [tele], end: [end],
+            avgNotes: {
+              speaker: [row.autospeakerscored + row.telenampedspeakerscored],
+              ampedSpeaker: [row.teleampedspeakerscored],
+              amp: [row.autoampscored + row.teleampscored],
+              trap: [row.trapscored],
+            },
+            endgame: {
+              none: row.endlocation <= 0 || row.endlocation > 4 ? 1 : 0,
+              park: row.endlocation == 1 || row.endlocation == 2 ? 1 : 0,
+              onstage: row.endlocation == 3 ? 1 : 0,
+              onstageHarmony: row.endlocation == 4 ? 1 : 0,
+            },
+            qualitative: {
+              onstagespeed: [row.onstagespeed],
+              harmonyspeed: [row.harmonyspeed],
+              trapspeed: [row.trapspeed],
+              ampspeed: [row.ampspeed],
+              speakerspeed: [row.speakerspeed],
+              stagehazard: [row.stagehazard],
+              defenseevasion: [row.defenseevasion],
+              aggression: [row.aggression],
+              maneuverability: [row.maneuverability],
+            }
+          };
         } else {
-          teamData.endgame.none++;
+          let teamData = responseObject[row.team];
+          teamData.auto.push(auto);
+          teamData.tele.push(tele);
+          teamData.end.push(end);
+          teamData.avgNotes.speaker.push(row.autospeakerscored + row.telenampedspeakerscored);
+          teamData.avgNotes.ampedSpeaker.push(row.teleampedspeakerscored);
+          teamData.avgNotes.amp.push(row.autoampscored + row.teleampscored);
+          teamData.avgNotes.trap.push(row.trapscored);
+          if (row.endlocation == 1) {
+            teamData.endgame.park++;
+          } else if (row.endlocation == 2 || row.endlocation == 3) {
+            teamData.endgame.onstage++; 
+          } else if (row.endlocation == 4) {
+            teamData.endgame.onstageHarmony++;
+          } else {
+            teamData.endgame.none++;
+          }
+          teamData.qualitative.onstagespeed.push(row.onstagespeed);
+          teamData.qualitative.harmonyspeed.push(row.harmonyspeed);
+          teamData.qualitative.trapspeed.push(row.trapspeed);
+          teamData.qualitative.ampspeed.push(row.ampspeed);
+          teamData.qualitative.speakerspeed.push(row.speakerspeed);
+          teamData.qualitative.stagehazard.push(row.stagehazard);
+          teamData.qualitative.defenseevasion.push(row.defenseevasion);
+          teamData.qualitative.aggression.push(row.aggression);
+          teamData.qualitative.maneuverability.push(row.maneuverability);
         }
-        teamData.qualitative.onstagespeed.push(row.onstagespeed);
-        teamData.qualitative.harmonyspeed.push(row.harmonyspeed);
-        teamData.qualitative.trapspeed.push(row.trapspeed);
-        teamData.qualitative.ampspeed.push(row.ampspeed);
-        teamData.qualitative.speakerspeed.push(row.speakerspeed);
-        teamData.qualitative.stagehazard.push(row.stagehazard);
-        teamData.qualitative.defenseevasion.push(row.defenseevasion);
-        teamData.qualitative.aggression.push(row.aggression);
-        teamData.qualitative.maneuverability.push(row.maneuverability);
       }
     });
 
