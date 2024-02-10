@@ -4,7 +4,6 @@ import _ from 'lodash';
 export async function POST(req){
    let body = await req.json();
    console.log(body);
-
    //check pre-match
    if (!(_.isString(body.scoutname) && _.isNumber(body.scoutteam) && _.isNumber(body.team) && _.isNumber(body.match))) {
       return NextResponse.json({message: "Invalid Pre-Match Data!"}, {status: 201});

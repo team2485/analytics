@@ -20,8 +20,8 @@ export default function Home() {
   const form = useRef();
 
   useEffect(()=> {
-    if(typeof window !== "undefined") {
-      setScoutProfile(JSON.parse(localStorage.ScoutProfile))
+    if(typeof window !== "undefined" && window.localStorage && window.localStorage.ScoutProfile) {
+      setScoutProfile(JSON.parse(localStorage?.ScoutProfile))
     }
   }, [])
 
@@ -39,39 +39,44 @@ export default function Home() {
   }
   
   function submit(e) {
-    let submitButton = document.querySelector("#submit");
-    function resetSubmit() {
-      submitButton.disabled = false;
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
-
     e.preventDefault();
-    let data = {noshow: false, leave: false, harmony: false, gndintake: false, srcintake: false, breakdown: false, defense: false};
+    //disable submit
+    let submitButton = document.querySelector("#submit");//todo: get changed to a useRef
+    submitButton.disabled = true;
+    //import values from form to data variable
+    let data = {noshow: false, leave: false, harmony: false, gndintake: false, srcintake: false, breakdown: false, defense: false, stageplacement: -1, breakdowncomments: null, defensecomments: null };
     [...new FormData(form.current).entries()].forEach(([name, value]) => {
       if (value == 'on') {
         data[name] = true;
       } else {
-        if (!isNaN(value)) {
+        if (!isNaN(value) && value != "") {
           data[name] = +value;
         } else {
           data[name] = value;
         }
       }
     });
+    //clear unneeded checkbox values
     data.breakdown = undefined;
     data.defense = undefined;
 
+    //check pre-match data
+    let preMatchInputs = document.querySelectorAll(".preMatchInput"); //todo: use the data object
+    for (let preMatchInput of preMatchInputs) {
+      if(preMatchInput.value == "" || preMatchInput.value <= "0") {
+        alert("Invalid Pre-Match Data!");
+        submitButton.disabled = false;
+        return;
+      } 
+    }
+
+    //confirm and submit
     if (confirm("Are you sure you want to submit?") == true) {
-      submitButton.disbaled = true;
       fetch('/api/add-match-data', {
         method: "POST",
         body: JSON.stringify(data)
       }).then((response)=> {
-        if(response.status === 200) {
+        if(response.status === 201) {
           return response.json();
         } else {
           return response.json().then(err => Promise.reject(err.message));
@@ -79,7 +84,7 @@ export default function Home() {
       }) 
       .then(data => {
         alert("Thank you!");
-        resetSubmit();
+        //todo: confetti (https://www.npmjs.com/package/js-confetti)
         if (typeof document !== 'undefined')  {
           let ScoutName = document.querySelector("input[name='scoutname']").value;
           let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
@@ -93,20 +98,15 @@ export default function Home() {
         }
         location.reload();
       })
-      .catch(error => alert(error));
-      
-      
-      // if(status !== 200) {
-      //     alert("There was a problem submitting... please try again.")
-      //     resetSubmit();
-      //     return;
-      //   }
-    } else {
-      
-    };
+      .catch(error => {
+        alert(error);
+        submitButton.disabled = false;
+      });
 
-    //todo: handle response to display message (and if 200, clear form)
-    //todo: in the meantime, lock up form
+    } else {
+      //user didn't want to submit
+      submitButton.disabled = false;
+    };
   }
 
   return (
@@ -123,15 +123,19 @@ export default function Home() {
             visibleName={"Team #:"} 
             internalName={"scoutteam"} 
             defaultValue={scoutProfile?.scoutteam || ""}
+            type={"number"}
           />
           <TextInput
             visibleName={"Team Scouted:"}
             internalName={"team"}
+            defaultValue={""}
+            type={"number"}
           />
           <TextInput 
             visibleName={"Match #:"} 
             internalName={"match"} 
             defaultValue={scoutProfile?.match || ""}
+            type={"number"}
           />
         </div>
         <Checkbox
@@ -304,7 +308,8 @@ export default function Home() {
             </div>
           </>
         )}
-        <button id="submit" type="submit">Submit</button>
+        <br></br>
+        <button id="submit" type="submit">SUBMIT</button>
       </form>
     </div>
   );

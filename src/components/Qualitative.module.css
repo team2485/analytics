@@ -33,3 +33,7 @@
     font-size: 25px;
     border-radius: 5px;
 }
+
+.qual button:hover {
+    background-color: rgb(255, 66, 66);
+}
