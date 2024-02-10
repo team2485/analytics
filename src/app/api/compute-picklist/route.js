@@ -33,65 +33,60 @@ export async function POST(request) {
   let rows = data.rows;
   let teamTable = {};
 
-  for (var i = 0; i < rows.length; i++) {
-    let espm = calcESPM(rows[i]);
-    let auto = calcAuto(rows[i]);
-    let tele = calcTele(rows[i]);
-    let end = calcEnd(rows[i]);
+  for (let i = 0; i < rows.length; i++) {
+    const curRow = rows[i];
+    let team = curRow.team;
+    let espm = calcESPM(curRow);
+    let auto = calcAuto(curRow);
+    let tele = calcTele(curRow);
+    let end = calcEnd(curRow);
     
-    if(teamTable[rows[i]] == null){
-      teamTable[rows[i].team] = { id: [rows[i].id], ESPM: [espm], Auto: [auto], Tele: [tele], End: [end], Maneuverability: [rows[i].maneuverability], Aggression: [rows[i].aggression], DefenseEvasion: [rows[i].defenseevasion], IntakeSpeed: [rows[i].intakespeed], StageHazard: [rows[i].stagehazard], OnStageSpeed: [rows[i].onstagespeed], HarmonySpeed: [rows[i].harmonyspeed], scoutname: [rows[i].scoutname] }
+    if(teamTable[team] == null){
+      //doesn't exist, so creating team datapoint
+      //todo: we only care about the two averages for the qualitative data, so only use those, details on line 56
+      teamTable[team] = { ESPM: [espm], Auto: [auto], Tele: [tele], End: [end] /* insert speed and movement here */}
     }
-    else if(teamTable[rows[i]]){
-      teamTable[rows[i].team].id.push(rows[i].id);
-      //to the rest replicating the one above 
-      teamTable[rows[i].team].ESPM.push(rows[i].ESPM);
-      teamTable[rows[i].team].Auto.push(rows[i].Auto);
-      teamTable[rows[i].team].Tele.push(rows[i].Tele);
-      teamTable[rows[i].team].End.push(rows[i].End);
-      teamTable[rows[i].team].Maneuverability.push(rows[i].Maneuverability);
-      teamTable[rows[i].team].Aggression.push(rows[i].Aggression);
-      teamTable[rows[i].team].DefenseEvasion.push(rows[i].DefenseEvasion);
-      teamTable[rows[i].team].IntakeSpeed.push(rows[i].IntakeSpeed);
-      teamTable[rows[i].team].StageHazard.push(rows[i].StageHazard);
-      teamTable[rows[i].team].OnStageSpeed.push(rows[i].OnStageSpeed);
-      teamTable[rows[i].team].HarmonySpeed.push(rows[i].HarmonySpeed);
-      teamTable[rows[i].team].scoutname.push(rows[i].scoutname);
+    else if(teamTable[team]){
+      //does exist, so appending to team data
+      teamTable[team].ESPM.push(curRow.ESPM);
+      teamTable[team].Auto.push(curRow.Auto);
+      teamTable[team].Tele.push(curRow.Tele);
+      teamTable[team].End.push(curRow.End);
+      //todo: we want 2 more values per match
+      // (1) Speed - Average all of the speed variables (don't include it is it's -1)
+      // (2) Movement - Average maneuverability, defenseevasion, aggression, and stage hazard (make sure to subtract the last two from 5 before averaging, since 0 is the best score)
     }
   }
 
-  var maxESPM = 0;
-  var maxAUTO = 0;
-  var maxTELE = 0;
-  var maxEND = 0;
-  var maxMANEUVERABILITY = 0;
-  var maxAGGRESSION = 0;
-  var maxDEFENSEEVASION = 0;
-  var maxINTAKESPEED = 0;
-  var maxSTAGEHAZARD = 0;
-  var maxONSTAGESPEED = 0;
-  var maxHARMONYSPEED = 0;
+  //todo: currently teamdata holds arrays for every value --- teamTable = {    2485: {espm: [10, 30, 50], auto: [5, 5, 5], ...}, 9485: {...}, ...    })
+  //todo: but we need to convert that into single values before you use them as single values on lines 77-87 --- teamTable = {    2485: {espm: 30, auto: 5, ...}, 9485: {...}, ...    }
+  //                                                                                                     🔽in fact, you could calculate the maximums as you calculate the values, but that's optional
+
+
+
+  //finding the maximums
+
+  let maxESPM = 0;
+  let maxAUTO = 0;
+  let maxTELE = 0;
+  let maxEND = 0;
+  let maxSPEED = 0;
+  let maxMOVEMENT = 0;
 
   for (let teamKey in teamTable) {
-    var teamData = teamTable[teamKey];
+    let teamData = teamTable[teamKey];
 
     maxESPM = Math.max(maxESPM, teamData.ESPM);
     maxAUTO = Math.max(maxAUTO, teamData.Auto);
     maxTELE = Math.max(maxTELE, teamData.Tele);
     maxEND = Math.max(maxEND, teamData.End);
-    maxMANEUVERABILITY = Math.max(maxMANEUVERABILITY, teamData.Maneuverability);
-    maxAGGRESSION = Math.max(maxAGGRESSION, teamData.Aggression);
-    maxDEFENSEEVASION = Math.max(maxDEFENSEEVASION, teamData.DefenseEvasion);
-    maxINTAKESPEED = Math.max(maxINTAKESPEED, teamData.IntakeSpeed);
-    maxSTAGEHAZARD = Math.max(maxSTAGEHAZARD, teamData.StageHazard);
-    maxONSTAGESPEED = Math.max(maxONSTAGESPEED, teamData.OnStageSpeed);
-    maxHARMONYSPEED = Math.max(maxHARMONYSPEED, teamData.HarmonySpeed);
+    //todo: calculate for speed and movement too
   }
   
-  //the step to normalize the values 
+  //normalizing the values & calculating the score
 
   for(let teamKey in teamTable) {
-    var teamData = teamTable[teamKey];
+    let teamData = teamTable[teamKey];
     //console.log(teamData.ESPM)
     teamData.ESPM /= maxESPM;
     teamData.Auto /= maxAUTO;
@@ -114,14 +109,17 @@ export async function POST(request) {
     teamTable[teamKey].score = teamData.score
     //console.log(teamTable[teamKey].score)
   }
-  let k = []
-  let d = []
-  for (const key in teamTable) {
-    k.push(key);
-    d.push(key[0])
-  }
 
-  let returnTable = {k: d}
+  //NOTE: THE FOLLOWING CODE DOES NOT GENERATE A DICTIONARY/JSON OBJECT AS YOU WANT, it makes returnTable = {"k": [the, values, of, the, d, array]}
+  //INSTEAD, YOU'LL SIMPLY WANT TO SORT teamTable, and return teamTable
+  // let k = []
+  // let d = []
+  // for (const key in teamTable) {
+  //   k.push(key);
+  //   d.push(key[0])
+  // }
+
+  // let returnTable = {k: d}
 
   //multiply the normaizled values by the weight
 
