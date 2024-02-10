@@ -56,10 +56,7 @@ export default function Home() {
         }
       }
     });
-    //clear unneeded checkbox values
-    data.breakdown = undefined;
-    data.defense = undefined;
-
+    
     //check pre-match data
     let preMatchInputs = document.querySelectorAll(".preMatchInput"); //todo: use the data object
     for (let preMatchInput of preMatchInputs) {
