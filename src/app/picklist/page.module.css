@@ -1,0 +1,18 @@
+.MainDiv {
+    margin: 10px;
+}
+.allWeights {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 200px;
+    width: 800px;
+    gap: 10px;
+}
+
+.weight input{
+    height: 35px;
+    width: 50px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
