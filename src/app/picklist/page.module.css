@@ -1,18 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Philosopher&display=swap');
+
 .MainDiv {
     margin: 10px;
+    font-family: 'Philosopher', sans-serif;
 }
-.allWeights {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+.weightsTable {
     height: 200px;
-    width: 800px;
-    gap: 10px;
+    width: 400px;
+    font-size: 20px;
 }
-
-.weight input{
+.weightsTable input {
     height: 35px;
     width: 50px;
     border: 2px solid black;
     border-radius: 5px;
+    text-align: center;
+    font-size: 20px;
+}
+.weightsTable td {
+    text-align: right;
+}
+.MainDiv span {
+    font-size: 40px;
+}
+.weights {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+    align-items: center;
+}
+.alliances {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+    align-items: center;
+}
+.allianceTable {
+    font-size: 20px;
+    border-spacing: 10px;
+}
+.allianceTable input {
+    height: 35px;
+    width: 100px;
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 20px;
 }
