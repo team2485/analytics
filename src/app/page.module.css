@@ -27,11 +27,14 @@
   .HBox {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 20px;
+    width: 100%;
+    justify-content: center;
   }
 
   .HBox input {
-    width: 100px;
+    width: 60px;
   }
 
   .Stage {
