@@ -70,6 +70,7 @@
     box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
     padding: 5px 0;
     border-radius: 3px;
+    font-weight: 400;
 }
 
 .picklistTable td:first-child {
@@ -79,4 +80,18 @@
 .picklistTable td:nth-child(2) {
     border: 1px solid black;
     background-color: #D4F0FF;
+}
+
+.weightsForm button {
+    position: relative;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border: 1px solid green;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 3px;
+    font-weight: 500;
+    background: linear-gradient(100deg, rgb(181, 238, 134), rgb(236, 234, 136));
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
 }

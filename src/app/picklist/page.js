@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Picklist() {
   const [fields, setFields] = useState([]);
-  const [picklist, setPicklist] = useState([{team: 2485, score: 100, espm: 1, speed: 1, movement: 1}, {team: 9485, score: 90, espm: 0.9, speed: 0.9, movement: 0.9}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
+  const [picklist, setPicklist] = useState([]);
   const [maxScore, setMaxScore] = useState(1);
   const formRef = useRef();
 
@@ -20,15 +20,17 @@ export default function Picklist() {
   function recalculate(event) {
     event.preventDefault();
     const formData = new FormData(formRef.current);
-    fetch('/api/compute-picklist', {
-      method: "POST",
-      body: JSON.stringify([...formData.entries()])
-    })
-      .then(resp => resp.json())
-      .then(picklist => {
-        setPicklist(picklist);
-        setMaxScore(picklist[0].score);
-      });
+    // fetch('/api/compute-picklist', {
+    //   method: "POST",
+    //   body: JSON.stringify([...formData.entries()])
+    // })
+    //   .then(resp => resp.json())
+    //   .then(picklist => {
+    //     setPicklist(picklist);
+    //     setMaxScore(picklist[0].score);
+    //   });
+    setPicklist([{team: 2485, score: 100, espm: 1, speed: 1, movement: 1}, {team: 9485, score: 90, espm: 0.9, speed: 0.9, movement: 0.9}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
+    setMaxScore(100);
   }
 
   function Weights() {
@@ -71,10 +73,20 @@ export default function Picklist() {
     )
   };
 
+  const valueToColor = (value) => {
+    if (value > 0.8) return greenToRedColors[0];
+    if (value > 0.6) return greenToRedColors[1];
+    if (value > 0.4) return greenToRedColors[2];
+    if (value > 0.2) return greenToRedColors[3];
+    return greenToRedColors[4];
+  }
+
+  console.log({maxScore})
+
   return (
     <div className={styles.MainDiv}>
       <div>
-        <form ref={formRef} onSubmit={recalculate}>
+        <form ref={formRef} onSubmit={recalculate} className={styles.weightsForm}>
           <div className={styles.weights}>
             <span><b>Weights</b></span>
             <Weights></Weights>
@@ -99,13 +111,13 @@ export default function Picklist() {
       <table className={styles.picklistTable} id="teamTable">
         <tr><th>Rank</th><th>Team</th><th>Score</th><th>ESPM</th><th>Speed</th><th>Mvt</th></tr>
         {picklist.map((teamData, index) => (
-          <tr key={index}>
+          <tr key={teamData.team}>
             <td>#{index + 1}</td>
             <td>{teamData.team}</td>
-            <td>{teamData.score}</td>
-            <td>{teamData.espm}</td>
-            <td>{teamData.speed}</td>
-            <td>{teamData.movement}</td>
+            <td style={{backgroundColor: valueToColor(teamData.score/maxScore)}}>{teamData.score}</td>
+            <td style={{backgroundColor: valueToColor(teamData.espm)}}>{teamData.espm}</td>
+            <td style={{backgroundColor: valueToColor(teamData.speed)}}>{teamData.speed}</td>
+            <td style={{backgroundColor: valueToColor(teamData.movement)}}>{teamData.movement}</td>
           </tr>
         ))}
       </table>
