@@ -5,8 +5,11 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Picklist() {
   const [fields, setFields] = useState([]);
-  const [picklist, setPicklist] = useState([]);
+  const [picklist, setPicklist] = useState([{team: 2485, score: 100, espm: 1, speed: 1, movement: 1}, {team: 9485, score: 90, espm: 0.9, speed: 0.9, movement: 0.9}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
+  const [maxScore, setMaxScore] = useState(1);
   const formRef = useRef();
+
+  const greenToRedColors = ["#9ADC83", "#BECC72", "#E1BB61", "#F0A56C", "#FF8E76"];
   
   useEffect(() => {
     fetch('/api/get-numeric-fields')
@@ -22,7 +25,10 @@ export default function Picklist() {
       body: JSON.stringify([...formData.entries()])
     })
       .then(resp => resp.json())
-      .then(picklist => setPicklist(picklist));
+      .then(picklist => {
+        setPicklist(picklist);
+        setMaxScore(picklist[0].score);
+      });
   }
 
   function Weights() {
@@ -67,35 +73,38 @@ export default function Picklist() {
 
   return (
     <div className={styles.MainDiv}>
-      <form ref={formRef} onSubmit={recalculate}>
-        <div className={styles.weights}>
-          <span><b>Weights</b></span>
-          <Weights></Weights>
+      <div>
+        <form ref={formRef} onSubmit={recalculate}>
+          <div className={styles.weights}>
+            <span><b>Weights</b></span>
+            <Weights></Weights>
+          </div>
+          <button>Reload Picklist</button>
+        </form>
+        <div className={styles.alliances}>
+          <span><b>Alliances</b></span>
+          <table className={styles.allianceTable}>
+            <th></th><th>T1</th><th>T2</th><th>T3</th>
+            <AllianceRow alliance={"1"}></AllianceRow>
+            <AllianceRow alliance={"2"}></AllianceRow>
+            <AllianceRow alliance={"3"}></AllianceRow>
+            <AllianceRow alliance={"4"}></AllianceRow>
+            <AllianceRow alliance={"5"}></AllianceRow>
+            <AllianceRow alliance={"6"}></AllianceRow>
+            <AllianceRow alliance={"7"}></AllianceRow>
+            <AllianceRow alliance={"8"}></AllianceRow>
+          </table>
         </div>
-        {/* TODO: add team exclusion */}
-        <button>Reload Picklist</button>
-      </form>
-      <div className={styles.alliances}>
-        <span><b>Alliances</b></span>
-        <table className={styles.allianceTable}>
-          <th></th><th>T1</th><th>T2</th><th>T3</th>
-          <AllianceRow alliance={"1"}></AllianceRow>
-          <AllianceRow alliance={"2"}></AllianceRow>
-          <AllianceRow alliance={"3"}></AllianceRow>
-          <AllianceRow alliance={"4"}></AllianceRow>
-          <AllianceRow alliance={"5"}></AllianceRow>
-          <AllianceRow alliance={"6"}></AllianceRow>
-          <AllianceRow alliance={"7"}></AllianceRow>
-          <AllianceRow alliance={"8"}></AllianceRow>
-        </table>
       </div>
-      <table>
-        <tr><th>Team</th><th>Score</th><th>ESPM</th><th>Mvt</th></tr>
+      <table className={styles.picklistTable} id="teamTable">
+        <tr><th>Rank</th><th>Team</th><th>Score</th><th>ESPM</th><th>Speed</th><th>Mvt</th></tr>
         {picklist.map((teamData, index) => (
           <tr key={index}>
-            <td>{teamData}</td>
+            <td>#{index + 1}</td>
+            <td>{teamData.team}</td>
             <td>{teamData.score}</td>
             <td>{teamData.espm}</td>
+            <td>{teamData.speed}</td>
             <td>{teamData.movement}</td>
           </tr>
         ))}
