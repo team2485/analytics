@@ -67,5 +67,48 @@
 }
 .graphContainer {
     min-width: 30%;
-    text-align: center;
+}
+.CBox {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    width: 100px;
+}
+.CBoxValue {
+    border-top: 1px solid gray;
+}
+.HBox {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    width: 250px;
+}
+.HBoxValue {
+    border-left: 1px solid gray;
+}
+.comments {
+    display: block;
+    position: relative;
+    top: 0;
+    width: auto;
+    border: 1px solid black;
+    background: white;
+    padding: auto;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px auto;
+    margin-top: -15px;
+}
+.commentsBox {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    width: 450px;
+}
+.BigBox {
+    border: 1px solid black;
+}
+.chartContainer {
+    width: 30vw;
+    height: 300px;
 }
