@@ -26,7 +26,7 @@ export default function Picklist() {
     //     setPicklist(picklist);
     //     setMaxScore(picklist[0].score);
     //   });
-    setPicklist([{team: 2485, score: 100, espm: 1, speed: 1, movement: 1}, {team: 9485, score: 90, espm: 0.9, speed: 0.9, movement: 0.9}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
+    setPicklist([{team: 2485, score: 100, espm: 1, speed: 0.9, movement: 1}, {team: 9485, score: 75, espm: 0.6, speed: 1, movement: 0.7}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
     setMaxScore(100);
   }
 
@@ -94,24 +94,30 @@ export default function Picklist() {
     }
 
     if (!picklist || picklist.length == 0) {
-      return <table className={styles.picklistTable}></table>
+      return <div className={styles.picklistContainer}>
+        <h1>Picklist</h1>
+        <span>Hit recalculate to view the picklist according to the weights you entered...</span>
+      </div>
     }
 
-    return <table className={styles.picklistTable} id="teamTable">
-      <thead>
-        <tr><th>Rank</th><th>Team</th><th>Score</th><th>ESPM</th><th>Speed</th><th>Mvt</th></tr>
-      </thead>
-      {picklist.filter(teamData => !teamsToExclude.includes(teamData.team)).map((teamData, index) => (
-        <tr key={teamData.team}>
-          <td>#{index + 1}</td>
-          <td>{teamData.team}</td>
-          <td style={{backgroundColor: valueToColor(teamData.score/maxScore)}}>{teamData.score}</td>
-          <td style={{backgroundColor: valueToColor(teamData.espm)}}>{teamData.espm}</td>
-          <td style={{backgroundColor: valueToColor(teamData.speed)}}>{teamData.speed}</td>
-          <td style={{backgroundColor: valueToColor(teamData.movement)}}>{teamData.movement}</td>
-        </tr>
-      ))}
-    </table>
+    return <div className={styles.picklistContainer}>
+        <h1>Picklist</h1>
+        <table className={styles.picklistTable} id="teamTable">
+        <thead>
+          <tr><th>Rank</th><th>Team</th><th>Score</th><th>ESPM</th><th>Speed</th><th>Mvt</th></tr>
+        </thead>
+        {picklist.filter(teamData => !teamsToExclude.includes(teamData.team)).map((teamData, index) => (
+          <tr key={teamData.team}>
+            <td>#{index + 1}</td>
+            <td>{teamData.team}</td>
+            <td style={{backgroundColor: valueToColor(teamData.score/maxScore)}}>{teamData.score}</td>
+            <td style={{backgroundColor: valueToColor(teamData.espm)}}>{teamData.espm}</td>
+            <td style={{backgroundColor: valueToColor(teamData.speed)}}>{teamData.speed}</td>
+            <td style={{backgroundColor: valueToColor(teamData.movement)}}>{teamData.movement}</td>
+          </tr>
+        ))}
+      </table>
+    </div>
   }
 
   function handleAllianceChange(allianceNumber, allianceTeams) {
@@ -127,17 +133,17 @@ export default function Picklist() {
       <div>
         <form ref={weightsFormRef} className={styles.weightsForm}>
           <div className={styles.weights}>
-            <span><b>Weights</b></span>
+            <h1>Weights</h1>
             <Weights></Weights>
           </div>
-          <button type="button" onClick={recalculate}>Reload Picklist</button>
+          <button type="button" onClick={recalculate} style={{marginBottom: '30px', fontSize: "20px"}}>Recalculate Picklist</button>
         </form>
         <div className={styles.alliances}>
-          <span><b>Alliances</b></span>
+          <h1>Alliances</h1>
           <form ref={alliancesFormRef}>
             <table className={styles.allianceTable}>
               <thead>
-                <tr key="1">
+                <tr key="head">
                   <th></th>
                   <th>T1</th>
                   <th>T2</th>

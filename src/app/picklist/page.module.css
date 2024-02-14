@@ -12,6 +12,12 @@
     height: 200px;
     width: 400px;
     font-size: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    border-spacing: 0;
+    margin: 10px 0;
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.4);
 }
 .weightsTable input {
     height: 35px;
@@ -24,8 +30,9 @@
 .weightsTable td {
     text-align: right;
 }
-.MainDiv span {
+.MainDiv h1 {
     font-size: 40px;
+    text-align: center;
 }
 .weights {
     display: flex;
@@ -44,6 +51,11 @@
 .allianceTable {
     font-size: 20px;
     border-spacing: 10px;
+    border: 1px solid gray;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.4);
 }
 .allianceTable input {
     height: 35px;
@@ -54,9 +66,19 @@
     font-size: 20px;
 }
 
-.picklistTable {
+.picklistContainer {
     flex-grow: 1;
     max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+.picklistContainer span {
+    text-align: center;
+}
+
+.picklistTable {
+    flex-grow: 1;
     border-spacing: 5px 20px;
 }
 
@@ -71,6 +93,7 @@
     padding: 5px 0;
     border-radius: 3px;
     font-weight: 400;
+    font-size: 25px;
 }
 
 .picklistTable td:first-child {
