@@ -1,3 +1,8 @@
+.MainDiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 .lightBorderBox {
     flex-grow: 1;
     border-radius: 10px;
@@ -71,7 +76,7 @@
 .CBox {
     display: flex;
     flex-direction: column;
-    border: 2px solid black;
+    border: 1px solid black;
     width: 100px;
 }
 .CBoxValue {
@@ -80,7 +85,7 @@
 .HBox {
     display: flex;
     flex-direction: row;
-    border: 2px solid black;
+    border: 1px solid black;
     width: 250px;
 }
 .HBoxValue {
@@ -102,7 +107,7 @@
 .commentsBox {
     display: flex;
     flex-direction: column;
-    border: 2px solid black;
+    border: 1px solid black;
     width: 450px;
 }
 .BigBox {

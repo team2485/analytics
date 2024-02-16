@@ -2,13 +2,19 @@
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, LineChart, Line, RadarChart, PolarRadiusAxis, PolarAngleAxis, PolarGrid, Radar, Legend } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, LineChart, Line, RadarChart, PolarRadiusAxis, PolarAngleAxis, PolarGrid, Radar, Legend, ReferenceLine } from 'recharts';
 import { VictoryPie } from "victory";
 
 export default function TeamView() {
   const [data, setData] = useState(null);
   const searchParams = useSearchParams();
   let team = searchParams.get("team");
+  const Colors = [
+    ["#116677", "#84C9D7", "#8CCCD9", "#C4EEF6"],
+    ["#003F7E", "#84AED7", "#A2C8ED", "#D8EAFB"],
+    ["#15007E", "#9D8CF3", "#BFB2FF", "#DDD6FF"],
+    ["#9F5EB5", "#C683DC", "#D88DF2", "#E7B7F7"],
+  ]
     //get data
     useEffect(() => {
       //TODO: Get Data (from localstorage if cached recently)
@@ -22,7 +28,7 @@ export default function TeamView() {
           espmOverTime: [
             {matchNum: 5, score: 47},
             {matchNum: 10, score: 38},
-            {matchNum: 50, score: 20},
+            {matchNum: 50, score: 55},
           ],
           noShow: .01,
           breakdown: .08,
@@ -78,22 +84,22 @@ export default function TeamView() {
             },
             trapSuccess: .6,
             trapAvg: .5,
-            intake: {
-              ground: .8,
-              station: .2,
-            },
           },
-          qualitative: {
-            onstagespeed: 5,
-            harmonyspeed: 1,
-            trapspeed: 1,
-            ampspeed: 1,
-            speakerspeed: 0,
-            stagehazard: 5,
-            defenseevasion: 5,
-            aggression: 1,
-            maneuverability: 5,
+          intake: {
+            ground: true,
+            source: false,
           },
+          qualitative: [
+            {name: "Onstage Speed", rating: 5},
+            {name: "Harmony Speed", rating: 1},
+            {name: "Trap Speed", rating: 2},
+            {name: "Amp Speed", rating: 4},
+            {name: "Apeaker Speed", rating: 1},
+            {name: "Stage Hazard", rating: 3},
+            {name: "Defense Evasion", rating: 0},
+            {name: "Aggression", rating: 5},
+            {name: "Maneuverability", rating: 2},
+          ],
       })
     }, []);
 
@@ -156,15 +162,16 @@ export default function TeamView() {
   }
 
   return (
-    <div>
-      <h1>Team {data.team} View</h1>
+    <div className={styles.MainDiv}>
+      <div>
+      <h1 style={{color: Colors[0][0]}}>Team {data.team} View</h1>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
-          <div style={{background: "#8CBFD9"}} className={styles.espmBox}>{data.autoScore + data.teleScore + data.endScore}</div>
+          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{data.autoScore + data.teleScore + data.endScore}</div>
           <div className={styles.espmBreakdown}>
-            <div style={{background: "blue"}}>A: {data.autoScore}</div>
-            <div style={{background: "blue"}}>T: {data.teleScore}</div>
-            <div style={{background: "blue"}}>E: {data.endScore}</div>
+            <div style={{background: Colors[0][3]}}>A: {data.autoScore}</div>
+            <div style={{background: Colors[0][3]}}>T: {data.teleScore}</div>
+            <div style={{background: Colors[0][3]}}>E: {data.endScore}</div>
           </div>
         </div>
       </div>
@@ -175,7 +182,9 @@ export default function TeamView() {
             <YAxis dataKey="score"/>
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
-            <Line type="monotone" dataKey="score" stroke="#99ADEF" />
+            <Line type="monotone" dataKey="score" stroke={Colors[0][0]} strokeWidth="3"/>
+            <Line type="monotone" dataKey="" stroke={Colors[0][1]} strokeWidth="2"/>
+            <ReferenceLine label="Max" stroke="red" strokeDasharray="3 3" />
             <Tooltip></Tooltip>
           </LineChart>
         </div>
@@ -194,8 +203,10 @@ export default function TeamView() {
       <Comments title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
       <br></br>
       <Comments title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
-      <h1>Auto</h1>
-      <div className={styles.graphContainer}>
+      </div>
+      <div>
+        <h1>Auto</h1>
+        <div className={styles.graphContainer}>
           <h2>Auto Over Time</h2>
           <LineChart width={450} height={300} data={data.auto.autoOverTime}>
             <XAxis type="number" dataKey="matchNum"/>
@@ -205,20 +216,22 @@ export default function TeamView() {
             <Line type="monotone" dataKey="score" stroke="#99ADEF" />
             <Tooltip></Tooltip>
           </LineChart>
+        </div>
+        <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
+        <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
+        <BigBox HC1={"Success"} 
+          HC2={"Avg Notes"} 
+          HR1={"Amp"} 
+          HR2={"Speaker"} 
+          R1C1={data.auto.autoNotes.ampSuccess} 
+          R1C2={data.auto.autoNotes.ampAvg}
+          R2C1={data.auto.autoNotes.spkrSuccess}
+          R2C2={data.auto.autoNotes.spkrAvg}>
+        </BigBox>
       </div>
-      <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
-      <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
-      <BigBox HC1={"Success"} 
-        HC2={"Avg Notes"} 
-        HR1={"Amp"} 
-        HR2={"Speaker"} 
-        R1C1={data.auto.autoNotes.ampSuccess} 
-        R1C2={data.auto.autoNotes.ampAvg}
-        R2C1={data.auto.autoNotes.spkrSuccess}
-        R2C2={data.auto.autoNotes.spkrAvg}>
-      </BigBox>
+      <div>
       <h1>Tele</h1>
-      <div className={styles.graphContainer}>
+        <div className={styles.graphContainer}>
           <h2>Tele Over Time</h2>
           <LineChart width={450} height={300} data={data.tele.teleOverTime}>
             <XAxis type="number" dataKey="matchNum"/>
@@ -228,35 +241,69 @@ export default function TeamView() {
             <Line type="monotone" dataKey="score" stroke="#99ADEF" />
             <Tooltip></Tooltip>
           </LineChart>
+        </div>
+        <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
+        <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
+        <BigBox HC1={"Success"} 
+          HC2={"Avg Notes"} 
+          HR1={"Amp"} 
+          HR2={"Speaker"} 
+          R1C1={data.tele.teleNotes.ampSuccess} 
+          R1C2={data.tele.teleNotes.ampAvg}
+          R2C1={data.tele.teleNotes.spkrSuccess}
+          R2C2={data.tele.teleNotes.spkrAvg}>
+        </BigBox>
       </div>
-      <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
-      <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
-      <BigBox HC1={"Success"} 
-        HC2={"Avg Notes"} 
-        HR1={"Amp"} 
-        HR2={"Speaker"} 
-        R1C1={data.tele.teleNotes.ampSuccess} 
-        R1C2={data.tele.teleNotes.ampAvg}
-        R2C1={data.tele.teleNotes.spkrSuccess}
-        R2C2={data.tele.teleNotes.spkrAvg}>
-      </BigBox>
-      <h1>Endgame</h1>
-      <div className={styles.chartContainer}>
-        <h2>Endgame %</h2>
-        <VictoryPie
-          data={EndgameData}
-          colorScale="blue"
-          labels={({ datum }) => `${datum.x}: ${datum.y}%`}/>
+      <div>
+        <h1>Endgame</h1>
+        <div className={styles.chartContainer}>
+          <h2>Endgame %</h2>
+          <VictoryPie
+            data={EndgameData}
+            colorScale={Colors[3]}
+            labels={({ datum }) => `${datum.x}: ${datum.y}%`}/>
+        </div>
+        <BigBox HC1={"Attempt"} 
+          HC2={"Success"} 
+          HR1={"Onstage"} 
+          HR2={"Harmony"} 
+          R1C1={(data.endgame.onstageAttempt)*100+"%"} 
+          R1C2={(data.endgame.onstageSuccess)*100+"%"}
+          R2C1={(data.endgame.harmonyAttempt)*100+"%"}
+          R2C2={(data.endgame.harmonySuccess)*100+"%"}>
+        </BigBox>
+        <br></br>
+        <div className={styles.HBox}>
+          <p>Onstage Placement</p>
+          <div>
+            <CBox title={"Center"} value={(data.endgame.onstagePlacement.center)*100+"%"}></CBox>
+            <CBox title={"Side"} value={(data.endgame.onstagePlacement.side)*100+"%"}></CBox>
+          </div>
+        </div>
+        <br></br>
+        <div className={styles.HBox}>
+          <p>Trap</p>
+          <CBox title={"Success"} value={(data.endgame.trapSuccess)*100+"%"}></CBox>
+          <CBox title={"Avg Notes"} value={data.endgame.trapAvg}></CBox>
+        </div>
+        <br></br>
+        <div className={styles.HBox}>
+          <p>Intake</p>
+          <CBox title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
+          <CBox title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
+        </div>
+        <div className={styles.allianceGraphs}>
+          <div className={styles.graphContainer}>
+            <h2>Qualitative Ratings</h2>
+            <RadarChart outerRadius={90} width={420} height={300} data={data.qualitative}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="name" />
+              <PolarRadiusAxis angle={10} domain={[0, 5]} />
+              <Radar name={data.team} dataKey="rating" stroke="blue" fill="blue" fillOpacity={0.3} />
+            </RadarChart>
+          </div>
+        </div>
       </div>
-      <BigBox HC1={"Attempt"} 
-        HC2={"Success"} 
-        HR1={"Onstage"} 
-        HR2={"Harmony"} 
-        R1C1={(data.endgame.onstageAttempt)*100+"%"} 
-        R1C2={(data.endgame.onstageSuccess)*100+"%"}
-        R2C1={(data.endgame.harmonyAttempt)*100+"%"}
-        R2C2={(data.endgame.harmonySuccess)*100+"%"}>
-      </BigBox>
     </div>
   )
 }
