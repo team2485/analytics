@@ -1,0 +1,14 @@
+.MainDiv {
+    margin: 10px;
+}
+.allWeights {
+    height: 200px;
+    width: 800px;
+}
+
+.weight input{
+    height: 35px;
+    width: 50px;
+    border: 2px solid black;
+    border-radius: 5px;
+}

@@ -163,7 +163,7 @@ export default function TeamView() {
 
   return (
     <div className={styles.MainDiv}>
-      <div>
+      <div className={styles.leftColumn}>
       <h1 style={{color: Colors[0][0]}}>Team {data.team} View</h1>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
@@ -177,7 +177,7 @@ export default function TeamView() {
       </div>
         <div className={styles.graphContainer}>
           <h2>ESPM Over Time</h2>
-          <LineChart width={450} height={300} data={data.espmOverTime}>
+          <LineChart width={350} height={175} data={data.espmOverTime}>
             <XAxis type="number" dataKey="matchNum"/>
             <YAxis dataKey="score"/>
             <CartesianGrid strokeDasharray="3 3" />
@@ -188,77 +188,75 @@ export default function TeamView() {
             <Tooltip></Tooltip>
           </LineChart>
         </div>
-      <CBox title={"No Show"} value={(data.noShow)*100+"%"}></CBox>
-      <br></br>
-      <CBox title={"Breakdown"} value={(data.breakdown)*100+"%"}></CBox>
-      <br></br>
-      <CBox title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
-      <br></br>
-      <CBox title={"Matches Scouted"} value={data.matchesScouted}></CBox>
-      <br></br>
-      <HBox title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
-      <br></br>
+      <div className={styles.generalBoxes}>
+        <CBox title={"No Show"} value={(data.noShow)*100+"%"}></CBox>
+        <CBox title={"Breakdown"} value={(data.breakdown)*100+"%"}></CBox>
+        <CBox title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
+        <CBox title={"Matches Scouted"} value={data.matchesScouted}></CBox>
+        <HBox title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
+      </div>
       <Comments title={"General Comments"} value={(data.generalComments).join(", ")}></Comments>
-      <br></br>
       <Comments title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
-      <br></br>
       <Comments title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
       </div>
-      <div>
-        <h1>Auto</h1>
-        <div className={styles.graphContainer}>
-          <h2>Auto Over Time</h2>
-          <LineChart width={450} height={300} data={data.auto.autoOverTime}>
-            <XAxis type="number" dataKey="matchNum"/>
-            <YAxis dataKey="score"/>
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
-            <Line type="monotone" dataKey="score" stroke="#99ADEF" />
-            <Tooltip></Tooltip>
-          </LineChart>
+      <div className={styles.middleColumn}>
+        <div className={styles.auto}>
+          <h1>Auto</h1>
+          <div className={styles.graphContainer}>
+            <h2>Auto Over Time</h2>
+            <LineChart width={350} height={175} data={data.auto.autoOverTime}>
+              <XAxis type="number" dataKey="matchNum"/>
+              <YAxis dataKey="score"/>
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" dataKey="score" stroke="#99ADEF" />
+              <Tooltip></Tooltip>
+            </LineChart>
+          </div>
+          <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
+          <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
+          <BigBox HC1={"Success"} 
+            HC2={"Avg Notes"} 
+            HR1={"Amp"} 
+            HR2={"Speaker"} 
+            R1C1={data.auto.autoNotes.ampSuccess} 
+            R1C2={data.auto.autoNotes.ampAvg}
+            R2C1={data.auto.autoNotes.spkrSuccess}
+            R2C2={data.auto.autoNotes.spkrAvg}>
+          </BigBox>
         </div>
-        <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
-        <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
-        <BigBox HC1={"Success"} 
-          HC2={"Avg Notes"} 
-          HR1={"Amp"} 
-          HR2={"Speaker"} 
-          R1C1={data.auto.autoNotes.ampSuccess} 
-          R1C2={data.auto.autoNotes.ampAvg}
-          R2C1={data.auto.autoNotes.spkrSuccess}
-          R2C2={data.auto.autoNotes.spkrAvg}>
-        </BigBox>
-      </div>
-      <div>
-      <h1>Tele</h1>
-        <div className={styles.graphContainer}>
-          <h2>Tele Over Time</h2>
-          <LineChart width={450} height={300} data={data.tele.teleOverTime}>
-            <XAxis type="number" dataKey="matchNum"/>
-            <YAxis dataKey="score"/>
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
-            <Line type="monotone" dataKey="score" stroke="#99ADEF" />
-            <Tooltip></Tooltip>
-          </LineChart>
+        <div className={styles.tele}>
+          <h1>Tele</h1>
+          <div className={styles.graphContainer}>
+            <h2>Tele Over Time</h2>
+            <LineChart width={350} height={175} data={data.tele.teleOverTime}>
+              <XAxis type="number" dataKey="matchNum"/>
+              <YAxis dataKey="score"/>
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" dataKey="score" stroke="#99ADEF" />
+              <Tooltip></Tooltip>
+            </LineChart>
+          </div>
+          <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
+          <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
+          <BigBox HC1={"Success"} 
+            HC2={"Avg Notes"} 
+            HR1={"Amp"} 
+            HR2={"Speaker"} 
+            R1C1={data.tele.teleNotes.ampSuccess} 
+            R1C2={data.tele.teleNotes.ampAvg}
+            R2C1={data.tele.teleNotes.spkrSuccess}
+            R2C2={data.tele.teleNotes.spkrAvg}>
+          </BigBox>
         </div>
-        <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
-        <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
-        <BigBox HC1={"Success"} 
-          HC2={"Avg Notes"} 
-          HR1={"Amp"} 
-          HR2={"Speaker"} 
-          R1C1={data.tele.teleNotes.ampSuccess} 
-          R1C2={data.tele.teleNotes.ampAvg}
-          R2C1={data.tele.teleNotes.spkrSuccess}
-          R2C2={data.tele.teleNotes.spkrAvg}>
-        </BigBox>
       </div>
-      <div>
+      <div className={styles.rightColumn}>
         <h1>Endgame</h1>
         <div className={styles.chartContainer}>
           <h2>Endgame %</h2>
           <VictoryPie
+            width={300}
             data={EndgameData}
             colorScale={Colors[3]}
             labels={({ datum }) => `${datum.x}: ${datum.y}%`}/>
@@ -292,17 +290,15 @@ export default function TeamView() {
           <CBox title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
           <CBox title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
         </div>
-        <div className={styles.allianceGraphs}>
           <div className={styles.graphContainer}>
             <h2>Qualitative Ratings</h2>
-            <RadarChart outerRadius={90} width={420} height={300} data={data.qualitative}>
+            <RadarChart outerRadius={80} width={420} height={300} data={data.qualitative}>
               <PolarGrid />
               <PolarAngleAxis dataKey="name" />
               <PolarRadiusAxis angle={10} domain={[0, 5]} />
               <Radar name={data.team} dataKey="rating" stroke="blue" fill="blue" fillOpacity={0.3} />
             </RadarChart>
           </div>
-        </div>
       </div>
     </div>
   )

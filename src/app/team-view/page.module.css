@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Belleza&display=swap');
+
 .MainDiv {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 5px;
+    font-family: "Belleza", sans-serif;
 }
 .lightBorderBox {
     flex-grow: 1;
@@ -78,6 +84,7 @@
     flex-direction: column;
     border: 1px solid black;
     width: 100px;
+    font-size: 14px;
 }
 .CBoxValue {
     border-top: 1px solid gray;
@@ -116,4 +123,38 @@
 .chartContainer {
     width: 30vw;
     height: 300px;
+}
+.generalBoxes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.auto {
+    border-bottom: 5px solid lightgray;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-right: 5px solid lightgray;
+    border-left: 5px solid lightgray;
+}
+.tele {
+    padding-right: 20px;
+    padding-left: 20px;
+    border-right: 5px solid lightgray;
+    border-left: 5px solid lightgray;
+    padding-top: 20px;
+}
+.leftColumn {
+    padding-right: 20px;
+    width: 30%;
+}
+.middleColumn {
+    display: flex;
+    flex-direction: column;
+    width: 34%;
+}
+.rightColumn {
+    padding-left: 20px;
+    width: 30%;
 }
