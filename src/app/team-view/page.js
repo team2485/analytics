@@ -76,7 +76,6 @@ export default function TeamView() {
             },
             onstageAttempt: .78,
             onstageSuccess: .95,
-            harmonyAttempt: .34,
             harmonySuccess: .75,
             onstagePlacement: {
               center: .82,
@@ -188,16 +187,20 @@ export default function TeamView() {
             <Tooltip></Tooltip>
           </LineChart>
         </div>
-      <div className={styles.generalBoxes}>
+      <div className={styles.valueBoxes}>
         <CBox title={"No Show"} value={(data.noShow)*100+"%"}></CBox>
         <CBox title={"Breakdown"} value={(data.breakdown)*100+"%"}></CBox>
         <CBox title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
         <CBox title={"Matches Scouted"} value={data.matchesScouted}></CBox>
         <HBox title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
       </div>
-      <Comments title={"General Comments"} value={(data.generalComments).join(", ")}></Comments>
-      <Comments title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
-      <Comments title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
+      <br></br>
+      <br></br>
+      <div className={styles.allComments}>
+        <Comments title={"General Comments"} value={(data.generalComments).join(", ")}></Comments>
+        <Comments title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
+        <Comments title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
+      </div>
       </div>
       <div className={styles.middleColumn}>
         <div className={styles.auto}>
@@ -213,17 +216,21 @@ export default function TeamView() {
               <Tooltip></Tooltip>
             </LineChart>
           </div>
-          <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
-          <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
-          <BigBox HC1={"Success"} 
-            HC2={"Avg Notes"} 
-            HR1={"Amp"} 
-            HR2={"Speaker"} 
-            R1C1={data.auto.autoNotes.ampSuccess} 
-            R1C2={data.auto.autoNotes.ampAvg}
-            R2C1={data.auto.autoNotes.spkrSuccess}
-            R2C2={data.auto.autoNotes.spkrAvg}>
-          </BigBox>
+          <div className={styles.valueBoxes}>
+            <div>
+              <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
+              <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
+            </div>
+            <BigBox HC1={"Success"} 
+              HC2={"Avg Notes"} 
+              HR1={"Amp"} 
+              HR2={"Speaker"} 
+              R1C1={data.auto.autoNotes.ampSuccess} 
+              R1C2={data.auto.autoNotes.ampAvg}
+              R2C1={data.auto.autoNotes.spkrSuccess}
+              R2C2={data.auto.autoNotes.spkrAvg}>
+            </BigBox>
+          </div>
         </div>
         <div className={styles.tele}>
           <h1>Tele</h1>
@@ -238,17 +245,21 @@ export default function TeamView() {
               <Tooltip></Tooltip>
             </LineChart>
           </div>
-          <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
-          <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
-          <BigBox HC1={"Success"} 
-            HC2={"Avg Notes"} 
-            HR1={"Amp"} 
-            HR2={"Speaker"} 
-            R1C1={data.tele.teleNotes.ampSuccess} 
-            R1C2={data.tele.teleNotes.ampAvg}
-            R2C1={data.tele.teleNotes.spkrSuccess}
-            R2C2={data.tele.teleNotes.spkrAvg}>
-          </BigBox>
+          <div className={styles.valueBoxes}>
+            <div>
+              <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
+              <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
+            </div>
+            <BigBox HC1={"Success"} 
+              HC2={"Avg Notes"} 
+              HR1={"Amp"} 
+              HR2={"Speaker"} 
+              R1C1={data.tele.teleNotes.ampSuccess} 
+              R1C2={data.tele.teleNotes.ampAvg}
+              R2C1={data.tele.teleNotes.spkrSuccess}
+              R2C2={data.tele.teleNotes.spkrAvg}>
+            </BigBox>
+          </div>
         </div>
       </div>
       <div className={styles.rightColumn}>
@@ -256,45 +267,56 @@ export default function TeamView() {
         <div className={styles.chartContainer}>
           <h2>Endgame %</h2>
           <VictoryPie
-            width={300}
+            width={200}
+            height={200}
             data={EndgameData}
             colorScale={Colors[3]}
-            labels={({ datum }) => `${datum.x}: ${datum.y}%`}/>
+            labels={({ datum }) => `${datum.x}: ${datum.y}%`}
+            labelIndicator
+            labelIndicatorInnerOffset={25}
+            labelIndicatorOuterOffset={3}
+            style={{labels: {fontSize: 8, fontFamily: "Belleza"}, data: {padding: 20}}}/>
         </div>
-        <BigBox HC1={"Attempt"} 
-          HC2={"Success"} 
-          HR1={"Onstage"} 
-          HR2={"Harmony"} 
-          R1C1={(data.endgame.onstageAttempt)*100+"%"} 
-          R1C2={(data.endgame.onstageSuccess)*100+"%"}
-          R2C1={(data.endgame.harmonyAttempt)*100+"%"}
-          R2C2={(data.endgame.harmonySuccess)*100+"%"}>
-        </BigBox>
-        <br></br>
-        <div className={styles.HBox}>
-          <p>Onstage Placement</p>
-          <div>
-            <CBox title={"Center"} value={(data.endgame.onstagePlacement.center)*100+"%"}></CBox>
-            <CBox title={"Side"} value={(data.endgame.onstagePlacement.side)*100+"%"}></CBox>
-          </div>
-        </div>
-        <br></br>
-        <div className={styles.HBox}>
-          <p>Trap</p>
-          <CBox title={"Success"} value={(data.endgame.trapSuccess)*100+"%"}></CBox>
-          <CBox title={"Avg Notes"} value={data.endgame.trapAvg}></CBox>
-        </div>
-        <br></br>
-        <div className={styles.HBox}>
-          <p>Intake</p>
-          <CBox title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
-          <CBox title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
+        <div className={styles.valueBoxes}>
+          <table>
+            <tr>
+              <td>Onstage</td>
+              <td><CBox title={"Attempt"} value={(data.endgame.onstageAttempt)*100+"%"}></CBox></td>
+              <td><CBox title={"Success"} value={(data.endgame.onstageSuccess)*100+"%"}></CBox></td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td><CBox title={"Center"} value={(data.endgame.onstagePlacement.center)*100+"%"}></CBox></td>
+              <td><CBox title={"Side"} value={(data.endgame.onstagePlacement.side)*100+"%"}></CBox></td>
+            </tr>
+          </table>
+          <table className={styles.trapTable}>
+            <tr>
+              <td>Trap</td>
+              <td>
+                <CBox title={"Success"} value={(data.endgame.trapSuccess)*100+"%"}></CBox>
+                <CBox title={"Avg Notes"} value={data.endgame.trapAvg}></CBox>
+              </td>
+            </tr>
+          </table>
+          <CBox title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
+          <table className={styles.intakeBox}>
+            <tr>
+              <td>Intake</td>
+              <td>
+                <CBox title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
+              </td>
+              <td>
+                <CBox title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
+              </td>
+            </tr>
+          </table>
         </div>
           <div className={styles.graphContainer}>
             <h2>Qualitative Ratings</h2>
-            <RadarChart outerRadius={80} width={420} height={300} data={data.qualitative}>
+            <RadarChart outerRadius={90} width={355} height={250} data={data.qualitative}>
               <PolarGrid />
-              <PolarAngleAxis dataKey="name" />
+              <PolarAngleAxis dataKey="name" fontSize={14}/>
               <PolarRadiusAxis angle={10} domain={[0, 5]} />
               <Radar name={data.team} dataKey="rating" stroke="blue" fill="blue" fillOpacity={0.3} />
             </RadarChart>
