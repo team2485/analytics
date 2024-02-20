@@ -50,7 +50,6 @@ CREATE TABLE TestMatches (
 
 INSERT INTO TestMatches (ScoutName, ScoutTeam, Team, Match, Breakdown, NoShow, Leave, AutoAmpScored, AutoAmpFailed, AutoSpeakerScored, AutoSpeakerFailed, TeleAmpScored, TeleAmpFailed, TeleNAmpedSpeakerScored, TeleAmpedSpeakerScored, TeleSpeakerFailed, EndLocation, Harmony, TrapScored, TrapFailed, Maneuverability, Aggression, DefenseEvasion, SpeakerSpeed, AmpSpeed, GndIntake, SrcIntake, StageHazard, TrapSpeed, OnStageSpeed, HarmonySpeed, GeneralComments, BreakdownComments, DefenseComments)
 VALUES 
-
 ('John Doe ', 2475, 9, 1, FALSE, FALSE, FALSE, 1, 0, 4, 1, 2, 0, 4, 8, 3, 7, TRUE, 4, 6, 10, 3, 1, 9, 4, FALSE, FALSE, 4, 3, 1, 2, 'Very maneuverable', NULL, 'Very good at getting in other’s way, able to effectively slow down other alliance.'), 
 ('Milan Gupta', 2485, 11, 1, FALSE, FALSE, FALSE, 0, 3, 5, 2, 5, 2, 3, 1, 0, 5, FALSE, 5, 1, 8, 7, 9, 6, 7, TRUE, FALSE, 2, 7, 5, 4, 'Reliable scorer with consistent performance', NULL, 'Solid wall defense against high-scoring robots'),
 ('Preston Seay', 2495, 10, 1, FALSE, FALSE, FALSE, 2, 1, 2, 0, 3, 1, 0, 2, 2, 4, TRUE, 3, 0, 7, 5, 6, 5, 6, FALSE, FALSE, 3, 5, 4, 7, 'Creative playmaker with unexpected maneuvers', 'Strategic use of stage hazards to disrupt opponents', NULL),

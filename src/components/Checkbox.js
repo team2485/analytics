@@ -6,7 +6,7 @@ export default function Checkbox ({ visibleName, internalName, changeListener })
     const [checked, setChecked] = useState(false);
     return (
         <div className={styles.boxContainer}>
-            <div className={styles.box + (checked ? " " + styles.checked : "")}>
+            <div className={styles.box}>
                 <input type="checkbox" id={internalName} name={internalName} checked={checked} onChange={(e) => {
                     setChecked(e.target.checked);
                     if (changeListener) changeListener(e);
