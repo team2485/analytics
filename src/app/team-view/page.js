@@ -113,7 +113,7 @@ export default function TeamView() {
   const EndgameData = [{ x: 'None', y: data.endgame.stage.none },
     { x: 'Park', y: data.endgame.stage.park },
     { x: 'Onstage', y: data.endgame.stage.onstage },
-    { x: 'Onstage Harmony', y: data.endgame.stage.onstageHarmony }];
+    { x: 'Harmony', y: data.endgame.stage.onstageHarmony }];
 
   function CBox({title, value}) {
     return (
@@ -175,15 +175,13 @@ export default function TeamView() {
         </div>
       </div>
         <div className={styles.graphContainer}>
-          <h2>ESPM Over Time</h2>
-          <LineChart width={350} height={175} data={data.espmOverTime}>
+          <h4>ESPM Over Time</h4>
+          <LineChart className={styles.lineChart} width={350} height={175} data={data.espmOverTime}>
             <XAxis type="number" dataKey="matchNum"/>
             <YAxis dataKey="score"/>
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
             <Line type="monotone" dataKey="score" stroke={Colors[0][0]} strokeWidth="3"/>
-            <Line type="monotone" dataKey="" stroke={Colors[0][1]} strokeWidth="2"/>
-            <ReferenceLine label="Max" stroke="red" strokeDasharray="3 3" />
             <Tooltip></Tooltip>
           </LineChart>
         </div>
@@ -206,13 +204,13 @@ export default function TeamView() {
         <div className={styles.auto}>
           <h1>Auto</h1>
           <div className={styles.graphContainer}>
-            <h2>Auto Over Time</h2>
-            <LineChart width={350} height={175} data={data.auto.autoOverTime}>
+            <h4>Auto Over Time</h4>
+            <LineChart className={styles.lineChart} width={350} height={175} data={data.auto.autoOverTime}>
               <XAxis type="number" dataKey="matchNum"/>
               <YAxis dataKey="score"/>
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
-              <Line type="monotone" dataKey="score" stroke="#99ADEF" />
+              <Line type="monotone" dataKey="score" stroke={Colors[1][0]} strokeWidth="3" />
               <Tooltip></Tooltip>
             </LineChart>
           </div>
@@ -235,13 +233,13 @@ export default function TeamView() {
         <div className={styles.tele}>
           <h1>Tele</h1>
           <div className={styles.graphContainer}>
-            <h2>Tele Over Time</h2>
-            <LineChart width={350} height={175} data={data.tele.teleOverTime}>
+            <h4>Tele Over Time</h4>
+            <LineChart className={styles.lineChart} width={350} height={175} data={data.tele.teleOverTime}>
               <XAxis type="number" dataKey="matchNum"/>
               <YAxis dataKey="score"/>
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
-              <Line type="monotone" dataKey="score" stroke="#99ADEF" />
+              <Line type="monotone" dataKey="score" stroke={Colors[2][0]} strokeWidth="3" />
               <Tooltip></Tooltip>
             </LineChart>
           </div>
@@ -265,17 +263,17 @@ export default function TeamView() {
       <div className={styles.rightColumn}>
         <h1>Endgame</h1>
         <div className={styles.chartContainer}>
-          <h2>Endgame %</h2>
+          <h4>Endgame Placement</h4>
           <VictoryPie
-            width={200}
-            height={200}
+            width={175}
+            height={175}
             data={EndgameData}
             colorScale={Colors[3]}
             labels={({ datum }) => `${datum.x}: ${datum.y}%`}
             labelIndicator
             labelIndicatorInnerOffset={25}
             labelIndicatorOuterOffset={3}
-            style={{labels: {fontSize: 8, fontFamily: "Belleza"}, data: {padding: 20}}}/>
+            style={{labels: {fontSize: 8, fontFamily: "Belleza"}, }}/>
         </div>
         <div className={styles.valueBoxes}>
           <table>
@@ -313,7 +311,7 @@ export default function TeamView() {
           </table>
         </div>
           <div className={styles.graphContainer}>
-            <h2>Qualitative Ratings</h2>
+            <h4>Qualitative Ratings</h4>
             <RadarChart outerRadius={90} width={355} height={250} data={data.qualitative}>
               <PolarGrid />
               <PolarAngleAxis dataKey="name" fontSize={14}/>
