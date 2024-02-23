@@ -7,6 +7,7 @@
     margin-right: 20px;
     margin-left: 20px;
     margin-top: 5px;
+    margin-bottom: 5px;
     font-family: "Belleza", sans-serif;
     justify-content: center;
     text-align: center;
@@ -77,15 +78,26 @@
     font-size: 20px;
     font-weight: 800;
 }
+.graphTitle {
+    display: block;
+    position: relative;
+    top: 0;
+    width: auto;
+    border: 1px solid black;
+    background: white;
+    border-radius: 5px;
+    padding: 2px;
+    margin: auto;
+    font-weight: 800;
+    margin-top: 20px;
+    background-color: #eef5ff;
+}
 .graphContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-width: 30%;
     margin-bottom: 10px;
-}
-.MainDiv h4 {
-    margin-top: 20px;
 }
 .lineChart {
     transform: translateX(-25px);
@@ -98,6 +110,7 @@
     font-size: 14px;
     justify-content: center;
     text-align: center;
+    border-radius: 5px;
 }
 .leftColumn .CBox {
     display: flex;
@@ -107,19 +120,21 @@
     font-size: 14px;
     justify-content: center;
     text-align: center;
+    border-radius: 5px;
 }
 .CBoxValue {
-    border-top: 1px solid gray;
+    border-top: 1px solid black;
 }
 .HBox {
     display: flex;
     flex-direction: row;
     border: 1px solid black;
     width: 200px;
-    align-items: center;
+    text-align: center;
+    border-radius: 5px;
 }
 .HBoxValue {
-    border-left: 1px solid gray;
+    border-left: 1px solid black;
 }
 .comments {
     display: block;
@@ -127,7 +142,6 @@
     top: 0;
     width: auto;
     border: 1px solid black;
-    background: white;
     border-radius: 5px;
     padding: 2px;
     margin: 10px auto;
@@ -139,11 +153,16 @@
     border: 1px solid black;
     width: 300px;
     align-self: center;
+    border-radius: 5px;
 }
 .BigBox {
     border: 1px solid black;
+    border-radius: 5px;
 }
 .chartContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 30vw;
     height: 300px;
     font-family: "Belleza", sans-serif;
@@ -203,6 +222,27 @@
 .intakeBox .CBox{
     width: 45px;
 }
+.intakeBox .CBoxValue{
+    display: flex;
+    height: 18px;
+    justify-content: center;
+}
 .MainDiv .trapTable {
     width: 110px;
+}
+.CFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.rightColumn .chartContainer h4 {
+    margin-bottom: -30px;
+    transform: translateY(-10px);
+}
+.rightColumn .valueBoxes {
+    margin-top: -20px;
+}
+.middleColumn table, .middleColumn th, .middleColumn td {
+    border: 1px solid black;
+    border-collapse: collapse;
 }

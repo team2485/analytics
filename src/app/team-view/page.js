@@ -13,7 +13,7 @@ export default function TeamView() {
     ["#116677", "#84C9D7", "#8CCCD9", "#C4EEF6"],
     ["#003F7E", "#84AED7", "#A2C8ED", "#D8EAFB"],
     ["#15007E", "#9D8CF3", "#BFB2FF", "#DDD6FF"],
-    ["#9F5EB5", "#C683DC", "#D88DF2", "#E7B7F7"],
+    ["#9F5EB5", "#C284D7", "#DBA2ED", "#F3D8FB"],
   ]
     //get data
     useEffect(() => {
@@ -71,8 +71,8 @@ export default function TeamView() {
             stage: {
               none: 5,
               park: 5,
-              onstage: 30,
-              onstageHarmony: 60,
+              onstage: 70,
+              onstageHarmony: 20,
             },
             onstageAttempt: .78,
             onstageSuccess: .95,
@@ -115,37 +115,41 @@ export default function TeamView() {
     { x: 'Onstage', y: data.endgame.stage.onstage },
     { x: 'Harmony', y: data.endgame.stage.onstageHarmony }];
 
-  function CBox({title, value}) {
+  function CBox({title, value, color1, color2}) {
     return (
-      <div className={styles.CBox}>
-        <p>{title}</p>
+      <div style={{backgroundColor: color2}} className={styles.CBox}>
+        <div style={{backgroundColor: color1}}>{title}</div>
         <div className={styles.CBoxValue}>{value}</div>
       </div>
     )
   }
 
-  function HBox({title, value}) {
+  function HBox({title, value, color1, color2}) {
     return (
-      <div className={styles.HBox}>
-        <p>{title}</p>
+      <div style={{backgroundColor: color2}} className={styles.HBox}>
+        <p style={{backgroundColor: color1}}>{title}</p>
         <div className={styles.HBoxValue}>{value}</div>
       </div>
     )
   }
 
-  function Comments({title, value}) {
+  function Comments({title, value, color1, color2}) {
     return (
-      <div className={styles.commentsBox}>
-        <p className={styles.comments}>{title}</p>
+      <div style={{backgroundColor: color2}} className={styles.commentsBox}>
+        <p style={{backgroundColor: color1}} className={styles.comments}>{title}</p>
         <div className={styles.commentValue}>{value}</div>
       </div>
     )
   }
 
-  function BigBox({HC1, HC2, HR1, R1C1, R1C2, HR2, R2C1, R2C2}) {
+  function BigBox({HC1, HC2, HR1, R1C1, R1C2, HR2, R2C1, R2C2, color1, color2, color3}) {
     return (
       <table className={styles.BigBox}>
-        <th></th><th>{HC1}</th><th>{HC2}</th>
+        <colgroup>
+          <col span="1" style={{backgroundColor: color1}}></col>
+          <col span="2" style={{backgroundColor: color3}}></col>
+        </colgroup>
+        <th style={{backgroundColor: "white", borderLeftColor: "white", borderTopColor: "white"}}></th><th style={{backgroundColor: color2}}>{HC1}</th><th style={{backgroundColor: color2}}>{HC2}</th>
         <tr>
           <td>{HR1}</td>
           <td>{R1C1}</td>
@@ -175,7 +179,7 @@ export default function TeamView() {
         </div>
       </div>
         <div className={styles.graphContainer}>
-          <h4>ESPM Over Time</h4>
+          <h4 className={styles.graphTitle}>ESPM Over Time</h4>
           <LineChart className={styles.lineChart} width={350} height={175} data={data.espmOverTime}>
             <XAxis type="number" dataKey="matchNum"/>
             <YAxis dataKey="score"/>
@@ -186,25 +190,25 @@ export default function TeamView() {
           </LineChart>
         </div>
       <div className={styles.valueBoxes}>
-        <CBox title={"No Show"} value={(data.noShow)*100+"%"}></CBox>
-        <CBox title={"Breakdown"} value={(data.breakdown)*100+"%"}></CBox>
-        <CBox title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
-        <CBox title={"Matches Scouted"} value={data.matchesScouted}></CBox>
-        <HBox title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"No Show"} value={(data.noShow)*100+"%"}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={(data.breakdown)*100+"%"}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Matches Scouted"} value={data.matchesScouted}></CBox>
+        <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
       </div>
       <br></br>
       <br></br>
       <div className={styles.allComments}>
-        <Comments title={"General Comments"} value={(data.generalComments).join(", ")}></Comments>
-        <Comments title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
-        <Comments title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"General Comments"} value={(data.generalComments).join(", ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
       </div>
       </div>
       <div className={styles.middleColumn}>
         <div className={styles.auto}>
-          <h1>Auto</h1>
+          <h1 style={{color: Colors[1][0]}}>Auto</h1>
           <div className={styles.graphContainer}>
-            <h4>Auto Over Time</h4>
+            <h4 className={styles.graphTitle}>Auto Over Time</h4>
             <LineChart className={styles.lineChart} width={350} height={175} data={data.auto.autoOverTime}>
               <XAxis type="number" dataKey="matchNum"/>
               <YAxis dataKey="score"/>
@@ -215,9 +219,9 @@ export default function TeamView() {
             </LineChart>
           </div>
           <div className={styles.valueBoxes}>
-            <div>
-              <CBox title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
-              <CBox title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
+            <div className={styles.CFlex}>
+              <CBox color1={Colors[1][2]} color2={Colors[1][3]} title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
+              <CBox color1={Colors[1][2]} color2={Colors[1][3]} title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
             </div>
             <BigBox HC1={"Success"} 
               HC2={"Avg Notes"} 
@@ -226,14 +230,15 @@ export default function TeamView() {
               R1C1={data.auto.autoNotes.ampSuccess} 
               R1C2={data.auto.autoNotes.ampAvg}
               R2C1={data.auto.autoNotes.spkrSuccess}
-              R2C2={data.auto.autoNotes.spkrAvg}>
+              R2C2={data.auto.autoNotes.spkrAvg}
+              color1={Colors[1][1]} color2={Colors[1][2]} color3={Colors[1][3]}>
             </BigBox>
           </div>
         </div>
         <div className={styles.tele}>
-          <h1>Tele</h1>
+          <h1 style={{color: Colors[2][0]}}>Tele</h1>
           <div className={styles.graphContainer}>
-            <h4>Tele Over Time</h4>
+            <h4 className={styles.graphTitle}>Tele Over Time</h4>
             <LineChart className={styles.lineChart} width={350} height={175} data={data.tele.teleOverTime}>
               <XAxis type="number" dataKey="matchNum"/>
               <YAxis dataKey="score"/>
@@ -244,9 +249,9 @@ export default function TeamView() {
             </LineChart>
           </div>
           <div className={styles.valueBoxes}>
-            <div>
-              <CBox title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
-              <CBox title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
+            <div className={styles.CFlex} >
+              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
+              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
             </div>
             <BigBox HC1={"Success"} 
               HC2={"Avg Notes"} 
@@ -255,68 +260,71 @@ export default function TeamView() {
               R1C1={data.tele.teleNotes.ampSuccess} 
               R1C2={data.tele.teleNotes.ampAvg}
               R2C1={data.tele.teleNotes.spkrSuccess}
-              R2C2={data.tele.teleNotes.spkrAvg}>
+              R2C2={data.tele.teleNotes.spkrAvg}
+              color1={Colors[2][1]} color2={Colors[2][2]} color3={Colors[2][3]}>
             </BigBox>
           </div>
         </div>
       </div>
       <div className={styles.rightColumn}>
-        <h1>Endgame</h1>
+        <h1 style={{color: Colors[3][0]}}>Endgame</h1>
+        <br></br>
         <div className={styles.chartContainer}>
-          <h4>Endgame Placement</h4>
+          <h4 className={styles.graphTitle}>Endgame Placement</h4>
           <VictoryPie
+            className={styles.pie}
             width={175}
             height={175}
             data={EndgameData}
             colorScale={Colors[3]}
             labels={({ datum }) => `${datum.x}: ${datum.y}%`}
             labelIndicator
-            labelIndicatorInnerOffset={25}
-            labelIndicatorOuterOffset={3}
-            style={{labels: {fontSize: 8, fontFamily: "Belleza"}, }}/>
+            labelIndicatorInnerOffset={19}
+            labelIndicatorOuterOffset={5}
+            style={{labels: {fontSize: 8, fontFamily: "Belleza"}}}/>
         </div>
         <div className={styles.valueBoxes}>
           <table>
             <tr>
               <td>Onstage</td>
-              <td><CBox title={"Attempt"} value={(data.endgame.onstageAttempt)*100+"%"}></CBox></td>
-              <td><CBox title={"Success"} value={(data.endgame.onstageSuccess)*100+"%"}></CBox></td>
+              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Attempt"} value={(data.endgame.onstageAttempt)*100+"%"}></CBox></td>
+              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Success"} value={(data.endgame.onstageSuccess)*100+"%"}></CBox></td>
             </tr>
             <tr>
               <td>Location</td>
-              <td><CBox title={"Center"} value={(data.endgame.onstagePlacement.center)*100+"%"}></CBox></td>
-              <td><CBox title={"Side"} value={(data.endgame.onstagePlacement.side)*100+"%"}></CBox></td>
+              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Center"} value={(data.endgame.onstagePlacement.center)*100+"%"}></CBox></td>
+              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Side"} value={(data.endgame.onstagePlacement.side)*100+"%"}></CBox></td>
             </tr>
           </table>
           <table className={styles.trapTable}>
             <tr>
               <td>Trap</td>
               <td>
-                <CBox title={"Success"} value={(data.endgame.trapSuccess)*100+"%"}></CBox>
-                <CBox title={"Avg Notes"} value={data.endgame.trapAvg}></CBox>
+                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Success"} value={(data.endgame.trapSuccess)*100+"%"}></CBox>
+                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Avg Notes"} value={data.endgame.trapAvg}></CBox>
               </td>
             </tr>
           </table>
-          <CBox title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
+          <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
           <table className={styles.intakeBox}>
             <tr>
               <td>Intake</td>
               <td>
-                <CBox title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
+                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
               </td>
               <td>
-                <CBox title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
+                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
               </td>
             </tr>
           </table>
         </div>
           <div className={styles.graphContainer}>
-            <h4>Qualitative Ratings</h4>
+            <h4 className={styles.graphTitle} >Qualitative Ratings</h4>
             <RadarChart outerRadius={90} width={355} height={250} data={data.qualitative}>
               <PolarGrid />
               <PolarAngleAxis dataKey="name" fontSize={14}/>
               <PolarRadiusAxis angle={10} domain={[0, 5]} />
-              <Radar name={data.team} dataKey="rating" stroke="blue" fill="blue" fillOpacity={0.3} />
+              <Radar name={data.team} dataKey="rating" stroke={Colors[3][1]} fill={Colors[3][1]} fillOpacity={0.3} strokeWidth="3" />
             </RadarChart>
           </div>
       </div>
