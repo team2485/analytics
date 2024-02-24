@@ -11,6 +11,8 @@ import SubHeader from "@/components/SubHeader";
 import { useEffect, useRef, useState } from "react";
 import PopUp from "@/components/PopUp";
 import { get, isUndefined } from "lodash";
+import JSConfetti from 'js-confetti';
+import { Just_Me_Again_Down_Here } from "next/font/google";
 
 export default function Home() {
   const [noShow, setNoShow] = useState(false);
@@ -56,7 +58,10 @@ export default function Home() {
         }
       }
     });
-    
+    //clear unneeded checkbox values
+    data.breakdown = undefined;
+    data.defense = undefined;
+
     //check pre-match data
     let preMatchInputs = document.querySelectorAll(".preMatchInput"); //todo: use the data object
     for (let preMatchInput of preMatchInputs) {
@@ -81,7 +86,10 @@ export default function Home() {
       }) 
       .then(data => {
         alert("Thank you!");
-        //todo: confetti (https://www.npmjs.com/package/js-confetti)
+        const jsConfetti = new JSConfetti();
+        jsConfetti.addConfetti({
+          confettiColors: ['yellow'],
+       })
         if (typeof document !== 'undefined')  {
           let ScoutName = document.querySelector("input[name='scoutname']").value;
           let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
@@ -93,7 +101,9 @@ export default function Home() {
           };
           localStorage.setItem("ScoutProfile", JSON.stringify(scoutProfile));
         }
-        location.reload();
+        setTimeout(() => {
+          location.reload()
+        }, 2000);
       })
       .catch(error => {
         alert(error);
