@@ -242,7 +242,7 @@
 .rightColumn .valueBoxes {
     margin-top: -20px;
 }
-.middleColumn table, .middleColumn th, .middleColumn td {
+.middleColumn table, .middleColumn th, .middleColumn td, .rightColumn table, .rightColumn th, .rightColumn td {
     border: 1px solid black;
     border-collapse: collapse;
 }

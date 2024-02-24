@@ -286,35 +286,34 @@ export default function TeamView() {
         <div className={styles.valueBoxes}>
           <table>
             <tr>
-              <td>Onstage</td>
-              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Attempt"} value={(data.endgame.onstageAttempt)*100+"%"}></CBox></td>
-              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Success"} value={(data.endgame.onstageSuccess)*100+"%"}></CBox></td>
+              <td style={{backgroundColor: Colors[3][1]}} rowSpan="2">Onstage</td>
+              <td style={{backgroundColor: Colors[3][2]}}>Attempt</td>
+              <td style={{backgroundColor: Colors[3][2]}}>Success</td>
             </tr>
             <tr>
-              <td>Location</td>
-              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Center"} value={(data.endgame.onstagePlacement.center)*100+"%"}></CBox></td>
-              <td><CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Side"} value={(data.endgame.onstagePlacement.side)*100+"%"}></CBox></td>
+              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstageAttempt)*100+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstageSuccess)*100+"%"}</td>
             </tr>
-          </table>
-          <table className={styles.trapTable}>
             <tr>
-              <td>Trap</td>
-              <td>
-                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Success"} value={(data.endgame.trapSuccess)*100+"%"}></CBox>
-                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Avg Notes"} value={data.endgame.trapAvg}></CBox>
-              </td>
+              <td style={{backgroundColor: Colors[3][1]}} rowSpan="2">Location</td>
+              <td style={{backgroundColor: Colors[3][2]}}>Center</td>
+              <td style={{backgroundColor: Colors[3][2]}}>Side</td>
+            </tr>
+            <tr>
+              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstagePlacement.center)*100+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstagePlacement.side)*100+"%"}</td>
             </tr>
           </table>
           <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
-          <table className={styles.intakeBox}>
+          <table>
             <tr>
-              <td>Intake</td>
-              <td>
-                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Ground"} value={<input type="checkbox" checked={data.intake.ground}></input>}></CBox>
-              </td>
-              <td>
-                <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Source"} value={<input type="checkbox" checked={data.intake.source}></input>}></CBox>
-              </td>
+              <td style={{backgroundColor: Colors[3][1]}} rowSpan="2">Intake</td>
+              <td style={{backgroundColor: Colors[3][2]}}>Ground</td>
+              <td style={{backgroundColor: Colors[3][2]}}>Source</td>
+            </tr>
+            <tr>
+              <td style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.ground}></input></td>
+              <td style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.source}></input></td>
             </tr>
           </table>
         </div>
