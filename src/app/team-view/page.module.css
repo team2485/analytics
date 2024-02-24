@@ -130,11 +130,22 @@
     flex-direction: row;
     border: 1px solid black;
     width: 200px;
-    text-align: center;
     border-radius: 5px;
 }
 .HBoxValue {
+    display: flex;
+    flex-direction: row;
     border-left: 1px solid black;
+    font-size: 13px;
+    align-content: center;
+    width: 150px;
+    height: 33px;
+}
+.HBoxTitle{
+    display: flex;
+    text-align: center;
+    width: 50px;
+    height: 33px;
 }
 .comments {
     display: block;
@@ -154,6 +165,8 @@
     width: 300px;
     align-self: center;
     border-radius: 5px;
+    height: 50px;
+    padding-bottom: 1px;
 }
 .BigBox {
     border: 1px solid black;
@@ -216,17 +229,6 @@
     font-size: 14px;
     width: 210px;
 }
-.MainDiv .intakeBox {
-    width: 140px;
-}
-.intakeBox .CBox{
-    width: 45px;
-}
-.intakeBox .CBoxValue{
-    display: flex;
-    height: 18px;
-    justify-content: center;
-}
 .MainDiv .trapTable {
     width: 110px;
 }
@@ -242,7 +244,16 @@
 .rightColumn .valueBoxes {
     margin-top: -20px;
 }
-.middleColumn table, .middleColumn th, .middleColumn td, .rightColumn table, .rightColumn th, .rightColumn td {
+.MainDiv table, .MainDiv th, .MainDiv tr, .MainDiv td {
     border: 1px solid black;
     border-collapse: collapse;
+}
+.commentValue {
+    background-color: #C4EEF6;
+    transform: translateY(-10px);
+    font-family: "Belleza", sans-serif;
+    height: 30px;
+    border: 0px;
+    padding: 5px;
+    text-align: center;
 }

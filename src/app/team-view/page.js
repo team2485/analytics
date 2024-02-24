@@ -126,10 +126,12 @@ export default function TeamView() {
 
   function HBox({title, value, color1, color2}) {
     return (
-      <div style={{backgroundColor: color2}} className={styles.HBox}>
-        <p style={{backgroundColor: color1}}>{title}</p>
-        <div className={styles.HBoxValue}>{value}</div>
-      </div>
+      <table>
+        <tr>
+          <td style={{backgroundColor: color1}}>{title}</td>
+          <td style={{backgroundColor: color2, fontSize: "13px"}}>{value}</td>
+        </tr>
+      </table>
     )
   }
 
@@ -137,7 +139,7 @@ export default function TeamView() {
     return (
       <div style={{backgroundColor: color2}} className={styles.commentsBox}>
         <p style={{backgroundColor: color1}} className={styles.comments}>{title}</p>
-        <div className={styles.commentValue}>{value}</div>
+        <input className={styles.commentValue} value={value}></input>
       </div>
     )
   }
@@ -304,7 +306,6 @@ export default function TeamView() {
               <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstagePlacement.side)*100+"%"}</td>
             </tr>
           </table>
-          <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
           <table>
             <tr>
               <td style={{backgroundColor: Colors[3][1]}} rowSpan="2">Intake</td>
@@ -312,10 +313,11 @@ export default function TeamView() {
               <td style={{backgroundColor: Colors[3][2]}}>Source</td>
             </tr>
             <tr>
-              <td style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.ground}></input></td>
-              <td style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.source}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.ground}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.source}></input></td>
             </tr>
           </table>
+          <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
         </div>
           <div className={styles.graphContainer}>
             <h4 className={styles.graphTitle} >Qualitative Ratings</h4>
