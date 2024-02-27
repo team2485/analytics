@@ -48,8 +48,20 @@ export async function POST(request) {
         return arr.map(row => row[index]).join();
       }
     }
-    //numbers, so average them
-    return mean(index)
+    if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
+      //qual, so exclude -1
+      return (arr) => {
+        let qualValues = arr.filter(row => row[index] != -1 && row[index] != null).map(row => row[index]);
+        if (qualValues.length == 0) return -1;
+        let sum = 0;
+        for (let val of qualValues) {
+          sum+=val;
+        }
+        return sum/qualValues.length;
+      }
+    }
+    //numbers, so average them (unless -1)
+    return mean(index);
   }
   
   //join data from multiple scouts on same match
@@ -58,8 +70,11 @@ export async function POST(request) {
         summarizeAll(byAveragingNumbers)
       ])
     );
-  
+  //get rid of noshows
   teamTable = teamTable.filter(dr => dr.noshow == false);
+  //average values for teams
+  teamTable = tidy(teamTable, groupBy(['team'], [summarizeAll(byAveragingNumbers)]));
+
   
   //calculate the values we care about: ESPM, Auto, Tele, End, Speed, Movement
   //TODO: define functions for calcSpeed & calcMovement
@@ -73,7 +88,7 @@ export async function POST(request) {
     return sum/arr.length;
   }
   function calcMovement(dr) {
-    let arr = [dr.maneuverability, dr.defenseEvasion, 5 - dr.stagehazard, 5 - dr.aggression].filter(a => a != -1)
+    let arr = [dr.maneuverability, dr.defenseevasion, 5 - dr.stagehazard, 5 - dr.aggression].filter(a => a != -1)
     if (arr.length == 0) return 0;
     let sum = 0;
     for (let value of arr) {
@@ -94,13 +109,11 @@ export async function POST(request) {
   );
   
   //calculate maxes
-  console.log(teamTable);
-  let maxes = tidy(teamTable, summarizeIf((vector) => Number.isFinite(vector[0]), max));
-  console.log(maxes);
+  const maxes = tidy(teamTable, summarizeIf((vector) => Number.isFinite(vector[0]), max))[0];
 
   //normalize & get score
   teamTable = tidy(teamTable, mutate({
-    auto: d => d.auto/maxes.auto,
+    auto2: d => d.auto/maxes.auto,
     tele: d => d.tele/maxes.tele,
     end: d => d.end/maxes.end,
     espm: d => d.espm/maxes.espm,
@@ -114,10 +127,8 @@ export async function POST(request) {
       });
       return sum;
     }
-  }))
+  }));
 
   return NextResponse.json(teamTable);
-
-
 }
 

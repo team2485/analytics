@@ -40,22 +40,22 @@ export default function Picklist() {
     return <table className={styles.weightsTable}>
       <tbody>
         <tr>
-            <td><label htmlFor="ESPM">ESPM:</label></td>
-            <td><input type="number" defaultValue={0} name="ESPM"></input></td>
+            <td><label htmlFor="espm">ESPM:</label></td>
+            <td><input id="espm" type="number" defaultValue={0} name="espm"></input></td>
             <td><label htmlFor="end">End:</label> </td>
-            <td><input type="number" defaultValue={0} name="end"></input></td>
+            <td><input id="end" type="number" defaultValue={0} name="end"></input></td>
         </tr>
         <tr>
             <td><label htmlFor="auto">Auto:</label></td>
-            <td><input type="number" defaultValue={0} name="auto"></input></td>
+            <td><input id="auto" type="number" defaultValue={0} name="auto"></input></td>
             <td><label htmlFor="speed">Speed:</label> </td>
-            <td><input type="number" defaultValue={0} name="speed"></input></td>
+            <td><input id="speed" type="number" defaultValue={0} name="speed"></input></td>
         </tr>
         <tr>
             <td><label htmlFor="tele">Tele:</label></td>
-            <td><input type="number" defaultValue={0} name="tele"></input></td>
+            <td><input id="tele" type="number" defaultValue={0} name="tele"></input></td>
             <td><label htmlFor="movement">Movement:</label> </td>
-            <td><input type="number" defaultValue={0} name="movement"></input></td>
+            <td><input id="movement" type="number" defaultValue={0} name="movement"></input></td>
         </tr>
       </tbody>
     </table>;
@@ -100,6 +100,10 @@ export default function Picklist() {
       </div>
     }
 
+    function roundToThree(x) {
+      return Math.round(x*1000)/1000;
+    }
+
     return <div className={styles.picklistContainer}>
         <h1>Picklist</h1>
         <table className={styles.picklistTable} id="teamTable">
@@ -110,10 +114,10 @@ export default function Picklist() {
           <tr key={teamData.team}>
             <td>#{index + 1}</td>
             <td>{teamData.team}</td>
-            <td style={{backgroundColor: valueToColor(teamData.score/maxScore)}}>{teamData.score}</td>
-            <td style={{backgroundColor: valueToColor(teamData.espm)}}>{teamData.espm}</td>
-            <td style={{backgroundColor: valueToColor(teamData.speed)}}>{teamData.speed}</td>
-            <td style={{backgroundColor: valueToColor(teamData.movement)}}>{teamData.movement}</td>
+            <td style={{backgroundColor: valueToColor(teamData.score/maxScore)}}>{roundToThree(teamData.score)}</td>
+            <td style={{backgroundColor: valueToColor(teamData.espm)}}>{roundToThree(teamData.espm)}</td>
+            <td style={{backgroundColor: valueToColor(teamData.speed)}}>{roundToThree(teamData.speed)}</td>
+            <td style={{backgroundColor: valueToColor(teamData.movement)}}>{roundToThree(teamData.movement)}</td>
           </tr>
         ))}
       </table>
