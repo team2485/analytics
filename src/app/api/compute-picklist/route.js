@@ -21,9 +21,9 @@ export async function POST(request) {
     );
   };
   const calcEnd = (record) => {
-    //TODO: FIX TO UTIL CALCULATIONS FILE
+    //TODO: CHANGE TO UTIL CALCULATIONS FILE
     return (
-      (record.endlocation == 0 ? 2 : 3) +
+      (record.endlocation == 0 ? 0 : record.endlocation == 1 ? 2 : 3) +
       (record.harmony ? 2 : 0) +
       record.trapscored * 5
     );
