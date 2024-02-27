@@ -4,7 +4,6 @@ import { tidy, mutate, arrange, desc, mean, select, summarizeIf, summarizeAll, m
 
 export async function POST(request) {
   const requestBody = await request.json();
-
   //console.log(requestBody); // e.g.   [ [ 'ESPM', '0' ], [ 'Maneuverability', '0' ] ]
 
   const calcAuto = (record) => {
@@ -35,6 +34,7 @@ export async function POST(request) {
   let data = await sql`SELECT * FROM testmatches;`;
   let rows = data.rows;
 
+  //function returns a function based on column index: the returned function will summarize each column
   function byAveragingNumbers(index) {
     if (['breakdown', 'leave', 'noshow', 'harmony', 'gndintake', 'srcintake'].includes(index)) {
       //booleans, so OR them
@@ -77,7 +77,6 @@ export async function POST(request) {
 
   
   //calculate the values we care about: ESPM, Auto, Tele, End, Speed, Movement
-  //TODO: define functions for calcSpeed & calcMovement
   function calcSpeed(dr) {
     let arr = [dr.speakerspeed, dr.ampspeed, dr.trapspeed, dr.onstagespeed, dr.onstagespeed].filter(a => a != -1)
     if (arr.length == 0) return 0;
@@ -111,24 +110,26 @@ export async function POST(request) {
   //calculate maxes
   const maxes = tidy(teamTable, summarizeIf((vector) => Number.isFinite(vector[0]), max))[0];
 
-  //normalize & get score
+  //normalize, get score, & sort
   teamTable = tidy(teamTable, mutate({
-    auto2: d => d.auto/maxes.auto,
-    tele: d => d.tele/maxes.tele,
-    end: d => d.end/maxes.end,
-    espm: d => d.espm/maxes.espm,
-    speed: d => d.speed/maxes.speed,
-    movement: d => d.movement/maxes.movement,
-    score: d => {
-      let sum = 0;
-      requestBody.forEach(weightPair => {
-        let [weightName, weightValue] = weightPair;
-        sum += (d[weightName] * weightValue) || 0;
-      });
-      return sum;
-    }
-  }));
+      auto: d => d.auto/maxes.auto,
+      tele: d => d.tele/maxes.tele,
+      end: d => d.end/maxes.end,
+      espm: d => d.espm/maxes.espm,
+      speed: d => d.speed/maxes.speed,
+      movement: d => d.movement/maxes.movement,
+      score: d => {
+        let sum = 0;
+        requestBody.forEach(weightPair => {
+          let [weightName, weightValue] = weightPair;
+          sum += (d[weightName] * weightValue) || 0;
+        });
+        return sum;
+      }
+    }),
+    arrange(desc('score'))
+  );
 
-  return NextResponse.json(teamTable);
+  return NextResponse.json(teamTable, {status: 200});
 }
 
