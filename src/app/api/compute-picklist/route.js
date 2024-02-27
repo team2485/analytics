@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { sql } from '@vercel/postgres';
+import { tidy, mutate, arrange, desc, mean, select, summarizeIf, summarizeAll, max, groupBy} from '@tidyjs/tidy'
 
 export async function POST(request) {
   const requestBody = await request.json();
+
   //console.log(requestBody); // e.g.   [ [ 'ESPM', '0' ], [ 'Maneuverability', '0' ] ]
 
   const calcAuto = (record) => {
@@ -20,6 +22,7 @@ export async function POST(request) {
     );
   };
   const calcEnd = (record) => {
+    //TODO: FIX TO UTIL CALCULATIONS FILE
     return (
       (record.endlocation == 0 ? 2 : 3) +
       (record.harmony ? 2 : 0) +
@@ -31,99 +34,89 @@ export async function POST(request) {
   };
   let data = await sql`SELECT * FROM testmatches;`;
   let rows = data.rows;
-  let teamTable = {};
 
-  for (let i = 0; i < rows.length; i++) {
-    const curRow = rows[i];
-    let team = curRow.team;
-    let espm = calcESPM(curRow);
-    let auto = calcAuto(curRow);
-    let tele = calcTele(curRow);
-    let end = calcEnd(curRow);
-    
-    if(teamTable[team] == null){
-      //doesn't exist, so creating team datapoint
-      //todo: we only care about the two averages for the qualitative data, so only use those, details on line 56
-      teamTable[team] = { ESPM: [espm], Auto: [auto], Tele: [tele], End: [end] /* insert speed and movement here */}
+  function byAveragingNumbers(index) {
+    if (['breakdown', 'leave', 'noshow', 'harmony', 'gndintake', 'srcintake'].includes(index)) {
+      //booleans, so OR them
+      return (arr) => {
+        return arr.some(row => row[index] == true);
+      }
     }
-    else if(teamTable[team]){
-      //does exist, so appending to team data
-      teamTable[team].ESPM.push(curRow.ESPM);
-      teamTable[team].Auto.push(curRow.Auto);
-      teamTable[team].Tele.push(curRow.Tele);
-      teamTable[team].End.push(curRow.End);
-      //todo: we want 2 more values per match
-      // (1) Speed - Average all of the speed variables (don't include it is it's -1)
-      // (2) Movement - Average maneuverability, defenseevasion, aggression, and stage hazard (make sure to subtract the last two from 5 before averaging, since 0 is the best score)
+    if (['scoutname', 'generalcomments', 'breakdowncomments', 'defensecomments'].includes(index)) {
+      //strings, so join them
+      return (arr) => {
+        return arr.map(row => row[index]).join();
+      }
     }
-  }
-
-  //todo: currently teamdata holds arrays for every value --- teamTable = {    2485: {espm: [10, 30, 50], auto: [5, 5, 5], ...}, 9485: {...}, ...    })
-  //todo: but we need to convert that into single values before you use them as single values on lines 77-87 --- teamTable = {    2485: {espm: 30, auto: 5, ...}, 9485: {...}, ...    }
-  //                                                                                                     🔽in fact, you could calculate the maximums as you calculate the values, but that's optional
-
-
-
-  //finding the maximums
-
-  let maxESPM = 0;
-  let maxAUTO = 0;
-  let maxTELE = 0;
-  let maxEND = 0;
-  let maxSPEED = 0;
-  let maxMOVEMENT = 0;
-
-  for (let teamKey in teamTable) {
-    let teamData = teamTable[teamKey];
-
-    maxESPM = Math.max(maxESPM, teamData.ESPM);
-    maxAUTO = Math.max(maxAUTO, teamData.Auto);
-    maxTELE = Math.max(maxTELE, teamData.Tele);
-    maxEND = Math.max(maxEND, teamData.End);
-    //todo: calculate for speed and movement too
+    //numbers, so average them
+    return mean(index)
   }
   
-  //normalizing the values & calculating the score
-
-  for(let teamKey in teamTable) {
-    let teamData = teamTable[teamKey];
-    //console.log(teamData.ESPM)
-    teamData.ESPM /= maxESPM;
-    teamData.Auto /= maxAUTO;
-    teamData.Tele /= maxTELE;
-    teamData.End /= maxEND;
-    teamData.Maneuverability /= maxMANEUVERABILITY;
-    teamData.Aggression /= maxAGGRESSION;
-    teamData.DefenseEvasion /= maxDEFENSEEVASION;
-    teamData.IntakeSpeed /= maxINTAKESPEED;
-    teamData.StageHazard /= maxSTAGEHAZARD;
-    teamData.OnStageSpeed /= maxONSTAGESPEED;
-    teamData.HarmonySpeed /= maxHARMONYSPEED;
-    teamData.score = 0;
-
-    for (let weight of requestBody){
-      //console.log(teamData[weight[0]])
-      teamData.score += (teamData[weight[0]] * weight[1]);
+  //join data from multiple scouts on same match
+  let teamTable = tidy(rows,
+      groupBy(['team', 'match'], [
+        summarizeAll(byAveragingNumbers)
+      ])
+    );
+  
+  teamTable = teamTable.filter(dr => dr.noshow == false);
+  
+  //calculate the values we care about: ESPM, Auto, Tele, End, Speed, Movement
+  //TODO: define functions for calcSpeed & calcMovement
+  function calcSpeed(dr) {
+    let arr = [dr.speakerspeed, dr.ampspeed, dr.trapspeed, dr.onstagespeed, dr.onstagespeed].filter(a => a != -1)
+    if (arr.length == 0) return 0;
+    let sum = 0;
+    for (let value of arr) {
+      sum+=value;
     }
-
-    teamTable[teamKey].score = teamData.score
-    //console.log(teamTable[teamKey].score)
+    return sum/arr.length;
   }
+  function calcMovement(dr) {
+    let arr = [dr.maneuverability, dr.defenseEvasion, 5 - dr.stagehazard, 5 - dr.aggression].filter(a => a != -1)
+    if (arr.length == 0) return 0;
+    let sum = 0;
+    for (let value of arr) {
+      sum+=value;
+    }
+    return sum/arr.length;
+  }
+  teamTable = tidy(teamTable,
+    mutate({
+      auto: calcAuto,
+      tele: calcTele,
+      end: calcEnd,
+      espm: (d) => d.auto + d.tele + d.end,
+      speed: calcSpeed,
+      movement: calcMovement,
+    }),
+    select(['team', 'auto', 'tele', 'end', 'espm', 'speed', 'movement'])
+  );
+  
+  //calculate maxes
+  console.log(teamTable);
+  let maxes = tidy(teamTable, summarizeIf((vector) => Number.isFinite(vector[0]), max));
+  console.log(maxes);
 
-  //NOTE: THE FOLLOWING CODE DOES NOT GENERATE A DICTIONARY/JSON OBJECT AS YOU WANT, it makes returnTable = {"k": [the, values, of, the, d, array]}
-  //INSTEAD, YOU'LL SIMPLY WANT TO SORT teamTable, and return teamTable
-  // let k = []
-  // let d = []
-  // for (const key in teamTable) {
-  //   k.push(key);
-  //   d.push(key[0])
-  // }
+  //normalize & get score
+  teamTable = tidy(teamTable, mutate({
+    auto: d => d.auto/maxes.auto,
+    tele: d => d.tele/maxes.tele,
+    end: d => d.end/maxes.end,
+    espm: d => d.espm/maxes.espm,
+    speed: d => d.speed/maxes.speed,
+    movement: d => d.movement/maxes.movement,
+    score: d => {
+      let sum = 0;
+      requestBody.forEach(weightPair => {
+        let [weightName, weightValue] = weightPair;
+        sum += (d[weightName] * weightValue) || 0;
+      });
+      return sum;
+    }
+  }))
 
-  // let returnTable = {k: d}
-
-  //multiply the normaizled values by the weight
-
-  return NextResponse.json(returnTable);
+  return NextResponse.json(teamTable);
 
 
 }

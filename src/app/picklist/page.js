@@ -17,17 +17,17 @@ export default function Picklist() {
   
   function recalculate(event) {
     const formData = new FormData(weightsFormRef.current);
-    // fetch('/api/compute-picklist', {
-    //   method: "POST",
-    //   body: JSON.stringify([...formData.entries()])
-    // })
-    //   .then(resp => resp.json())
-    //   .then(picklist => {
-    //     setPicklist(picklist);
-    //     setMaxScore(picklist[0].score);
-    //   });
-    setPicklist([{team: 2485, score: 100, espm: 1, speed: 0.9, movement: 1}, {team: 9485, score: 75, espm: 0.6, speed: 1, movement: 0.7}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
-    setMaxScore(100);
+    fetch('/api/compute-picklist', {
+      method: "POST",
+      body: JSON.stringify([...formData.entries()])
+    })
+      .then(resp => resp.json())
+      .then(picklist => {
+        setPicklist(picklist);
+        setMaxScore(picklist[0].score);
+      });
+    // setPicklist([{team: 2485, score: 100, espm: 1, speed: 0.9, movement: 1}, {team: 9485, score: 75, espm: 0.6, speed: 1, movement: 0.7}, {team: 1234, score: 30, espm: 0.5, speed: 0.1, movement: 0.4}]);
+    // setMaxScore(100);
   }
 
   function updateAlliancesData() {

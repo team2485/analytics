@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tidyjs/tidy": "^2.5.2",
     "@vercel/postgres": "^0.5.1",
     "next": "14.0.4",
     "react": "^18",
