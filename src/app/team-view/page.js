@@ -18,7 +18,7 @@ export default function TeamView() {
     //get data
     useEffect(() => {
       //TODO: Get Data (from localstorage if cached recently)
-      //fetch("/api/get-alliance-data").then(resp => resp.json()).then(data => setData(data));
+      //fetch("/api/get-team-data").then(resp => resp.json()).then(data => setData(data));
       setData({
           team: 2485,
           teamName: "W.A.R. Lords",

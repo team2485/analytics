@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from '@vercel/postgres';
 import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
+import { tidy, mutate, arrange, desc, mean, select, summarizeIf, summarizeAll, max, groupBy, summarize} from '@tidyjs/tidy'
 
 export async function get(request) {
   //get team to analyze
@@ -11,120 +12,133 @@ export async function get(request) {
     return NextResponse.json({message: "Invalid team number"}, {status: 400});
   }
 
-  let data = await sql`SELECT * FROM testmatches WHERE team = team;`;
+  let data = await sql`SELECT * FROM testmatches WHERE team = ${team};`;
   let rows = data.rows;
 
-  //get data to be like:
-  /* {
-          team: 2485,
-          teamName: "W.A.R. Lords",
-          autoScore: 15,
-          teleScore: 27,
-          endScore: 5,
-          espmOverTime: [
-            {matchNum: 5, score: 47},
-            {matchNum: 10, score: 38},
-            {matchNum: 50, score: 55},
-          ],
-          noShow: .01,
-          breakdown: .08,
-          lastBreakdown: 3,
-          matchesScouted: 3,
-          scouts: ["yael", "ella", "preston",],
-          generalComments: ["very good", "incredible", "amazing",],
-          breakdownComments: ["the shooter broke",],
-          defenseComments: ["very good at defense", "defended well",],
-          auto: {
-            leave: .95,
-            autoOverTime: [
-              {matchNum: 5, score: 10},
-              {matchNum: 10, score: 9},
-              {matchNum: 50, score: 8},
-            ],
-            autoNotes: {
-              total: 3.2,
-              ampSuccess: .92,
-              ampAvg: 1.2,
-              spkrSuccess: .89,
-              spkrAvg: 2
-            }},
-          tele: {
-            teleOverTime: [
-              {matchNum: 5, score: 30},
-              {matchNum: 10, score: 29},
-              {matchNum: 50, score: 28},
-            ],
-            teleNotes: {
-              amplified: .43,
-              total: 20,
-              ampSuccess: .96,
-              ampAvg: 9.2,
-              spkrSuccess: .94,
-              spkrAvg: 10.8
-            },
-          },
-          endgame: {
-            stage: {
-              none: 5,
-              park: 5,
-              onstage: 30,
-              onstageHarmony: 60,
-            },
-            onstageAttempt: .78,
-            onstageSuccess: .95,
-            harmonySuccess: .75,
-            onstagePlacement: {
-              center: .82,
-              side: .18,
-            },
-            trapSuccess: .6,
-            trapAvg: .5,
-          },
-          intake: {
-            ground: true,
-            source: false,
-          },
-          qualitative: [
-            {name: "Onstage Speed", rating: 5},
-            {name: "Harmony Speed", rating: 1},
-            {name: "Trap Speed", rating: 2},
-            {name: "Amp Speed", rating: 4},
-            {name: "Apeaker Speed", rating: 1},
-            {name: "Stage Hazard", rating: 3},
-            {name: "Defense Evasion", rating: 0},
-            {name: "Aggression", rating: 5},
-            {name: "Maneuverability", rating: 2},
-          ],
+  if (rows.length == 0) {
+    return NextResponse.json({message: "No data for team"}, {status: 404});
+  }
+
+  //function returns a function based on column index: the returned function will summarize each column
+  function byAveragingNumbers(index) {
+    if (['breakdown', 'leave', 'noshow', 'harmony', 'gndintake', 'srcintake'].includes(index)) {
+      //booleans, so OR them
+      return (arr) => {
+        return arr.some(row => row[index] == true);
       }
-    */
+    }
+    if (['scoutname', 'generalcomments', 'breakdowncomments', 'defensecomments'].includes(index)) {
+      //strings, so join them
+      return (arr) => {
+        return arr.map(row => row[index]).join();
+      }
+    }
+    if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
+      //qual, so exclude -1
+      return (arr) => {
+        let qualValues = arr.filter(row => row[index] != -1 && row[index] != null).map(row => row[index]);
+        if (qualValues.length == 0) return -1;
+        let sum = 0;
+        for (let val of qualValues) {
+          sum+=val;
+        }
+        return sum/qualValues.length;
+      }
+    }
+    //numbers, so average them (unless -1)
+    return mean(index);
+  }
+  
+  //join data from same match
+  let teamTable = tidy(rows,
+    groupBy(['match'], [
+      summarizeAll(byAveragingNumbers)
+    ])
+  );
+  
+  //calculate auto, tele, end, espm
+  teamTable = tidy(teamTable,
+    mutate({
+      auto: calcAuto,
+      tele: calcTele,
+      end: calcEnd,
+      espm: (rec) => rec.auto + rec.tele + rec.end
+    })
+  );
 
   function rowsToArray(rows, index) {
     return rows.map(row => row[index]).filter(rowAtIndex => rowAtIndex != null);
   }
-  let returnObject = {team: team, teamName: '', autoScore: 0, teleScore: 0, endScore: 0, espmOverTime: [],
-                        noShow: 0, breakdown: 0, lastBreakdown: 0, matchesScouted: rows.length(), scouts: rowsToArray(rows, "scoutName"),
-                        generalComments: rowsToArray(rows, "generalComments"), breakdownComments: rowsToArray(rows, "breakdownComments"), defenseComments: rowsToArray(rows, "defenseComments"),
-                        auto: {
-                            leave: 0,
-                            autoOverTime: [],
-                            autoNotes: {
-                                total: 0,
-                                ampSuccess: 0,
-                                ampAvg: 0,
-                                spkrSuccess: 0,
-                                spkrAvg: 0
-                            }},
-                        tele: {
-                            teleOverTime: [],
-                            teleNotes: {
-                                amplified: 0,
-                                total: 0,
-                                ampSuccess: 0,
-                                ampAvg: 0,
-                                spkrSuccess: 0,
-                                spkrAvg: 0
-                            },
-                        },
+
+  function percentValue(arr, index, value) {
+    return arr.filter(e => e[index] == value)/arr.length;
+  }
+
+  //get return table
+  const matchesScouted = teamTable.length;
+  teamTable = tidy(teamTable,
+    summarize({
+      team: first('team'),
+      teamName: '',
+      autoScore: median('auto'),
+      teleScore: median('tele'),
+      endScore: median('end'),
+      espmOverTime: (arr) => {
+        return tidy(arr, select(['espm', 'match']));
+      },
+      noShow: arr => percentValue(arr, 'noshow', true),
+      breakdown: arr => 1 - percentValue(arr, 'breakdown', null),
+      lastBreakdown: arr => arr.filter(e => e.breakdown != null).reduce((a, b) => b.match),
+      scouts: arr => rowsToArray(arr, 'scoutname'),
+      generalComments: arr => rowsToArray(arr, 'generalcomments'),
+      breakdownComments: arr => rowsToArray(arr, 'breakdowncomments'),
+      defenseComments: arr => rowsToArray(arr, 'defensecomments'),
+      auto: arr => {
+        return {
+          leave: percentValue(arr, 'leave', true),
+          autoOverTime: tidy(arr, select(['auto', 'match'])),
+          autoNotes: tidy(arr, summarize({
+            ampAvg: median('autoampscored'),
+            spkrAvg: median('autospeakerscored'),
+            total: median('autoampscored')(arr) + median('autospeakerscored')(arr),
+            ampSuccess: total('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr)),
+            speakerSuccess: total('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr)),
+          }))
+        }
+      },
+      tele: arr => {
+        return {
+          teleOverTime: tidy(arr, select(['tele', 'match'])),
+          teleNotes: {
+            spkrAvg: median('telenampedspeakerscored'),
+            ampAvg: median('teleampscored'),
+            amplified: median('teleampedspeakerscored'),
+            total: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('teleampscored')(arr),
+            spkrSuccess: (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr)) / (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('telespeakerfailed')(arr)),
+            ampSuccess: median('teleampscored')(arr) / (median('teleampscored')(arr) + median('teleampfailed')(arr)),
+          }
+        }
+      },
+      endgame: arr => {
+        let stage = {none: 0, park: 0, onstage: 0, onstageHarmony: 0};
+        return {
+          stage,
+          onstageAttempt: ,
+          onstageSuccess: ,
+          harmonySuccess: ,
+          onstagePlacement: {
+            center: ,
+            side: ,
+          },
+          trapSuccess: ,
+          trapAvg: ,
+        }
+      }
+    })
+  );
+
+
+  let returnObject = {
                         endgame: {
                             stage: {
                                 none: 0,
