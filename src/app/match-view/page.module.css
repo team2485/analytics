@@ -77,14 +77,14 @@
     border-radius: 10px;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     justify-content: center;
-    align-items: center;
 }
 
-.graphContainer {
+.espmOverTimeContainer {
     min-width: 30%;
     text-align: center;
 }
 
+=======
 .RPs {
     display: flex;
     margin: 10px 40px;
