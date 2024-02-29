@@ -4,8 +4,16 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, LineChart, Line, RadarChart, PolarRadiusAxis, PolarAngleAxis, PolarGrid, Radar, Legend, ReferenceLine } from 'recharts';
 import { VictoryPie } from "victory";
+import { Suspense } from "react";
 
-export default function TeamView() {
+
+export default function TeamViewPage() {
+  return <Suspense>
+    <TeamView/>
+  </Suspense>
+}
+
+function TeamView() {
   const [data, setData] = useState(null);
   const searchParams = useSearchParams();
   let team = searchParams.get("team");

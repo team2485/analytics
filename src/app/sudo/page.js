@@ -31,7 +31,8 @@ export default function Sudo() {
   };
   const calcEnd = (record) => {
     return (
-      (record.endlocation == 0 ? 2 : 3) +
+      (record.endlocation == 0 ? 0 :
+        record.endlocation == 1 ? 2 : 3) +
       (record.harmony ? 2 : 0) +
       record.trapscored * 5
     );
@@ -119,10 +120,7 @@ export default function Sudo() {
       title: "AUTO",
       key: "auto",
       render: (text, record) => {
-        let auto =
-          record.autoampscored * 2 +
-          record.autospeakerscored * 5 +
-          (record.leave ? 2 : 0);
+        let auto = calcAuto(record);
         return <>{auto}</>;
       },
       sorter: (a, b) => sort(calcAuto(a), calcAuto(b)),
@@ -132,10 +130,7 @@ export default function Sudo() {
       title: "TELE",
       key: "tele",
       render: (text, record) => {
-        let tele =
-          record.teleampscored * 1 +
-          record.teleampedspeakerscored * 5 +
-          record.telenampedspeakerscored * 2;
+        let tele = calcTele(record);
         return <>{tele}</>;
       },
       sorter: (a, b) => sort(calcTele(a), calcTele(b)),
@@ -145,11 +140,7 @@ export default function Sudo() {
       title: "END",
       key: "auto",
       render: (text, record) => {
-        console.log(record);
-        let end =
-          (record.endlocation == 0 ? 2 : 3) +
-          (record.harmony ? 2 : 0) +
-          record.trapscored * 5;
+        let end = calcEnd(record);
         return <>{end}</>;
       },
       sorter: (a, b) => sort(calcEnd(a), calcEnd(b)),
@@ -189,7 +180,6 @@ export default function Sudo() {
     "DefenseEvasion",
     "SpeakerSpeed",
     "AmpSpeed",
-    "IntakeSpeed",
     "GndIntake",
     "SrcIntake",
     "StageHazard",

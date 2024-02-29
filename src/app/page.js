@@ -8,13 +8,22 @@ import Qualitative from "@/components/Qualitative";
 import CommentBox from "@/components/CommentBox";
 import styles from "./page.module.css";
 import SubHeader from "@/components/SubHeader";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import PopUp from "@/components/PopUp";
+import { get, isUndefined } from "lodash";
 
 export default function Home() {
   const [noShow, setNoShow] = useState(false);
   const [breakdown, setBreakdown] = useState(false);
   const [defense, setDefense] = useState(false);
+  const [scoutProfile, setScoutProfile] = useState(null);
   const form = useRef();
+
+  useEffect(()=> {
+    if(typeof window !== "undefined" && window.localStorage && window.localStorage.ScoutProfile) {
+      setScoutProfile(JSON.parse(localStorage?.ScoutProfile))
+    }
+  }, [])
 
   function onNoShowChange(e) {
     let checked = e.target.checked;
@@ -28,31 +37,73 @@ export default function Home() {
     let checked = e.target.checked;
     setDefense(checked);
   }
+  
   function submit(e) {
     e.preventDefault();
-    let data = {noshow: false, leave: false, harmony: false, gndintake: false, srcintake: false, breakdown: false, defense: false};
+    //disable submit
+    let submitButton = document.querySelector("#submit");//todo: get changed to a useRef
+    submitButton.disabled = true;
+    //import values from form to data variable
+    let data = {noshow: false, leave: false, harmony: false, gndintake: false, srcintake: false, breakdown: false, defense: false, stageplacement: -1, breakdowncomments: null, defensecomments: null };
     [...new FormData(form.current).entries()].forEach(([name, value]) => {
       if (value == 'on') {
         data[name] = true;
       } else {
-        if (!isNaN(value)) {
-          data[name] = 1*value;
+        if (!isNaN(value) && value != "") {
+          data[name] = +value;
         } else {
           data[name] = value;
         }
       }
     });
-    data.breakdown = undefined;
-    data.defense = undefined;
+    
+    //check pre-match data
+    let preMatchInputs = document.querySelectorAll(".preMatchInput"); //todo: use the data object
+    for (let preMatchInput of preMatchInputs) {
+      if(preMatchInput.value == "" || preMatchInput.value <= "0") {
+        alert("Invalid Pre-Match Data!");
+        submitButton.disabled = false;
+        return;
+      } 
+    }
 
-    //todo: add confirmation
+    //confirm and submit
+    if (confirm("Are you sure you want to submit?") == true) {
+      fetch('/api/add-match-data', {
+        method: "POST",
+        body: JSON.stringify(data)
+      }).then((response)=> {
+        if(response.status === 201) {
+          return response.json();
+        } else {
+          return response.json().then(err => Promise.reject(err.message));
+        }
+      }) 
+      .then(data => {
+        alert("Thank you!");
+        //todo: confetti (https://www.npmjs.com/package/js-confetti)
+        if (typeof document !== 'undefined')  {
+          let ScoutName = document.querySelector("input[name='scoutname']").value;
+          let ScoutTeam = document.querySelector("input[name='scoutteam']").value;
+          let Match = document.querySelector("input[name='match']").value;
+          let scoutProfile = { 
+            scoutname: ScoutName, 
+            scoutteam: ScoutTeam, 
+            match: Number(Match)+1 
+          };
+          localStorage.setItem("ScoutProfile", JSON.stringify(scoutProfile));
+        }
+        location.reload();
+      })
+      .catch(error => {
+        alert(error);
+        submitButton.disabled = false;
+      });
 
-    fetch('/api/add-match-data', {
-      method: "POST",
-      body: JSON.stringify(data)
-    });
-    //todo: handle response to display message (and if 200, clear form)
-    //todo: in the meantime, lock up form
+    } else {
+      //user didn't want to submit
+      submitButton.disabled = false;
+    };
   }
 
   return (
@@ -60,13 +111,29 @@ export default function Home() {
       <form ref={form} name="Scouting Form" onSubmit={submit}>
         <Header headerName={"Match Info"} />
         <div className={styles.MatchInfo}>
-          <TextInput visibleName={"Scout Name:"} internalName={"scoutname"} />
-          <TextInput visibleName={"Team #:"} internalName={"scoutteam"} />
+          <TextInput 
+            visibleName={"Scout Name:"} 
+            internalName={"scoutname"} 
+            defaultValue={scoutProfile?.scoutname || ""}
+          />
+          <TextInput 
+            visibleName={"Team #:"} 
+            internalName={"scoutteam"} 
+            defaultValue={scoutProfile?.scoutteam || ""}
+            type={"number"}
+          />
           <TextInput
             visibleName={"Team Scouted:"}
             internalName={"team"}
+            defaultValue={""}
+            type={"number"}
           />
-          <TextInput visibleName={"Match #:"} internalName={"match"} />
+          <TextInput 
+            visibleName={"Match #:"} 
+            internalName={"match"} 
+            defaultValue={scoutProfile?.match || ""}
+            type={"number"}
+          />
         </div>
         <Checkbox
           visibleName={"No Show"}
@@ -238,7 +305,8 @@ export default function Home() {
             </div>
           </>
         )}
-        <button type="submit">Submit</button>
+        <br></br>
+        <button id="submit" type="submit">SUBMIT</button>
       </form>
     </div>
   );
