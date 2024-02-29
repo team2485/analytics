@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Philosopher&display=swap');
+
+.MainDiv {
+    background: black;
+    color: white;
+    padding: 5px 40px;
+    padding-bottom: 50px;
+    min-height: calc(100vh - 45px);
+    font-family: 'Philosopher', sans-serif;
+}
+
+.MatchInfo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 5px;
+  }
+  
+  .AutoNotes, .TeleNotes, .TrapNotes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .HBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .HBox input {
+    width: 60px;
+  }
+
+  .Stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .MainDiv button[type=submit] {
+    background-color: #FFD900;
+    height: 50px;
+    width: 120px;
+    border-radius: 5px;
+    border: 1px solid #ffa200;
+    font-size: 30px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+  }
+
+  .MainDiv button[type=submit]:hover {
+    background-color: #fcec91;
+  }
+
+  .MainDiv button, .MainDiv input {
+    font-family: 'Philosopher', sans-serif;
+  }
+
+  .MainDiv label {
+    font-size: 25px;
+  }
+
+  .Qual {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .MainDiv input[type=checkbox] {
+    justify-content: center;
+  }
+
+span.subsubheading {
+  display: block;
+  text-align: center;
+  font-size: 25px;
+}
+
+hr.subsubheading {
+  margin: 0px 20px;
+  background-color: white;
+}
+
+.Intake {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px;
+}
+.MainDiv input:focus,
+.MainDiv textarea:focus {
+    border-color: rgb(87, 171, 254);
+    outline: none;
+}
+.MainDiv input:focus:invalid,
+.MainDiv textarea:focus:invalid {
+    border-color: rgb(184, 0, 0);
+}
