@@ -2,13 +2,13 @@ import { NextResponse } from "next/server";
 import { sql } from '@vercel/postgres';
 import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
-import { tidy, mutate, arrange, desc, mean, select, summarizeIf, summarizeAll, max, groupBy, summarize} from '@tidyjs/tidy'
+import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total} from '@tidyjs/tidy'
 
-export async function get(request) {
+export async function GET(request) {
   //get team to analyze
   const { searchParams } = new URL(request.url)
   const team = searchParams.get('team')
-  if (_.isNumber(team) == false) {
+  if (_.isNumber(+team) == false) {
     return NextResponse.json({message: "Invalid team number"}, {status: 400});
   }
 
@@ -76,19 +76,20 @@ export async function get(request) {
 
   //get return table
   const matchesScouted = teamTable.length;
-  teamTable = tidy(teamTable,
+  let returnObject = tidy(teamTable,
     summarize({
       team: first('team'),
-      teamName: '',
+      teamName: (a) => '',
       autoScore: median('auto'),
       teleScore: median('tele'),
       endScore: median('end'),
+      matchesScouted: (a) => matchesScouted,
       espmOverTime: (arr) => {
         return tidy(arr, select(['espm', 'match']));
       },
       noShow: arr => percentValue(arr, 'noshow', true),
-      breakdown: arr => 1 - percentValue(arr, 'breakdown', null),
-      lastBreakdown: arr => arr.filter(e => e.breakdown != null).reduce((a, b) => b.match),
+      breakdown: arr => percentValue(arr, 'breakdown', true),
+      lastBreakdown: arr => arr.filter(e => e.breakdown == true).reduce((a, b) => b.match, "N/A"),
       scouts: arr => rowsToArray(arr, 'scoutname'),
       generalComments: arr => rowsToArray(arr, 'generalcomments'),
       breakdownComments: arr => rowsToArray(arr, 'breakdowncomments'),
@@ -100,9 +101,9 @@ export async function get(request) {
           autoNotes: tidy(arr, summarize({
             ampAvg: median('autoampscored'),
             spkrAvg: median('autospeakerscored'),
-            total: median('autoampscored')(arr) + median('autospeakerscored')(arr),
-            ampSuccess: total('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr)),
-            speakerSuccess: total('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr)),
+            total: a => (median('autoampscored')(arr) + median('autospeakerscored')(arr)),
+            ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr))),
+            speakerSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
           }))
         }
       },
@@ -110,9 +111,9 @@ export async function get(request) {
         return {
           teleOverTime: tidy(arr, select(['tele', 'match'])),
           teleNotes: {
-            spkrAvg: median('telenampedspeakerscored'),
-            ampAvg: median('teleampscored'),
-            amplified: median('teleampedspeakerscored'),
+            spkrAvg: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr),
+            ampAvg: median('teleampscored')(arr),
+            amplified: median('teleampedspeakerscored')(arr) / (median('teleampedspeakerscored')(arr) + median('telenampedspeakerscored')),
             total: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('teleampscored')(arr),
             spkrSuccess: (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr)) / (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('telespeakerfailed')(arr)),
             ampSuccess: median('teleampscored')(arr) / (median('teleampscored')(arr) + median('teleampfailed')(arr)),
@@ -121,66 +122,72 @@ export async function get(request) {
       },
       endgame: arr => {
         let stage = {none: 0, park: 0, onstage: 0, onstageHarmony: 0};
+        let onstagePlacement = {center: 0, side: 0};
+        arr.forEach(row => {
+          //stage
+          if (row.endlocation == 0) stage.none++;
+          else if (row.endlocation <= 2) stage.park++;
+          else if (row.endlocation == 3) stage.onstage++;
+          else if (row.endlocation == 4) stage.onstageHarmony++;
+
+          //placement
+          if (row.stageplacement && row.stageplacement == 0) {
+            onstagePlacement.center++;
+          }
+          else if (row.stageplacement && row.stageplacement == 0) {
+            onstagePlacement.side++;
+          }
+        });
+        const divisor = arr.length;
+        stage.none*=100/divisor;
+        stage.park*=100/divisor;
+        stage.onstage*=100/divisor;
+        stage.onstageHarmony*=100/divisor;
+
+        onstagePlacement.center = 100 * onstagePlacement.center / (onstagePlacement.center + onstagePlacement.side)
+        onstagePlacement.side = 100 - onstagePlacement.center;
         return {
           stage,
-          onstageAttempt: ,
-          onstageSuccess: ,
-          harmonySuccess: ,
-          onstagePlacement: {
-            center: ,
-            side: ,
-          },
-          trapSuccess: ,
-          trapAvg: ,
+          onstageAttempt: n({ predicate: d => d.endlocation > 1 })(arr) / divisor,
+          onstageSuccess: n({ predicate: d => d.endlocation > 2 })(arr) / n({ predicate: d => d.endlocation > 1 })(arr),
+          harmonySuccess: n({ predicate: d => d.endlocation > 3 })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
+          onstagePlacement,
+          trapSuccess: median('trapscored')(arr) / (median('trapscored')(arr) + median('trapfailed')(arr)),
+          trapAvg: median('trapscored')(arr),
         }
+      },
+      intake: arr => {
+        return {
+          ground: (n((row) => row.gndintake == true)(arr) / n()(arr)) > 0.5,
+          source: (n((row) => row.srcintake == true)(arr) / n()(arr)) > 0.5,
+        }
+      },
+      qualitative: arr => {
+        function averageQualitative(index, arr) {
+          let qualarray = arr.filter(row => row[index] != -1 && row[index] != null && row[index] != undefined);
+          if (qualarray.length == 0) return -1;
+          let sum = 0;
+          for (let row of qualarray) {
+            sum += row[index];
+          }
+          return sum/arr.length;
+        }
+        return [
+          {name: "Onstage Speed", rating: averageQualitative('onstagespeed', arr)},
+          {name: "Harmony Speed", rating: averageQualitative('harmonyspeed', arr)},
+          {name: "Trap Speed", rating: averageQualitative('trapspeed', arr)},
+          {name: "Amp Speed", rating: averageQualitative('ampspeed', arr)},
+          {name: "Speaker Speed", rating: averageQualitative('speakerspeed', arr)},
+          {name: "Stage Hazard", rating: averageQualitative('stagehazard', arr)},
+          {name: "Defense Evasion", rating: averageQualitative('defenseevasion', arr)},
+          {name: "Aggression", rating: averageQualitative('aggression', arr)},
+          {name: "Maneuverability", rating: averageQualitative('maneuverability', arr)},
+        ]
       }
     })
   );
 
+  console.log(returnObject[0]);
 
-  let returnObject = {
-                        endgame: {
-                            stage: {
-                                none: 0,
-                                park: 0,
-                                onstage: 0,
-                                onstageHarmony: 0,
-                            },
-                            onstageAttempt: 0,
-                            onstageSuccess: 0,
-                            harmonySuccess: 0,
-                            onstagePlacement: {
-                                center: 0,
-                                side: 0,
-                            },
-                            trapSuccess: 0,
-                            trapAvg: 0,
-                        },
-                        intake: {
-                            ground: false,
-                            source: false,
-                        },
-                        qualitative: [
-                            {name: "Onstage Speed", rating: 0},
-                            {name: "Harmony Speed", rating: 0},
-                            {name: "Trap Speed", rating: 0},
-                            {name: "Amp Speed", rating: 0},
-                            {name: "Apeaker Speed", rating: 0},
-                            {name: "Stage Hazard", rating: 0},
-                            {name: "Defense Evasion", rating: 0},
-                            {name: "Aggression", rating: 0},
-                            {name: "Maneuverability", rating: 0},
-                        ],
-                    };
-  if (returnObject.matchesScouted == 0) {
-    return NextResponse.json(returnObject, {status: 200});
-  }
-  let calculations = {auto: [], tele: [], end: []};
-  
-
-  for (let scoutData of rows) {
-    
-  }
-  
-  return NextResponse.json(returnTable, {status: 200});
+  return NextResponse.json(returnObject[0], {status: 200});
 }
