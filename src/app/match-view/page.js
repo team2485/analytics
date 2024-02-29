@@ -167,7 +167,7 @@ function MatchView() {
 
     return <div className={styles.lightBorderBox}>
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
-      <h2 style={{color: colors[3]}}>{teamData.teamName}</h2>
+      {/* <h2 style={{color: colors[3]}}>{"" || teamData.teamName}</h2> */}
       <div className={styles.scoreBreakdownContainer}>
         <div style={{background: colors[0]}} className={styles.espmBox}>{teamData.auto + teamData.tele + teamData.end}</div>
         <div className={styles.espmBreakdown}>
