@@ -241,8 +241,8 @@ console.log(data)
           </div>
           <div className={styles.valueBoxes}>
             <div className={styles.CFlex}>
-              <CBox color1={Colors[1][2]} color2={Colors[1][3]} title={"Leave"} value={(data.auto.leave)*100+"%"}></CBox>
-              <CBox color1={Colors[1][2]} color2={Colors[1][3]} title={"Total Notes"} value={(data.auto.autoNotes.total)}></CBox>
+              <CBox color1={Colors[1][2]} color2={Colors[1][3]} title={"Leave"} value={Math.round(1000*data.auto.leave)/10+"%"}></CBox>
+              <CBox color1={Colors[1][2]} color2={Colors[1][3]} title={"Total Notes"} value={Math.round(10*data.auto.autoNotes.total)/10}></CBox>
             </div>
             <BigBox HC1={"Success"} 
               HC2={"Avg Notes"} 
