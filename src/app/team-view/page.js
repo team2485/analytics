@@ -184,18 +184,18 @@ function TeamView() {
       </table>
     )
   }
-
+console.log(data)
   return (
     <div className={styles.MainDiv}>
       <div className={styles.leftColumn}>
       <h1 style={{color: Colors[0][0]}}>Team {data.team} View</h1>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
-          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{data.autoScore + data.teleScore + data.endScore}</div>
+          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{Math.round(10*data.autoScore + data.teleScore + data.endScore)/10}</div>
           <div className={styles.espmBreakdown}>
-            <div style={{background: Colors[0][3]}}>A: {data.autoScore}</div>
-            <div style={{background: Colors[0][3]}}>T: {data.teleScore}</div>
-            <div style={{background: Colors[0][3]}}>E: {data.endScore}</div>
+            <div style={{background: Colors[0][3]}}>A: {Math.round(10*data.autoScore)/10}</div>
+            <div style={{background: Colors[0][3]}}>T: {Math.round(10*data.teleScore)/10}</div>
+            <div style={{background: Colors[0][3]}}>E: {Math.round(10*data.endScore)/10}</div>
           </div>
         </div>
       </div>
@@ -211,8 +211,8 @@ function TeamView() {
           </LineChart>
         </div>
       <div className={styles.valueBoxes}>
-        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"No Show"} value={(data.noShow)*100+"%"}></CBox>
-        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={(data.breakdown)*100+"%"}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"No Show"} value={Math.round(1000*data.noShow)/10+"%"}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={Math.round(1000*data.breakdown)/10+"%"}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Matches Scouted"} value={data.matchesScouted}></CBox>
         <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
@@ -248,10 +248,10 @@ function TeamView() {
               HC2={"Avg Notes"} 
               HR1={"Amp"} 
               HR2={"Speaker"} 
-              R1C1={data.auto.autoNotes.ampSuccess} 
-              R1C2={data.auto.autoNotes.ampAvg}
-              R2C1={data.auto.autoNotes.spkrSuccess}
-              R2C2={data.auto.autoNotes.spkrAvg}
+              R1C1={Math.round(1000*data.auto.autoNotes.ampSuccess)/10 + "%"} 
+              R1C2={Math.round(10*data.auto.autoNotes.ampAvg)/10}
+              R2C1={Math.round(1000*data.auto.autoNotes.spkrSuccess)/10 + "%"}
+              R2C2={Math.round(10*data.auto.autoNotes.spkrAvg)/10}
               color1={Colors[1][1]} color2={Colors[1][2]} color3={Colors[1][3]}>
             </BigBox>
           </div>
@@ -279,9 +279,9 @@ function TeamView() {
               HR1={"Amp"} 
               HR2={"Speaker"} 
               R1C1={Math.round(1000*data.tele.teleNotes.ampSuccess)/10 + "%"} 
-              R1C2={data.tele.teleNotes.ampAvg}
+              R1C2={Math.round(10*data.tele.teleNotes.ampAvg)/10}
               R2C1={Math.round(1000*data.tele.teleNotes.spkrSuccess)/10 + "%"}
-              R2C2={data.tele.teleNotes.spkrAvg}
+              R2C2={Math.round(10*data.tele.teleNotes.spkrAvg)/10}
               color1={Colors[2][1]} color2={Colors[2][2]} color3={Colors[2][3]}>
             </BigBox>
           </div>
@@ -298,7 +298,7 @@ function TeamView() {
             height={175}
             data={EndgameData}
             colorScale={Colors[3]}
-            labels={({ datum }) => `${datum.x}: ${datum.y}%`}
+            labels={({ datum }) => `${datum.x}: ${Math.round(datum.y)}%`}
             labelIndicator
             labelIndicatorInnerOffset={19}
             labelIndicatorOuterOffset={5}
@@ -312,8 +312,8 @@ function TeamView() {
               <td style={{backgroundColor: Colors[3][2]}}>Success</td>
             </tr>
             <tr>
-              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstageAttempt)*100+"%"}</td>
-              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstageSuccess)*100+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstageAttempt)/10+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstageSuccess)/10+"%"}</td>
             </tr>
             <tr>
               <td style={{backgroundColor: Colors[3][1]}} rowSpan="2">Location</td>
@@ -321,8 +321,8 @@ function TeamView() {
               <td style={{backgroundColor: Colors[3][2]}}>Side</td>
             </tr>
             <tr>
-              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstagePlacement.center)*100+"%"}</td>
-              <td style={{backgroundColor: Colors[3][3]}}>{(data.endgame.onstagePlacement.side)*100+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstagePlacement.center)/10+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstagePlacement.side)/10+"%"}</td>
             </tr>
           </table>
           <table>
@@ -336,7 +336,7 @@ function TeamView() {
               <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.source}></input></td>
             </tr>
           </table>
-          <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={(data.endgame.harmonySuccess)*100+"%"}></CBox>
+          <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={Math.round(1000*data.endgame.harmonySuccess)/10+"%"}></CBox>
         </div>
           <div className={styles.graphContainer}>
             <h4 className={styles.graphTitle} >Qualitative Ratings</h4>
