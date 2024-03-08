@@ -12,7 +12,6 @@ import { useEffect, useRef, useState } from "react";
 import PopUp from "@/components/PopUp";
 import { get, isUndefined } from "lodash";
 import JSConfetti from 'js-confetti';
-import { Just_Me_Again_Down_Here } from "next/font/google";
 
 export default function Home() {
   const [noShow, setNoShow] = useState(false);
