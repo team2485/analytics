@@ -71,6 +71,9 @@
     max-width: 1000px;
     display: flex;
     flex-direction: column;
+    overflow-x: auto;
+    margin-left: 10px;
+    flex-grow: 1;
 }
 
 .picklistContainer span {

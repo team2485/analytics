@@ -66,16 +66,16 @@ export default function Picklist() {
           <td><input id="espm" type="number" defaultValue={weights.espm || 0} name="espm"></input></td>
           <td><label htmlFor="end">End:</label></td>
           <td><input id="end" type="number" defaultValue={weights.end || 0} name="end"></input></td>
-          <td><label htmlFor="amp">Amp:</label></td>
-          <td><input id="amp" type="number" defaultValue={weights.amp || 0} name="amp"></input></td>
+          {/* <td><label htmlFor="amp">Amp:</label></td>
+          <td><input id="amp" type="number" defaultValue={weights.amp || 0} name="amp"></input></td> */}
         </tr>
         <tr>
           <td><label htmlFor="auto">Auto:</label></td>
           <td><input id="auto" type="number" defaultValue={weights.auto || 0} name="auto"></input></td>
           <td><label htmlFor="speed">Speed:</label></td>
           <td><input id="speed" type="number" defaultValue={weights.speed || 0} name="speed"></input></td>
-          <td><label htmlFor="speaker">Speaker:</label></td>
-          <td><input id="speaker" type="number" defaultValue={weights.speaker || 0} name="speaker"></input></td>
+          {/* <td><label htmlFor="speaker">Speaker:</label></td>
+          <td><input id="speaker" type="number" defaultValue={weights.speaker || 0} name="speaker"></input></td> */}
         </tr>
         <tr>
           <td><label htmlFor="tele">Tele:</label></td>
@@ -127,6 +127,10 @@ export default function Picklist() {
       setTeamRatings({ ...teamRatings, [team]: false });
     };
 
+    function handleMeh(team) {
+      setTeamRatings({ ...teamRatings, [team]: undefined });
+    };
+
     if (!picklist || picklist.length === 0) {
       return (
         <div className={styles.picklistContainer}>
@@ -163,9 +167,10 @@ export default function Picklist() {
               {picklist.filter(teamData => !teamsToExclude.includes(teamData.team)).map((teamData, index) => (
                 <tr key={teamData.team}>
                   <td>#{index + 1}</td>
-                  <td>{teamData.team}
-                    {teamRatings[teamData.team] === true && '👍'}
-                    {teamRatings[teamData.team] === false && '👎'}
+                  <td><a href={`/team-view?team=${teamData.team}`}>{teamData.team}
+                    {teamRatings[teamData.team] === true && '✅'}
+                    {teamRatings[teamData.team] === false && '❌'}
+                    </a>
                   </td>
                   <td style={{ backgroundColor: valueToColor(teamData.score / maxScore) }}>{roundToThree(teamData.score)}</td>
                   <td style={{ backgroundColor: valueToColor(teamData.espm) }}>{roundToThree(teamData.espm)}</td>
@@ -177,8 +182,15 @@ export default function Picklist() {
                   <td style={{ backgroundColor: valueToColor(teamData.speed) }}>{roundToThree(teamData.speed)}</td>
                   <td style={{ backgroundColor: valueToColor(teamData.movement) }}>{roundToThree(teamData.movement)}</td>
                   <td>
-                    <button onClick={() => handleThumbsUp(teamData.team)}>👍</button>
-                    <button onClick={() => handleThumbsDown(teamData.team)}>👎</button>
+                    {teamRatings[teamData.team] !== true &&
+                      <button onClick={() => handleThumbsUp(teamData.team)}>✅</button>
+                    }
+                    {teamRatings[teamData.team] !== false &&
+                      <button onClick={() => handleThumbsDown(teamData.team)}>❌</button>
+                    }
+                    {teamRatings[teamData.team] !== undefined &&
+                      <button onClick={() => handleMeh(teamData.team)}>🫳</button>
+                    }
                   </td>
                 </tr>
               ))}
