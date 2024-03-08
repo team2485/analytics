@@ -14,7 +14,8 @@ function calcTele(record) {
 };
 function calcEnd(record) {
   return (
-    (record.endlocation == 0 ? 2 : 3) +
+    (record.endlocation == 0 ? 0 :
+      record.endlocation <= 2 ? 1 : 3) +
     (record.harmony ? 2 : 0) +
     record.trapscored * 5
   );
