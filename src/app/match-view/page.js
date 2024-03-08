@@ -206,7 +206,7 @@ function MatchView() {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="place" />
-            <YAxis />
+            <YAxis type='number'/>
             <Tooltip />
             <Bar dataKey="value" fill={colors[3]} activeBar={<Rectangle fill="gold" stroke={colors[3]} />} />
           </BarChart>
