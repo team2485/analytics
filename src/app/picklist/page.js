@@ -11,6 +11,7 @@ export default function Picklist() {
   const [allianceData, setAllianceData] = useState({});
   const [weights, setWeights] = useState({});
   const [teamRatings, setTeamRatings] = useState({});
+  const [weightsChanged, setWeightsChanged] = useState(false);
 
   const weightsFormRef = useRef();
   const alliancesFormRef = useRef();
@@ -50,6 +51,7 @@ export default function Picklist() {
 
     setPicklist(picklist);
     setMaxScore(picklist[0].score);
+    setWeightsChanged(false);
   };
 
   function updateAlliancesData() {
@@ -58,34 +60,37 @@ export default function Picklist() {
     setTeamsToExclude(teams);
   };
 
-  const Weights = () => (
-    <table className={styles.weightsTable}>
+  const Weights = () => {
+    const handleWeightChange = (e) => {
+      setWeightsChanged(true);
+    }
+    return <table className={styles.weightsTable}>
       <tbody>
         <tr>
           <td><label htmlFor="espm">ESPM:</label></td>
-          <td><input id="espm" type="number" defaultValue={weights.espm || 0} name="espm"></input></td>
+          <td><input id="espm" type="number" defaultValue={weights.espm || 0} name="espm" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="end">End:</label></td>
-          <td><input id="end" type="number" defaultValue={weights.end || 0} name="end"></input></td>
+          <td><input id="end" type="number" defaultValue={weights.end || 0} name="end" onChange={handleWeightChange}></input></td>
           {/* <td><label htmlFor="amp">Amp:</label></td>
-          <td><input id="amp" type="number" defaultValue={weights.amp || 0} name="amp"></input></td> */}
+          <td><input id="amp" type="number" defaultValue={weights.amp || 0} name="amp" onChange={handleWeightChange}></input></td> */}
         </tr>
         <tr>
           <td><label htmlFor="auto">Auto:</label></td>
-          <td><input id="auto" type="number" defaultValue={weights.auto || 0} name="auto"></input></td>
+          <td><input id="auto" type="number" defaultValue={weights.auto || 0} name="auto" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="speed">Speed:</label></td>
-          <td><input id="speed" type="number" defaultValue={weights.speed || 0} name="speed"></input></td>
+          <td><input id="speed" type="number" defaultValue={weights.speed || 0} name="speed" onChange={handleWeightChange}></input></td>
           {/* <td><label htmlFor="speaker">Speaker:</label></td>
-          <td><input id="speaker" type="number" defaultValue={weights.speaker || 0} name="speaker"></input></td> */}
+          <td><input id="speaker" type="number" defaultValue={weights.speaker || 0} name="speaker" onChange={handleWeightChange}></input></td> */}
         </tr>
         <tr>
           <td><label htmlFor="tele">Tele:</label></td>
-          <td><input id="tele" type="number" defaultValue={weights.tele || 0} name="tele"></input></td>
+          <td><input id="tele" type="number" defaultValue={weights.tele || 0} name="tele" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="movement">Movement:</label></td>
-          <td><input id="movement" type="number" defaultValue={weights.movement || 0} name="movement"></input></td>
+          <td><input id="movement" type="number" defaultValue={weights.movement || 0} name="movement" onChange={handleWeightChange}></input></td>
         </tr>
       </tbody>
     </table>
-  );
+  }
 
   const AllianceRow = ({ allianceNumber, allianceData, handleAllianceChange }) => {
     const firstValue = allianceData ? allianceData[0] : '';
@@ -217,7 +222,10 @@ export default function Picklist() {
             <h1>Weights</h1>
             <Weights></Weights>
           </div>
-          <button type="button" onClick={recalculate} style={{ marginBottom: '30px', fontSize: "20px" }}>Recalculate Picklist</button>
+          <button type="button" onClick={recalculate} style={{
+            marginBottom: '30px',
+            fontSize: "20px",
+          }} className={weightsChanged ? styles.recalculateIsMad : ""}>Recalculate Picklist</button>
         </form>
         <div className={styles.alliances}>
           <h1>Alliances</h1>
