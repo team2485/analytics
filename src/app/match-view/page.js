@@ -141,11 +141,11 @@ function MatchView() {
 
     return <div className={styles.lightBorderBox}>
       <div className={styles.scoreBreakdownContainer}>
-        <div style={{background: colors[0]}} className={styles.espmBox}>{auto + tele + end}</div>
+        <div style={{background: colors[0]}} className={styles.espmBox}>{Math.round(10*(auto + tele + end))/10}</div>
         <div className={styles.espmBreakdown}>
-          <div style={{background: colors[1]}}>A: {auto}</div>
-          <div style={{background: colors[1]}}>T: {tele}</div>
-          <div style={{background: colors[1]}}>E: {end}</div>
+          <div style={{background: colors[1]}}>A: {Math.round(10*auto)/10}</div>
+          <div style={{background: colors[1]}}>T: {Math.round(10*tele)/10}</div>
+          <div style={{background: colors[1]}}>E: {Math.round(10*end)/10}</div>
         </div>
       </div>
       <div className={styles.RPs}>
@@ -169,11 +169,11 @@ function MatchView() {
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
       <h2 style={{color: colors[3]}}>{teamData.teamName}</h2>
       <div className={styles.scoreBreakdownContainer}>
-        <div style={{background: colors[0]}} className={styles.espmBox}>{teamData.auto + teamData.tele + teamData.end}</div>
+        <div style={{background: colors[0]}} className={styles.espmBox}>{Math.round(10*(teamData.auto + teamData.tele + teamData.end))/10}</div>
         <div className={styles.espmBreakdown}>
-          <div style={{background: colors[1]}}>A: {teamData.auto}</div>
-          <div style={{background: colors[1]}}>T: {teamData.tele}</div>
-          <div style={{background: colors[1]}}>E: {teamData.end}</div>
+          <div style={{background: colors[1]}}>A: {Math.round(10*teamData.auto)/10}</div>
+          <div style={{background: colors[1]}}>T: {Math.round(10*teamData.tele)/10}</div>
+          <div style={{background: colors[1]}}>E: {Math.round(10*teamData.end)/10}</div>
         </div>
       </div>
       <br></br>
@@ -182,20 +182,20 @@ function MatchView() {
         <ResponsiveContainer width="100%">
           <BarChart
             data={[{
-              place: "Speaker",
-              value: teamData.avgNotes.speaker
+              place: "Spkr",
+              value: Math.round(10*teamData.avgNotes.speaker)/10
             },
             {
               place: "⬆️ Spkr",
-              value: teamData.avgNotes.ampedSpeaker
+              value: Math.round(10*teamData.avgNotes.ampedSpeaker)/10
             },
             {
               place: "Amp",
-              value: teamData.avgNotes.amp
+              value: Math.round(10*teamData.avgNotes.amp)/10
             },
             {
               place: "Trap",
-              value: teamData.avgNotes.trap
+              value: Math.round(10*teamData.avgNotes.trap)/10
             }]}
             margin={{
               top: 5,
@@ -218,7 +218,7 @@ function MatchView() {
         <VictoryPie
           data={endgameData}
           colorScale={colors}
-          labels={({ datum }) => `${datum.x}: ${datum.y}%`}
+          labels={({ datum }) => `${datum.x}: ${Math.round(datum.y)}%`}
         />
       </div>
       <br></br>
