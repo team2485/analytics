@@ -115,7 +115,7 @@ export default function Sudo() {
     },
     {
       title: "END",
-      key: "auto",
+      key: "end",
       render: (text, record) => {
         let end = calcEnd(record);
         return <>{end}</>;
