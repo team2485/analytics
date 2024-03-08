@@ -1,36 +1,11 @@
 import { NextResponse } from "next/server";
 import { sql } from '@vercel/postgres';
 import { tidy, mutate, arrange, desc, mean, select, summarizeIf, summarizeAll, max, groupBy} from '@tidyjs/tidy'
+import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 
 export async function POST(request) {
-  const requestBody = await request.json();
-  //console.log(requestBody); // e.g.   [ [ 'ESPM', '0' ], [ 'Maneuverability', '0' ] ]
+  const requestBody = await request.json(); // e.g.   [ [ 'ESPM', '0' ], [ 'Maneuverability', '0' ] ]
 
-  const calcAuto = (record) => {
-    return (
-      record.autoampscored * 2 +
-      record.autospeakerscored * 5 +
-      (record.leave ? 2 : 0)
-    );
-  };
-  const calcTele = (record) => {
-    return (
-      record.teleampscored * 1 +
-      record.teleampedspeakerscored * 5 +
-      record.telenampedspeakerscored * 2
-    );
-  };
-  const calcEnd = (record) => {
-    //TODO: CHANGE TO UTIL CALCULATIONS FILE
-    return (
-      (record.endlocation == 0 ? 0 : record.endlocation == 1 ? 2 : 3) +
-      (record.harmony ? 2 : 0) +
-      record.trapscored * 5
-    );
-  };
-  const calcESPM = (record) => {
-    return calcAuto(record) + calcTele(record) + calcEnd(record);
-  };
   let data = await sql`SELECT * FROM testmatches;`;
   let rows = data.rows;
 

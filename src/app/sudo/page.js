@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Table, Button, Checkbox, Switch } from "antd";
+import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 
 export default function Sudo() {
   const [data, setData] = useState([]);
@@ -15,31 +16,7 @@ export default function Sudo() {
     if (a > b) return 1;
     return 0;
   };
-  const calcAuto = (record) => {
-    return (
-      record.autoampscored * 2 +
-      record.autospeakerscored * 5 +
-      (record.leave ? 2 : 0)
-    );
-  };
-  const calcTele = (record) => {
-    return (
-      record.teleampscored * 1 +
-      record.teleampedspeakerscored * 5 +
-      record.telenampedspeakerscored * 2
-    );
-  };
-  const calcEnd = (record) => {
-    return (
-      (record.endlocation == 0 ? 0 :
-        record.endlocation == 1 ? 2 : 3) +
-      (record.harmony ? 2 : 0) +
-      record.trapscored * 5
-    );
-  };
-  const calcESPM = (record) => {
-    return calcAuto(record) + calcTele(record) + calcEnd(record);
-  };
+  
   let columns = [
     {
       title: "ScoutName",
