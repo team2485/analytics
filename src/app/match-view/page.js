@@ -157,17 +157,11 @@ function MatchView() {
     </div>
   }
 
-  let matchMax = 0;
- for (let teamData of [data.team1, data.team1, data.team3, data.team4, data.team5, data.team6]) {
-  matchMax = Math.max(teamData.avgNotes.speaker, teamData.avgNotes.amp, teamData.avgNotes.ampedSpeaker, teamData.avgNotes.trap, matchMax)
- }
- matchMax = Math.floor(matchMax) + 2;
-
   function TeamDisplay({teamData, colors, matchMax}) {
 
-    const generateTicks = (min, matchMax) => {
+    const generateTicks = (min, max) => {
       const ticks = [];
-      for (let i = min; i <= matchMax; i += 2) {
+      for (let i = min; i <= max; i += 2) {
         ticks.push(i);
       }
       return ticks;
@@ -176,7 +170,7 @@ function MatchView() {
     const endgameData = [{ x: 'None', y: teamData.endgame.none },
               { x: 'Park', y: teamData.endgame.park },
               { x: 'Onstage', y: teamData.endgame.onstage },
-              { x: 'Onstage Harmony', y: teamData.endgame.onstageHarmony }];
+              { x: 'Harmony', y: teamData.endgame.onstageHarmony }];
 
     return <div className={styles.lightBorderBox}>
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
@@ -218,8 +212,8 @@ function MatchView() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="place" />
-            <YAxis type='number' domain={[0, matchMax]} ticks={generateTicks}/>
+            <XAxis dataKey="place" width="20"/>
+            <YAxis type='number' domain={[0, matchMax]} ticks={generateTicks(0, matchMax)}/>
             <Tooltip />
             <Bar dataKey="value" fill={colors[3]} activeBar={<Rectangle fill="gold" stroke={colors[3]} />} />
           </BarChart>
@@ -229,6 +223,7 @@ function MatchView() {
       <div className={styles.chartContainer}>
         <h2>Endgame %</h2>
         <VictoryPie
+          padding={100}
           data={endgameData}
           colorScale={colors}
           labels={({ datum }) => `${datum.x}: ${Math.round(datum.y)}%`}
@@ -276,6 +271,15 @@ function MatchView() {
       fullMark: 5});
   }
   console.log(radarData);
+
+  let matchMax = 0;
+  for (let teamData of [data.team1, data.team2, data.team3, data.team4, data.team5, data.team6]) {
+   if (teamData) {
+    matchMax = Math.max(teamData.avgNotes.speaker, teamData.avgNotes.amp, teamData.avgNotes.ampedSpeaker, teamData.avgNotes.trap, matchMax)
+  }
+   }
+  matchMax = Math.floor(matchMax) + 2; 
+
   return (
     <div>
       <div className={styles.matchNav}>
