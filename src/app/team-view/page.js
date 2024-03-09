@@ -271,8 +271,8 @@ console.log(data)
           </div>
           <div className={styles.valueBoxes}>
             <div className={styles.CFlex} >
-              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"⬆️Notes"} value={(data.tele.teleNotes.amplified)*100+"%"}></CBox>
-              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"Total Notes"} value={data.tele.teleNotes.total}></CBox>
+              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"⬆️Notes"} value={Math.round(1000*data.tele.teleNotes.amplified)/10+"%"}></CBox>
+              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"Total Notes"} value={Math.round(10*data.tele.teleNotes.total)/10}></CBox>
             </div>
             <BigBox HC1={"Success"} 
               HC2={"Avg Notes"} 
@@ -325,22 +325,22 @@ console.log(data)
               <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstagePlacement.side)/10+"%"}</td>
             </tr>
           </table>
-          <table>
+          <table className={styles.intakeTable}>
             <tr>
-              <td style={{backgroundColor: Colors[3][1]}} rowSpan="2">Intake</td>
-              <td style={{backgroundColor: Colors[3][2]}}>Ground</td>
-              <td style={{backgroundColor: Colors[3][2]}}>Source</td>
+              <td style={{backgroundColor: Colors[3][1], width: "40px"}} rowSpan="2">Intake</td>
+              <td style={{backgroundColor: Colors[3][2], width: "50px"}}>Ground</td>
+              <td style={{backgroundColor: Colors[3][2], width: "50px"}}>Source</td>
             </tr>
             <tr>
-              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.ground}></input></td>
-              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3]}}><input type="checkbox" checked={data.intake.source}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px"}}><input type="checkbox" checked={data.intake.ground}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px"}}><input type="checkbox" checked={data.intake.source}></input></td>
             </tr>
           </table>
           <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={Math.round(1000*data.endgame.harmonySuccess)/10+"%"}></CBox>
         </div>
           <div className={styles.graphContainer}>
             <h4 className={styles.graphTitle} >Qualitative Ratings</h4>
-            <RadarChart outerRadius={90} width={355} height={250} data={data.qualitative}>
+            <RadarChart outerRadius={80} width={335} height={230} data={data.qualitative}>
               <PolarGrid />
               <PolarAngleAxis dataKey="name" fontSize={14}/>
               <PolarRadiusAxis angle={10} domain={[0, 5]} />

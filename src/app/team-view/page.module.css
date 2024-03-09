@@ -96,11 +96,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     min-width: 30%;
     margin-bottom: 10px;
 }
-.lineChart {
-    transform: translateX(-25px);
+.graphContainer svg {
+    align-self: center;
+    transform: translateX(-10px);
 }
 .CBox {
     display: flex;
@@ -204,18 +206,47 @@
     padding-top: 20px;
 }
 .leftColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     padding-right: 20px;
-    width: 30%;
+    width: 31%;
 }
 .middleColumn {
     display: flex;
     flex-direction: column;
-    width: 34%;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 33%;
 }
 .rightColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     padding-left: 20px;
-    width: 30%;
+    width: 31%;
 }
+@media screen and (max-width: 480px) {
+    .MainDiv {
+        margin: 0px;
+    }
+    .scoreBreakdownContainer {
+        margin-bottom: 0px;
+    }
+    .leftColumn, .middleColumn, .rightColumn {
+        width: 100%;
+        padding: 0;
+}
+    .auto, .tele {
+        border: 0px solid white;
+        padding: 0;
+    }
+    .graphContainer {
+        width: 325px;
+        margin: 10px auto;
+    }}
 .allComments {
     display: flex;
     flex-direction: column;
@@ -228,6 +259,9 @@
 .MainDiv table {
     font-size: 14px;
     width: 210px;
+}
+.MainDiv .rightColumn .intakeTable {
+    width: auto;
 }
 .MainDiv .trapTable {
     width: 110px;
