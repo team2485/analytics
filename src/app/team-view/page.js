@@ -189,6 +189,7 @@ function TeamView() {
     <div className={styles.MainDiv}>
       <div className={styles.leftColumn}>
       <h1 style={{color: Colors[0][0]}}>Team {data.team} View</h1>
+      <h3>{data.teamName}</h3>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
           <div style={{background: Colors[0][1]}} className={styles.espmBox}>{data.autoScore + data.teleScore + data.endScore}</div>

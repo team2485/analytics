@@ -110,7 +110,7 @@ export default function Picklist() {
         </thead>
         {picklist.filter(teamData => !teamsToExclude.includes(teamData.team)).map((teamData, index) => (
           <tr key={teamData.team}>
-            <td>#{index + 1}</td>
+            <td>#{index + 1}{teamData.firstRanking !== -1 ? ` (${teamData.firstRanking - index - 1 > 0 ? "+" : ""}${teamData.firstRanking - index - 1})` : ""}</td>
             <td>{teamData.team}</td>
             <td style={{backgroundColor: valueToColor(teamData.score/maxScore)}}>{roundToThree(teamData.score)}</td>
             <td style={{backgroundColor: valueToColor(teamData.espm)}}>{roundToThree(teamData.espm)}</td>
