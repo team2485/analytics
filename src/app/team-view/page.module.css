@@ -100,9 +100,17 @@
     min-width: 30%;
     margin-bottom: 10px;
 }
+.radarContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 30%;
+    margin-bottom: 10px;
+}
 .graphContainer svg {
     align-self: center;
-    transform: translateX(-10px);
+    transform: translateX(-20px);
 }
 .CBox {
     display: flex;
@@ -113,6 +121,11 @@
     justify-content: center;
     text-align: center;
     border-radius: 5px;
+    align-self: center;
+}
+.CBoxTitle {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 .leftColumn .CBox {
     display: flex;
@@ -178,8 +191,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 30vw;
-    height: 300px;
+    align-items: center;
+    align-self: center;
+    width: 350px;
     font-family: "Belleza", sans-serif;
 }
 .valueBoxes {
@@ -238,10 +252,18 @@
     .leftColumn, .middleColumn, .rightColumn {
         width: 100%;
         padding: 0;
-}
+    }
+    .leftColumn {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 4px solid lightgray;
+    }
     .auto, .tele {
         border: 0px solid white;
         padding: 0;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+        border-bottom: 4px solid lightgray;
     }
     .graphContainer {
         width: 325px;

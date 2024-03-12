@@ -137,7 +137,7 @@ function TeamView() {
   function CBox({title, value, color1, color2}) {
     return (
       <div style={{backgroundColor: color2}} className={styles.CBox}>
-        <div style={{backgroundColor: color1}}>{title}</div>
+        <div className={styles.CBoxTitle} style={{backgroundColor: color1}}>{title}</div>
         <div className={styles.CBoxValue}>{value}</div>
       </div>
     )
@@ -294,15 +294,15 @@ console.log(data)
           <h4 className={styles.graphTitle}>Endgame Placement</h4>
           <VictoryPie
             className={styles.pie}
-            width={175}
-            height={175}
+            width={190}
+            height={190}
             data={EndgameData}
             colorScale={Colors[3]}
             labels={({ datum }) => `${datum.x}: ${Math.round(datum.y)}%`}
             labelIndicator
-            labelIndicatorInnerOffset={19}
+            labelIndicatorInnerOffset={22}
             labelIndicatorOuterOffset={5}
-            style={{labels: {fontSize: 8, fontFamily: "Belleza"}}}/>
+            style={{labels: {fontSize: 6.75, fontFamily: "Belleza"}}}/>
         </div>
         <div className={styles.valueBoxes}>
           <table>
@@ -338,7 +338,7 @@ console.log(data)
           </table>
           <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={Math.round(1000*data.endgame.harmonySuccess)/10+"%"}></CBox>
         </div>
-          <div className={styles.graphContainer}>
+          <div className={styles.radarContainer}>
             <h4 className={styles.graphTitle} >Qualitative Ratings</h4>
             <RadarChart outerRadius={80} width={335} height={230} data={data.qualitative}>
               <PolarGrid />
