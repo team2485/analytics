@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from '@vercel/postgres';
 import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
-import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total} from '@tidyjs/tidy'
+import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy'
 
 export async function GET(request) {
   //get team to analyze
@@ -63,7 +63,8 @@ export async function GET(request) {
       tele: calcTele,
       end: calcEnd,
       espm: (rec) => rec.auto + rec.tele + rec.end
-    })
+    }), 
+    arrange([asc('match')])
   );
 
   function rowsToArray(rows, index) {
@@ -103,8 +104,8 @@ export async function GET(request) {
             spkrAvg: median('autospeakerscored'),
             total: a => (median('autoampscored')(arr) + median('autospeakerscored')(arr)),
             ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr))),
-            speakerSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
-          }))
+            spkrSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
+          }))[0] 
         }
       },
       tele: arr => {
