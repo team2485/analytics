@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from '@vercel/postgres';
 import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
-import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total} from '@tidyjs/tidy'
+import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy'
 
 export async function GET(request) {
   //get team to analyze
@@ -63,7 +63,8 @@ export async function GET(request) {
       tele: calcTele,
       end: calcEnd,
       espm: (rec) => rec.auto + rec.tele + rec.end
-    })
+    }), 
+    arrange([asc('match')])
   );
 
   function rowsToArray(rows, index) {
@@ -74,12 +75,24 @@ export async function GET(request) {
     return arr.filter(e => e[index] == value)/arr.length;
   }
 
+  const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+    },
+  }).then(resp => {
+    if (resp.status !== 200) {
+      return {teams: [{nameShort: ""}]};
+    }
+    return resp.json();
+  }).then(data => data.teams[0].nameShort );
+
   //get return table
   const matchesScouted = teamTable.length;
   let returnObject = tidy(teamTable,
     summarize({
       team: first('team'),
-      teamName: (a) => '',
+      teamName: () => teamName,
       autoScore: median('auto'),
       teleScore: median('tele'),
       endScore: median('end'),
@@ -103,8 +116,8 @@ export async function GET(request) {
             spkrAvg: median('autospeakerscored'),
             total: a => (median('autoampscored')(arr) + median('autospeakerscored')(arr)),
             ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr))),
-            speakerSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
-          }))
+            spkrSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
+          }))[0] 
         }
       },
       tele: arr => {
