@@ -32,7 +32,7 @@ function TeamView() {
         <button style={team == t2 ? {background: 'black', color: 'yellow'} : {background: colors[1][1]}}>{t2 || 404}</button>
       </Link>
       <Link href={`/team-view?team=${t3 || ""}&${searchParams.toString()}`}>
-        <button style={team == t2 ? {background: 'black', color: 'yellow'} : {background: colors[2][1]}}>{t3 || 404}</button>
+        <button style={team == t3 ? {background: 'black', color: 'yellow'} : {background: colors[2][1]}}>{t3 || 404}</button>
       </Link>
     </div>
   }
