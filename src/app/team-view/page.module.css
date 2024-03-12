@@ -12,6 +12,39 @@
     justify-content: center;
     text-align: center;
 }
+
+
+.matchNav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 10px;
+    gap: 5px;
+}
+
+.matchNav button {
+    border: 1px solid black;
+    padding: 3px 15px;
+    padding-bottom: 0px;
+    border-radius: 5px;
+    font-size: 45px;
+    font-family: "Teko", sans-serif;
+}
+
+.matchNav button:hover {
+    background: black !important;
+    color: yellow !important;
+}
+
+.allianceBoard {
+    display: flex;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    flex-wrap: wrap;
+}
+
+
 .lightBorderBox {
     flex-grow: 1;
     border-radius: 10px;

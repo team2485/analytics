@@ -134,14 +134,15 @@ function MatchView() {
   }
 
   function AllianceButtons({t1, t2, t3, colors}) {
+    console.log(searchParams.toString())
     return <div className={styles.allianceBoard}>
-      <Link href={"/team-view?team=" + t1.team}>
+      <Link href={`/team-view?team=${t1.team}&${searchParams.toString()}`}>
         <button style={{background: colors[0][1]}}>{t1.team}</button>
       </Link>
-      <Link href={"/team-view?team=" + t2.team}>
+      <Link href={`/team-view?team=${t2.team}&${searchParams.toString()}`}>
       <button style={{background: colors[1][1]}}>{t2.team}</button>
       </Link>
-      <Link href={"/team-view?team=" + t3.team}>
+      <Link href={`/team-view?team=${t3.team}&${searchParams.toString()}`}>
       <button style={{background: colors[2][1]}}>{t3.team}</button>
       </Link>
     </div>
