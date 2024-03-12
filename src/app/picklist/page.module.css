@@ -67,10 +67,13 @@
 }
 
 .picklistContainer {
-    flex-grow: 1;
-    max-width: 800px;
+    width: 650px;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
+    overflow-x: auto;
+    margin-left: 10px;
+    flex-grow: 1;
 }
 
 .picklistContainer span {
@@ -90,7 +93,7 @@
 .picklistTable td {
     text-align: center;
     box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
-    padding: 5px 0;
+    padding: 8px;
     border-radius: 3px;
     font-weight: 400;
     font-size: 25px;
@@ -117,4 +120,12 @@
     font-weight: 500;
     background: linear-gradient(100deg, rgb(181, 238, 134), rgb(236, 234, 136));
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+}
+
+button.recalculateIsMad {
+    background: linear-gradient(100deg, rgb(238, 196, 134), rgb(236, 158, 136));
+}
+
+.picklistTableContainer {
+  overflow-x: auto;
 }
