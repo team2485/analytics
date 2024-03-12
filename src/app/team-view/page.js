@@ -321,8 +321,8 @@ console.log(data)
               <td style={{backgroundColor: Colors[3][2]}}>Side</td>
             </tr>
             <tr>
-              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstagePlacement.center)/10+"%"}</td>
-              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(1000*data.endgame.onstagePlacement.side)/10+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(10*data.endgame.onstagePlacement.center)/10+"%"}</td>
+              <td style={{backgroundColor: Colors[3][3]}}>{Math.round(10*data.endgame.onstagePlacement.side)/10+"%"}</td>
             </tr>
           </table>
           <table className={styles.intakeTable}>
