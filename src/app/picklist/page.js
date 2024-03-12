@@ -169,36 +169,42 @@ export default function Picklist() {
               </tr>
             </thead>
             <tbody>
-              {picklist.filter(teamData => !teamsToExclude.includes(teamData.team)).map((teamData, index) => (
-                <tr key={teamData.team}>
-                  <td>#{index + 1}</td>
-                  <td><a href={`/team-view?team=${teamData.team}`}>{teamData.team}
-                    {teamRatings[teamData.team] === true && '✅'}
-                    {teamRatings[teamData.team] === false && '❌'}
-                    </a>
-                  </td>
-                  <td style={{ backgroundColor: valueToColor(teamData.score / maxScore) }}>{roundToThree(teamData.score)}</td>
-                  <td style={{ backgroundColor: valueToColor(teamData.espm) }}>{roundToThree(teamData.espm)}</td>
-                  <td style={{ backgroundColor: valueToColor(teamData.auto) }}>{roundToThree(teamData.auto)}</td>
-                  <td style={{ backgroundColor: valueToColor(teamData.tele) }}>{roundToThree(teamData.tele)}</td>
-                  <td style={{ backgroundColor: valueToColor(teamData.end) }}>{roundToThree(teamData.end)}</td>
-                  {/* <td style={{ backgroundColor: valueToColor(teamData.amp) }}>{roundToThree(teamData.amp)}</td>
-                  <td style={{ backgroundColor: valueToColor(teamData.speaker) }}>{roundToThree(teamData.speaker)}</td> */}
-                  <td style={{ backgroundColor: valueToColor(teamData.speed) }}>{roundToThree(teamData.speed)}</td>
-                  <td style={{ backgroundColor: valueToColor(teamData.movement) }}>{roundToThree(teamData.movement)}</td>
-                  <td>
-                    {teamRatings[teamData.team] !== true &&
-                      <button onClick={() => handleThumbsUp(teamData.team)}>✅</button>
-                    }
-                    {teamRatings[teamData.team] !== false &&
-                      <button onClick={() => handleThumbsDown(teamData.team)}>❌</button>
-                    }
-                    {teamRatings[teamData.team] !== undefined &&
-                      <button onClick={() => handleMeh(teamData.team)}>🫳</button>
-                    }
-                  </td>
-                </tr>
-              ))}
+              {picklist.map((teamData, index) => {
+                if (teamsToExclude.includes(teamData.team)) {
+                  return <tr key={teamData.team} style={{display: "none"}}></tr>
+                } else {
+                  return (
+                    <tr key={teamData.team}>
+                      <td>#{index + 1}{teamData.firstRanking !== -1 ? ` (${teamData.firstRanking - index - 1 > 0 ? "+" : ""}${teamData.firstRanking - index - 1})` : ""}</td>
+                      <td><a href={`/team-view?team=${teamData.team}`}>{teamData.team}
+                        {teamRatings[teamData.team] === true && '✅'}
+                        {teamRatings[teamData.team] === false && '❌'}
+                        </a>
+                      </td>
+                      <td style={{ backgroundColor: valueToColor(teamData.score / maxScore) }}>{roundToThree(teamData.score)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.espm) }}>{roundToThree(teamData.espm)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.auto) }}>{roundToThree(teamData.auto)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.tele) }}>{roundToThree(teamData.tele)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.end) }}>{roundToThree(teamData.end)}</td>
+                      {/* <td style={{ backgroundColor: valueToColor(teamData.amp) }}>{roundToThree(teamData.amp)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.speaker) }}>{roundToThree(teamData.speaker)}</td> */}
+                      <td style={{ backgroundColor: valueToColor(teamData.speed) }}>{roundToThree(teamData.speed)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.movement) }}>{roundToThree(teamData.movement)}</td>
+                      <td>
+                        {teamRatings[teamData.team] !== true &&
+                          <button onClick={() => handleThumbsUp(teamData.team)}>✅</button>
+                        }
+                        {teamRatings[teamData.team] !== false &&
+                          <button onClick={() => handleThumbsDown(teamData.team)}>❌</button>
+                        }
+                        {teamRatings[teamData.team] !== undefined &&
+                          <button onClick={() => handleMeh(teamData.team)}>🫳</button>
+                        }
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
             </tbody>
           </table>
         {/* </div> */}

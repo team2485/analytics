@@ -75,12 +75,24 @@ export async function GET(request) {
     return arr.filter(e => e[index] == value)/arr.length;
   }
 
+  const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+    },
+  }).then(resp => {
+    if (resp.status !== 200) {
+      return {teams: [{nameShort: ""}]};
+    }
+    return resp.json();
+  }).then(data => data.teams[0].nameShort );
+
   //get return table
   const matchesScouted = teamTable.length;
   let returnObject = tidy(teamTable,
     summarize({
       team: first('team'),
-      teamName: (a) => '',
+      teamName: () => teamName,
       autoScore: median('auto'),
       teleScore: median('tele'),
       endScore: median('end'),
