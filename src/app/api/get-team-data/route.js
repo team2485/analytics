@@ -132,7 +132,7 @@ export async function GET(request) {
           else if (row.endlocation == 4) stage.onstageHarmony++;
 
           //placement
-          if (row.stageplacement && row.stageplacement == 0) {
+          if (row.stageplacement && row.stageplacement == 1) {
             onstagePlacement.center++;
           }
           else if (row.stageplacement && row.stageplacement == 0) {
