@@ -325,15 +325,30 @@ console.log(data)
               <td style={{backgroundColor: Colors[3][3]}}>{Math.round(10*data.endgame.onstagePlacement.side)/10+"%"}</td>
             </tr>
           </table>
-          <table className={styles.intakeTable}>
+          <table className={styles.differentTable}>
+            <tr>
+              <td style={{backgroundColor: Colors[3][1], width:"30px"}} rowSpan="4">Trap</td>
+              <td style={{backgroundColor: Colors[3][2], width:"75px"}}>Success</td>
+            </tr>
+            <tr>
+              <td style={{backgroundColor: Colors[3][3], width:"75px"}}>{Math.round(1000*data.endgame.trapSuccess)/10+"%"}</td>
+            </tr>
+            <tr>
+              <td style={{backgroundColor: Colors[3][2], width:"75px"}} >Avg Notes</td>
+            </tr>
+            <tr>
+              <td style={{backgroundColor: Colors[3][3], width:"75px"}}>{Math.round(10*data.endgame.trapAvg)/10}</td>
+            </tr>
+          </table>
+          <table className={styles.differentTable} style={{borderRadius: "5px"}}>
             <tr>
               <td style={{backgroundColor: Colors[3][1], width: "40px"}} rowSpan="2">Intake</td>
-              <td style={{backgroundColor: Colors[3][2], width: "50px"}}>Ground</td>
+              <td style={{backgroundColor: Colors[3][2], width: "50px", height: "10px"}}>Ground</td>
               <td style={{backgroundColor: Colors[3][2], width: "50px"}}>Source</td>
             </tr>
             <tr>
-              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px"}}><input type="checkbox" checked={data.intake.ground}></input></td>
-              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px"}}><input type="checkbox" checked={data.intake.source}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px", height: "30px"}}><input type="checkbox" checked={data.intake.ground}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px", height: "30px"}}><input type="checkbox" checked={data.intake.source}></input></td>
             </tr>
           </table>
           <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={Math.round(1000*data.endgame.harmonySuccess)/10+"%"}></CBox>

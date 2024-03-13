@@ -242,33 +242,6 @@
     padding-left: 20px;
     width: 31%;
 }
-@media screen and (max-width: 480px) {
-    .MainDiv {
-        margin: 0px;
-    }
-    .scoreBreakdownContainer {
-        margin-bottom: 0px;
-    }
-    .leftColumn, .middleColumn, .rightColumn {
-        width: 100%;
-        padding: 0;
-    }
-    .leftColumn {
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        border-bottom: 4px solid lightgray;
-    }
-    .auto, .tele {
-        border: 0px solid white;
-        padding: 0;
-        margin-bottom: 10px;
-        padding-bottom: 20px;
-        border-bottom: 4px solid lightgray;
-    }
-    .graphContainer {
-        width: 325px;
-        margin: 10px auto;
-    }}
 .allComments {
     display: flex;
     flex-direction: column;
@@ -282,8 +255,9 @@
     font-size: 14px;
     width: 210px;
 }
-.MainDiv .rightColumn .intakeTable {
+.MainDiv .rightColumn .differentTable {
     width: auto;
+    align-self: center;
 }
 .MainDiv .trapTable {
     width: 110px;
@@ -313,3 +287,30 @@
     padding: 5px;
     text-align: center;
 }
+@media screen and (max-width: 1150px) {
+    .MainDiv {
+        margin: 0px;
+    }
+    .scoreBreakdownContainer {
+        margin-bottom: 0px;
+    }
+    .leftColumn, .middleColumn, .rightColumn {
+        width: 100%;
+        padding: 0;
+    }
+    .leftColumn {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 4px solid lightgray;
+    }
+    .auto, .tele {
+        border: 0px solid white;
+        padding: 0;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+        border-bottom: 4px solid lightgray;
+    }
+    .graphContainer {
+        width: 325px;
+        margin: 10px auto;
+    }}
