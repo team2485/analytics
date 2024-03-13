@@ -5,7 +5,7 @@ import { calcAuto, calcTele, calcEnd } from "@/util/calculations";
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
 export async function GET() {
-    let data = await sql`SELECT * FROM ${process.env.DATABASE_TABLE_NAME};`;
+    let data = await sql`SELECT * FROM sdr2024;`;
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 

@@ -12,7 +12,7 @@ export async function GET(request) {
     return NextResponse.json({message: "Invalid team number"}, {status: 400});
   }
 
-  let data = await sql`SELECT * FROM ${process.env.DATABASE_TABLE_NAME} WHERE team = ${team};`;
+  let data = await sql`SELECT * FROM sdr2024 WHERE team = ${team};`;
   let rows = data.rows;
 
   if (rows.length == 0) {
