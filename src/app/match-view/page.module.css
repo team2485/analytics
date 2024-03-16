@@ -63,7 +63,6 @@
 .allianceESPMs {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     gap: 10px;
     padding: 10px;
 }
@@ -75,18 +74,34 @@
     padding: 10px;
     margin: 10px;
     margin-top: 0px;
-    gap: 10px;
+    gap: 0px;
     border-radius: 10px;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .graphContainer {
+    display: flex;
+    flex-direction: column;
     min-width: 30%;
     text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }
-
+.lineGraphContainer {
+    display: flex;
+    flex-direction: column;
+    min-width: 30%;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.lineGraphContainer svg {
+    transform: translateX(-20px);
+}
 .RPs {
     display: flex;
     margin: 10px 40px;
@@ -134,6 +149,27 @@
 
 .lightBorderBox h1 {
     font-size: 45px;
+    margin-bottom: -20px;
+}
+.lightBorderBox .espmBox {
+    height: 50px;
+    text-align: center;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid black;
+    border-radius: 10px 10px 0 0;
+    font-size: 30px;
+    font-weight: 800;
+    text-align: center;
+}
+.lightBorderBox .espmBreakdown {
+    height: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+}
+.lightBorderBox .espmBreakdown div {
+    padding: 2px;
 }
 
 .scoreBreakdownContainer {
@@ -171,6 +207,7 @@
     border-radius: 10px 10px 0 0;
     font-size: 30px;
     font-weight: 800;
+    text-align: center;
 }
 
 .espmBox::before {
@@ -186,7 +223,7 @@
     padding: auto;
     border-radius: 5px;
     padding: 5px;
-    margin-bottom: -20px;
+    margin-bottom: -25px;
     font-size: 20px;
     font-weight: 800;
 }
@@ -195,4 +232,14 @@
     width: 30vw;
     height: 300px;
     margin: auto;
+    margin-bottom: -40px;
+}
+.barchartContainer {
+    width: 30vw;
+    height: 300px;
+    margin: auto;
+    margin-bottom: -30px;
+}
+.barchartContainer svg {
+    transform: translateX(-20px);
 }
