@@ -2,8 +2,10 @@
 
 import styles from "./page.module.css";
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function Picklist() {
+  const router = useRouter();
   const [fields, setFields] = useState([]);
   const [picklist, setPicklist] = useState([]);
   const [maxScore, setMaxScore] = useState(1);
@@ -20,8 +22,25 @@ export default function Picklist() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const urlWeights = Object.fromEntries(urlParams.entries());
+    const urlWeights = Object.fromEntries(urlParams);
     setWeights(urlWeights);
+
+    const urlAlliances = {};
+    let urlTeamsToExclude = teamsToExclude;
+    for (const [key, value] of urlParams.entries()) {
+      if (key.startsWith('A')) {
+        const [, allianceNumber, teamPosition] = key.match(/A(\d+)T(\d+)/);
+        if (!urlAlliances[allianceNumber]) {
+          urlAlliances[allianceNumber] = [];
+        }
+        urlAlliances[allianceNumber][parseInt(teamPosition) - 1] = value;
+        urlTeamsToExclude[((allianceNumber - 1) * 3) + (teamPosition-1)] = +value;
+      }
+    }
+    setAllianceData(urlAlliances);
+    console.log({urlTeamsToExclude});
+    console.log(urlAlliances);
+    setTeamsToExclude(urlTeamsToExclude);
 
     const storedRatings = localStorage.getItem('teamRatings');
     if (storedRatings) {
@@ -41,7 +60,7 @@ export default function Picklist() {
     const newWeights = Object.fromEntries(weightEntries);
     setWeights(newWeights);
 
-    const urlParams = new URLSearchParams(weightEntries);
+    const urlParams = new URLSearchParams([...weightEntries, ...Object.entries(allianceData).flatMap(([allianceNumber, teams]) => teams.map((team, index) => [`T${allianceNumber}A${index + 1}`, team]))]);
     window.history.replaceState(null, '', `?${urlParams.toString()}`);
 
     const picklist = await fetch('/api/compute-picklist', {
@@ -54,39 +73,49 @@ export default function Picklist() {
     setWeightsChanged(false);
   };
 
-  function updateAlliancesData() {
+  function updateAlliancesData(allianceNumber, allianceTeams) {
     let formData = new FormData(alliancesFormRef.current);
     let teams = [...formData.entries()].map(entry => +entry[1]);
     setTeamsToExclude(teams);
+
+    let updateAllianceData = {
+      ...allianceData,
+      [allianceNumber]: allianceTeams
+    }
+
+    const urlParams = new URLSearchParams([...Object.entries(weights), ...Object.entries(updateAllianceData).flatMap(([allianceNumber, teams]) => teams.map((team, index) => [`A${allianceNumber}T${index + 1}`, team]))]);
+    window.history.replaceState(null, '', `?${urlParams.toString()}`);
   };
 
   const Weights = () => {
     const handleWeightChange = (e) => {
       setWeightsChanged(true);
+      const { name, value } = e.target;
+      setWeights(prevWeights => ({ ...prevWeights, [name]: parseFloat(value) }));
     }
     return <table className={styles.weightsTable}>
       <tbody>
         <tr>
           <td><label htmlFor="espm">ESPM:</label></td>
-          <td><input id="espm" type="number" defaultValue={weights.espm || 0} name="espm" onChange={handleWeightChange}></input></td>
+          <td><input id="espm" type="number" value={weights.espm || 0} name="espm" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="end">End:</label></td>
-          <td><input id="end" type="number" defaultValue={weights.end || 0} name="end" onChange={handleWeightChange}></input></td>
+          <td><input id="end" type="number" value={weights.end || 0} name="end" onChange={handleWeightChange}></input></td>
           {/* <td><label htmlFor="amp">Amp:</label></td>
-          <td><input id="amp" type="number" defaultValue={weights.amp || 0} name="amp" onChange={handleWeightChange}></input></td> */}
+          <td><input id="amp" type="number" value={weights.amp || 0} name="amp" onChange={handleWeightChange}></input></td> */}
         </tr>
         <tr>
           <td><label htmlFor="auto">Auto:</label></td>
-          <td><input id="auto" type="number" defaultValue={weights.auto || 0} name="auto" onChange={handleWeightChange}></input></td>
+          <td><input id="auto" type="number" value={weights.auto || 0} name="auto" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="speed">Speed:</label></td>
-          <td><input id="speed" type="number" defaultValue={weights.speed || 0} name="speed" onChange={handleWeightChange}></input></td>
+          <td><input id="speed" type="number" value={weights.speed || 0} name="speed" onChange={handleWeightChange}></input></td>
           {/* <td><label htmlFor="speaker">Speaker:</label></td>
-          <td><input id="speaker" type="number" defaultValue={weights.speaker || 0} name="speaker" onChange={handleWeightChange}></input></td> */}
+          <td><input id="speaker" type="number" value={weights.speaker || 0} name="speaker" onChange={handleWeightChange}></input></td> */}
         </tr>
         <tr>
           <td><label htmlFor="tele">Tele:</label></td>
-          <td><input id="tele" type="number" defaultValue={weights.tele || 0} name="tele" onChange={handleWeightChange}></input></td>
+          <td><input id="tele" type="number" value={weights.tele || 0} name="tele" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="movement">Movement:</label></td>
-          <td><input id="movement" type="number" defaultValue={weights.movement || 0} name="movement" onChange={handleWeightChange}></input></td>
+          <td><input id="movement" type="number" value={weights.movement || 0} name="movement" onChange={handleWeightChange}></input></td>
         </tr>
       </tbody>
     </table>
@@ -99,20 +128,28 @@ export default function Picklist() {
     return (
       <tr>
         <td>A{allianceNumber}</td>
-        <td><label htmlFor={"T1A" + allianceNumber}></label><input name={"T1A" + allianceNumber} type="number" defaultValue={firstValue}
+        <td><label htmlFor={`A${allianceNumber}T1`}></label><input name={`A${allianceNumber}T1`} type="number" defaultValue={firstValue}
           onBlur={e => {
             handleAllianceChange(allianceNumber, [e.target.value, secondValue, thirdValue]);
           }}></input></td>
-        <td><label htmlFor={"T2A" + allianceNumber}></label><input name={"T2A" + allianceNumber} type="number" defaultValue={secondValue}
+        <td><label htmlFor={`A${allianceNumber}T2`}></label><input name={`A${allianceNumber}T2`} type="number" defaultValue={secondValue}
           onBlur={e => {
             handleAllianceChange(allianceNumber, [firstValue, e.target.value, thirdValue])
           }}></input></td>
-        <td><label htmlFor={"T3A" + allianceNumber}></label><input name={"T3A" + allianceNumber} type="number" defaultValue={thirdValue}
+        <td><label htmlFor={`A${allianceNumber}T3`}></label><input name={`A${allianceNumber}T3`} type="number" defaultValue={thirdValue}
           onBlur={e => {
             handleAllianceChange(allianceNumber, [firstValue, secondValue, e.target.value])
           }}></input></td>
       </tr>
     )
+  };
+
+  const handleAllianceChange = (allianceNumber, allianceTeams) => {
+    setAllianceData({
+      ...allianceData,
+      [allianceNumber]: allianceTeams
+    });
+    updateAlliancesData(allianceNumber, allianceTeams);
   };
 
   function PicklistTable() {
@@ -210,14 +247,6 @@ export default function Picklist() {
         {/* </div> */}
       </div>
     );
-  };
-
-  const handleAllianceChange = (allianceNumber, allianceTeams) => {
-    setAllianceData({
-      ...allianceData,
-      [allianceNumber]: allianceTeams
-    });
-    updateAlliancesData();
   };
 
   return (
