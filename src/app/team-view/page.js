@@ -67,7 +67,7 @@ function TeamView() {
       if (team) {
         fetch("/api/get-team-data?team=" + team).then(resp => resp.json()).then(data => {
           if (data.message) {
-            console.log(data.message);
+            setData({message: data.message});
           } else {
             setData(data);
           }
@@ -76,10 +76,22 @@ function TeamView() {
     }, [team]);
 
 
-  console.log(data);
+  if (team == null || team == '' || (data && data.message)) {
+    return (
+      <div>
+        <form className={styles.teamInputForm}>
+          <span>{data?.message}</span>
+          <label for="team">Team: </label>
+          <input id="team" name="team" placeholder="Team #" type="number"></input>
+          <br></br>
+          <button>Go!</button>
+        </form>
+      </div>
+    )
+  }
 
   if (data == null) {
-    return(
+    return (
       <div>
         <h1>Loading...</h1>
       </div>
