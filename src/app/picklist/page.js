@@ -2,10 +2,8 @@
 
 import styles from "./page.module.css";
 import { useEffect, useState, useRef } from "react";
-// import { useRouter } from 'next/navigation';
 
 export default function Picklist() {
-  // const router = useRouter();
   const [fields, setFields] = useState([]);
   const [picklist, setPicklist] = useState([]);
   const [maxScore, setMaxScore] = useState(1);
