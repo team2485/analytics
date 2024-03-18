@@ -63,6 +63,7 @@ export default function Sudo() {
           danger
           onClick={async () => {
             const password = prompt("Enter your password");
+            console.log({record});
             fetch("/api/delete-row", {
               method: "POST",
               headers: {

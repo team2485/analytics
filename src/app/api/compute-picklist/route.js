@@ -6,8 +6,20 @@ import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 export async function POST(request) {
   const requestBody = await request.json(); // e.g.   [ [ 'ESPM', '0' ], [ 'Maneuverability', '0' ] ]
 
-  let data = await sql`SELECT * FROM testmatches;`;
+  let data = await sql`SELECT * FROM sdr2024;`;
   let rows = data.rows;
+
+  const frcAPITeamRankings = await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CAPH", {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+    }
+  }).then(resp => {
+    if (resp.status !== 200) {
+      return {Rankings: []};
+    }
+    return resp.json();
+  }).then(data => data.Rankings);
 
   //function returns a function based on column index: the returned function will summarize each column
   function byAveragingNumbers(index) {
@@ -104,6 +116,18 @@ export async function POST(request) {
     }),
     arrange(desc('score'))
   );
+
+  teamTable = teamTable.map(teamData => {
+    let firstRanking = -1;
+    let rankedData = frcAPITeamRankings.filter(rankedTeamData => rankedTeamData.teamNumber == teamData.team);
+    if (rankedData.length == 1) {
+      firstRanking = rankedData[0].rank;
+    }
+    return {
+      ...teamData,
+      firstRanking,
+    }
+  });
 
   return NextResponse.json(teamTable, {status: 200});
 }

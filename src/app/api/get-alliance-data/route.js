@@ -5,10 +5,21 @@ import { calcAuto, calcTele, calcEnd } from "@/util/calculations";
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
 export async function GET() {
-    let data = await sql`SELECT * FROM testmatches;`;
+    let data = await sql`SELECT * FROM sdr2024;`;
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
-    console.log(rows);
+
+    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+      }
+    }).then(resp => {
+      if (resp.status !== 200) {
+        return {teams: []};
+      }
+      return resp.json();
+    }).then(data => data.teams);
 
     //generate arrays of each value
     let responseObject = {};
@@ -18,8 +29,9 @@ export async function GET() {
         let tele = calcTele(row);
         let end = calcEnd(row);
         if (responseObject[row.team] == undefined) {
+          let frcAPITeamInfo = frcAPITeamData.filter(teamData => teamData.teamNumber == row.team);
           responseObject[row.team] = {
-            team: row.team, teamName: "[name]",
+            team: row.team, teamName: frcAPITeamInfo.length == 0 ? "🤖" : frcAPITeamInfo[0].nameShort,
             auto: [auto], tele: [tele], end: [end],
             avgNotes: {
               speaker: [row.autospeakerscored + row.telenampedspeakerscored],

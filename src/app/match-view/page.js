@@ -49,9 +49,34 @@ function MatchView() {
     //setData based on teams selected
   useEffect(() => {
     if (searchParams && allData) {
-      let [team1, team2, team3, team4, team5, team6] = [searchParams.get("team1"), searchParams.get("team2"), searchParams.get("team3"), searchParams.get("team4"), searchParams.get("team5"), searchParams.get("team6")];
-      console.log(searchParams.get("team1"));
-      setData({team1: allData[team1], team2: allData[team2], team3: allData[team3], team4: allData[team4], team5: allData[team5], team6: allData[team6]});
+      if (searchParams.get('match') == null || searchParams.get('match') == "") {
+        //search by teams
+        let [team1, team2, team3, team4, team5, team6] = [searchParams.get("team1"), searchParams.get("team2"), searchParams.get("team3"), searchParams.get("team4"), searchParams.get("team5"), searchParams.get("team6")];
+        setData({team1: allData[team1], team2: allData[team2], team3: allData[team3], team4: allData[team4], team5: allData[team5], team6: allData[team6]});
+      } else {
+        //search by match
+        fetch('/api/get-teams-of-match?match=' + searchParams.get('match')).then(resp => resp.json()).then(data => {
+          if (data.message) {
+            console.log(message);
+          } else {
+            //update url with teams
+            const newParams = new URLSearchParams(searchParams);
+            newParams.set('team1', data.team1);
+            newParams.set('team2', data.team2);
+            newParams.set('team3', data.team3);
+            newParams.set('team4', data.team4);
+            newParams.set('team5', data.team5);
+            newParams.set('team6', data.team6);
+            newParams.delete('match');
+
+            const newUrl = `${window.location.pathname}?${newParams.toString()}`;
+            window.history.replaceState(null, 'Picklist', newUrl);
+            
+            setData({team1: allData[data.team1], team2: allData[data.team2], team3: allData[data.team3], team4: allData[data.team4], team5: allData[data.team5], team6: allData[data.team6]});
+          }
+        })
+
+      }
     }
   }, [searchParams, allData]);
 
@@ -66,39 +91,58 @@ function MatchView() {
   if (searchParams.get("go") != "go") {
     return <div>
       <form className={styles.teamForm}>
-        <label htmlFor="team1">Blue 1:</label>
-        <input id="team1" name="team1" defaultValue={searchParams.get("team1")}></input>
-        <br></br>
-        <label htmlFor="team2">Blue 2:</label>
-        <input id="team2" name="team2" defaultValue={searchParams.get("team2")}></input>
-        <br></br>
-        <label htmlFor="team3">Blue 3:</label>
-        <input id="team3" name="team3" defaultValue={searchParams.get("team3")}></input>
-        <br></br>
-        <label htmlFor="team4">Red 1:</label>
-        <input id="team4" name="team4" defaultValue={searchParams.get("team4")}></input>
-        <br></br>
-        <label htmlFor="team5">Red 2:</label>
-        <input id="team5" name="team5" defaultValue={searchParams.get("team5")}></input>
-        <br></br>
-        <label htmlFor="team6">Red 3:</label>
-        <input id="team6" name="team6" defaultValue={searchParams.get("team6")}></input>
-        <br></br>
-        <input type="hidden" name="go" value="go"></input>
+        <span>View by Teams...</span>
+        <div className={styles.horizontalBox}>
+          <div>
+            <label htmlFor="team1">Blue 1:</label>
+            <br/>
+            <input id="team1" name="team1" defaultValue={searchParams.get("team1")}></input>
+          </div>
+          <div>
+            <label htmlFor="team2">Blue 2:</label>
+            <br/>
+            <input id="team2" name="team2" defaultValue={searchParams.get("team2")}></input>
+          </div>
+          <div>
+            <label htmlFor="team3">Blue 3:</label>
+            <br/>
+            <input id="team3" name="team3" defaultValue={searchParams.get("team3")}></input>
+          </div>
+          <div>
+            <label htmlFor="team4">Red 1:</label>
+            <br/>
+            <input id="team4" name="team4" defaultValue={searchParams.get("team4")}></input>
+          </div>
+          <div>
+            <label htmlFor="team5">Red 2:</label>
+            <br/>
+            <input id="team5" name="team5" defaultValue={searchParams.get("team5")}></input>
+          </div>
+          <div>
+            <label htmlFor="team6">Red 3:</label>
+            <br/>
+            <input id="team6" name="team6" defaultValue={searchParams.get("team6")}></input>
+          </div>
+          <input type="hidden" name="go" value="go"></input>
+        </div>
+        <span>Or by Match...</span>
+        <label htmlFor="match">Match #</label>
+        <input id="match" name="match" type="number"></input>
         <button>Go!</button>
       </form>
     </div>
   }
 
   function AllianceButtons({t1, t2, t3, colors}) {
+    console.log(searchParams.toString())
     return <div className={styles.allianceBoard}>
-      <Link href={"/team-view?team=" + t1.team}>
+      <Link href={`/team-view?team=${t1.team}&${searchParams.toString()}`}>
         <button style={{background: colors[0][1]}}>{t1.team}</button>
       </Link>
-      <Link href={"/team-view?team=" + t2.team}>
+      <Link href={`/team-view?team=${t2.team}&${searchParams.toString()}`}>
       <button style={{background: colors[1][1]}}>{t2.team}</button>
       </Link>
-      <Link href={"/team-view?team=" + t3.team}>
+      <Link href={`/team-view?team=${t3.team}&${searchParams.toString()}`}>
       <button style={{background: colors[2][1]}}>{t3.team}</button>
       </Link>
     </div>
@@ -141,11 +185,11 @@ function MatchView() {
 
     return <div className={styles.lightBorderBox}>
       <div className={styles.scoreBreakdownContainer}>
-        <div style={{background: colors[0]}} className={styles.espmBox}>{auto + tele + end}</div>
+        <div style={{background: colors[0]}} className={styles.espmBox}>{Math.round(10*(auto + tele + end))/10}</div>
         <div className={styles.espmBreakdown}>
-          <div style={{background: colors[1]}}>A: {auto}</div>
-          <div style={{background: colors[1]}}>T: {tele}</div>
-          <div style={{background: colors[1]}}>E: {end}</div>
+          <div style={{background: colors[1]}}>A: {Math.round(10*auto)/10}</div>
+          <div style={{background: colors[1]}}>T: {Math.round(10*tele)/10}</div>
+          <div style={{background: colors[1]}}>E: {Math.round(10*end)/10}</div>
         </div>
       </div>
       <div className={styles.RPs}>
@@ -157,23 +201,30 @@ function MatchView() {
     </div>
   }
 
-  function TeamDisplay({teamData, colors}) {
+  function TeamDisplay({teamData, colors, matchMax}) {
+
+    const generateTicks = (min, max) => {
+      const ticks = [];
+      for (let i = min; i <= max; i += 2) {
+        ticks.push(i);
+      }
+      return ticks;
+    };
+
     const endgameData = [{ x: 'None', y: teamData.endgame.none },
               { x: 'Park', y: teamData.endgame.park },
               { x: 'Onstage', y: teamData.endgame.onstage },
-              { x: 'Onstage Harmony', y: teamData.endgame.onstageHarmony }];
-
-
+              { x: 'Harmony', y: teamData.endgame.onstageHarmony }];
 
     return <div className={styles.lightBorderBox}>
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
-      {/* <h2 style={{color: colors[3]}}>{"" || teamData.teamName}</h2> */}
+      <h2 style={{color: colors[3]}}>{teamData.teamName}</h2>
       <div className={styles.scoreBreakdownContainer}>
-        <div style={{background: colors[0]}} className={styles.espmBox}>{teamData.auto + teamData.tele + teamData.end}</div>
+        <div style={{background: colors[0]}} className={styles.espmBox}>{Math.round(10*(teamData.auto + teamData.tele + teamData.end))/10}</div>
         <div className={styles.espmBreakdown}>
-          <div style={{background: colors[1]}}>A: {teamData.auto}</div>
-          <div style={{background: colors[1]}}>T: {teamData.tele}</div>
-          <div style={{background: colors[1]}}>E: {teamData.end}</div>
+          <div style={{background: colors[1]}}>A: {Math.round(10*teamData.auto)/10}</div>
+          <div style={{background: colors[1]}}>T: {Math.round(10*teamData.tele)/10}</div>
+          <div style={{background: colors[1]}}>E: {Math.round(10*teamData.end)/10}</div>
         </div>
       </div>
       <br></br>
@@ -182,20 +233,20 @@ function MatchView() {
         <ResponsiveContainer width="100%">
           <BarChart
             data={[{
-              place: "Speaker",
-              value: teamData.avgNotes.speaker
+              place: "Spkr",
+              value: Math.round(10*teamData.avgNotes.speaker)/10
             },
             {
               place: "⬆️ Spkr",
-              value: teamData.avgNotes.ampedSpeaker
+              value: Math.round(10*teamData.avgNotes.ampedSpeaker)/10
             },
             {
               place: "Amp",
-              value: teamData.avgNotes.amp
+              value: Math.round(10*teamData.avgNotes.amp)/10
             },
             {
               place: "Trap",
-              value: teamData.avgNotes.trap
+              value: Math.round(10*teamData.avgNotes.trap)/10
             }]}
             margin={{
               top: 5,
@@ -205,8 +256,8 @@ function MatchView() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="place" />
-            <YAxis />
+            <XAxis dataKey="place" width="20"/>
+            <YAxis type='number' domain={[0, matchMax]} ticks={generateTicks(0, matchMax)}/>
             <Tooltip />
             <Bar dataKey="value" fill={colors[3]} activeBar={<Rectangle fill="gold" stroke={colors[3]} />} />
           </BarChart>
@@ -216,9 +267,10 @@ function MatchView() {
       <div className={styles.chartContainer}>
         <h2>Endgame %</h2>
         <VictoryPie
+          padding={100}
           data={endgameData}
           colorScale={colors}
-          labels={({ datum }) => `${datum.x}: ${datum.y}%`}
+          labels={({ datum }) => `${datum.x}: ${Math.round(datum.y)}%`}
         />
       </div>
       <br></br>
@@ -263,6 +315,15 @@ function MatchView() {
       fullMark: 5});
   }
   console.log(radarData);
+
+  let matchMax = 0;
+  for (let teamData of [data.team1, data.team2, data.team3, data.team4, data.team5, data.team6]) {
+   if (teamData) {
+    matchMax = Math.max(teamData.avgNotes.speaker, teamData.avgNotes.amp, teamData.avgNotes.ampedSpeaker, teamData.avgNotes.trap, matchMax)
+  }
+   }
+  matchMax = Math.floor(matchMax) + 2; 
+
   return (
     <div>
       <div className={styles.matchNav}>
@@ -312,14 +373,14 @@ function MatchView() {
         </div>
       </div>
       <div className={styles.matches}>
-        <TeamDisplay teamData={data.team1 || defaultTeam} colors={COLORS[0]}></TeamDisplay>
-        <TeamDisplay teamData={data.team2 || defaultTeam} colors={COLORS[1]}></TeamDisplay>
-        <TeamDisplay teamData={data.team3 || defaultTeam} colors={COLORS[2]}></TeamDisplay>
+        <TeamDisplay teamData={data.team1 || defaultTeam} colors={COLORS[0]} matchMax={matchMax}></TeamDisplay>
+        <TeamDisplay teamData={data.team2 || defaultTeam} colors={COLORS[1]} matchMax={matchMax}></TeamDisplay>
+        <TeamDisplay teamData={data.team3 || defaultTeam} colors={COLORS[2]} matchMax={matchMax}></TeamDisplay>
       </div>
       <div className={styles.matches}>
-        <TeamDisplay teamData={data.team4 || defaultTeam} colors={COLORS[3]}></TeamDisplay>
-        <TeamDisplay teamData={data.team5 || defaultTeam} colors={COLORS[4]}></TeamDisplay>
-        <TeamDisplay teamData={data.team6 || defaultTeam} colors={COLORS[5]}></TeamDisplay>
+        <TeamDisplay teamData={data.team4 || defaultTeam} colors={COLORS[3]} matchMax={matchMax}></TeamDisplay>
+        <TeamDisplay teamData={data.team5 || defaultTeam} colors={COLORS[4]} matchMax={matchMax}></TeamDisplay>
+        <TeamDisplay teamData={data.team6 || defaultTeam} colors={COLORS[5]} matchMax={matchMax}></TeamDisplay>
       </div>
     </div>
   )

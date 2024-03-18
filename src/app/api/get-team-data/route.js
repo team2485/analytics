@@ -9,14 +9,14 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const team = searchParams.get('team')
   if (_.isNumber(+team) == false) {
-    return NextResponse.json({message: "Invalid team number"}, {status: 400});
+    return NextResponse.json({message: "ERROR: Invalid team number"}, {status: 400});
   }
 
-  let data = await sql`SELECT * FROM testmatches WHERE team = ${team};`;
+  let data = await sql`SELECT * FROM sdr2024 WHERE team = ${team};`;
   let rows = data.rows;
 
   if (rows.length == 0) {
-    return NextResponse.json({message: "No data for team"}, {status: 404});
+    return NextResponse.json({message: "ERROR: No data for team " + team}, {status: 404});
   }
 
   //function returns a function based on column index: the returned function will summarize each column
@@ -75,12 +75,24 @@ export async function GET(request) {
     return arr.filter(e => e[index] == value)/arr.length;
   }
 
+  const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+    },
+  }).then(resp => {
+    if (resp.status !== 200) {
+      return {teams: [{nameShort: ""}]};
+    }
+    return resp.json();
+  }).then(data => data.teams[0].nameShort );
+
   //get return table
   const matchesScouted = teamTable.length;
   let returnObject = tidy(teamTable,
     summarize({
       team: first('team'),
-      teamName: (a) => '',
+      teamName: () => teamName,
       autoScore: median('auto'),
       teleScore: median('tele'),
       endScore: median('end'),

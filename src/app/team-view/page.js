@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, LineChart, Line, RadarChart, PolarRadiusAxis, PolarAngleAxis, PolarGrid, Radar, Legend, ReferenceLine } from 'recharts';
 import { VictoryPie } from "victory";
 import { Suspense } from "react";
+import Link from "next/link";
 
 
 export default function TeamViewPage() {
@@ -16,7 +17,44 @@ export default function TeamViewPage() {
 function TeamView() {
   const [data, setData] = useState(null);
   const searchParams = useSearchParams();
-  let team = searchParams.get("team");
+  const team = searchParams.get("team");
+  const hasTopBar = searchParams.get('team1') !== null;
+  
+
+
+  function AllianceButtons({t1, t2, t3, colors}) {
+    console.log(searchParams.get('team6'))
+    return <div className={styles.allianceBoard}>
+      <Link href={`/team-view?team=${t1 || ""}&${searchParams.toString()}`}>
+        <button style={team == t1 ? {background: 'black', color: 'yellow'} : {background: colors[0][1]}}>{t1 || 404}</button>
+      </Link>
+      <Link href={`/team-view?team=${t2 || ""}&${searchParams.toString()}`}>
+        <button style={team == t2 ? {background: 'black', color: 'yellow'} : {background: colors[1][1]}}>{t2 || 404}</button>
+      </Link>
+      <Link href={`/team-view?team=${t3 || ""}&${searchParams.toString()}`}>
+        <button style={team == t3 ? {background: 'black', color: 'yellow'} : {background: colors[2][1]}}>{t3 || 404}</button>
+      </Link>
+    </div>
+  }
+  function TopBar() {
+    const COLORS = [
+      ["#B7F7F2", "#A1E7E1", "#75C6BF", "#5EB5AE"],
+      ["#8AB8FD", "#7D99FF", "#6184DD", "#306BDD"],
+      ["#E1BFFA", "#E1A6FE", "#CA91F2", "#A546DF"],
+      ["#FFC6F6", "#ECA6E0", "#ED75D9", "#C342AE"],
+      ["#FABFC4", "#FEA6AD", "#F29199", "#E67983"],
+      ["#FFE3D3", "#EBB291", "#E19A70", "#D7814F"],
+    ];
+    if (!hasTopBar) {
+      return <></>
+    }
+    return <div className={styles.matchNav}>
+      <AllianceButtons t1={searchParams.get('team1')} t2={searchParams.get('team2')} t3={searchParams.get('team3')} colors={[COLORS[0], COLORS[1], COLORS[2]]}></AllianceButtons>
+      <Link href={`/match-view?team1=${searchParams.get('team1') || ""}&team2=${searchParams.get('team2') || ""}&team3=${searchParams.get('team3') || ""}&team4=${searchParams.get('team4') || ""}&team5=${searchParams.get('team5') || ""}&team6=${searchParams.get('team6') || ""}&go=go`}><button style={{background: "#ffff88", color: "black"}}>Match</button></Link>
+      <AllianceButtons t1={searchParams.get('team4')} t2={searchParams.get('team5')} t3={searchParams.get('team6')} colors={[COLORS[3], COLORS[4], COLORS[5]]}></AllianceButtons>
+    </div>
+  }
+
   const Colors = [
     ["#116677", "#84C9D7", "#8CCCD9", "#C4EEF6"],
     ["#003F7E", "#84AED7", "#A2C8ED", "#D8EAFB"],
@@ -29,100 +67,31 @@ function TeamView() {
       if (team) {
         fetch("/api/get-team-data?team=" + team).then(resp => resp.json()).then(data => {
           if (data.message) {
-            console.log(data.message);
+            setData({message: data.message});
           } else {
             setData(data);
           }
         });
       }
-      // setData({
-      //     team: 2485,
-      //     teamName: "W.A.R. Lords",
-      //     autoScore: 15,
-      //     teleScore: 27,
-      //     endScore: 5,
-      //     espmOverTime: [
-      //       {matchNum: 5, score: 47},
-      //       {matchNum: 10, score: 38},
-      //       {matchNum: 50, score: 55},
-      //     ],
-      //     noShow: .01,
-      //     breakdown: .08,
-      //     lastBreakdown: 3,
-      //     matchesScouted: 3,
-      //     scouts: ["yael", "ella", "preston",],
-      //     generalComments: ["very good", "incredible", "amazing",],
-      //     breakdownComments: ["the shooter broke",],
-      //     defenseComments: ["very good at defense", "defended well",],
-      //     auto: {
-      //       leave: .95,
-      //       autoOverTime: [
-      //         {matchNum: 5, score: 10},
-      //         {matchNum: 10, score: 9},
-      //         {matchNum: 50, score: 8},
-      //       ],
-      //       autoNotes: {
-      //         total: 3.2,
-      //         ampSuccess: .92,
-      //         ampAvg: 1.2,
-      //         spkrSuccess: .89,
-      //         spkrAvg: 2
-      //       }},
-      //     tele: {
-      //       teleOverTime: [
-      //         {matchNum: 5, score: 30},
-      //         {matchNum: 10, score: 29},
-      //         {matchNum: 50, score: 28},
-      //       ],
-      //       teleNotes: {
-      //         amplified: .43,
-      //         total: 20,
-      //         ampSuccess: .96,
-      //         ampAvg: 9.2,
-      //         spkrSuccess: .94,
-      //         spkrAvg: 10.8
-      //       },
-      //     },
-      //     endgame: {
-      //       stage: {
-      //         none: 5,
-      //         park: 5,
-      //         onstage: 70,
-      //         onstageHarmony: 20,
-      //       },
-      //       onstageAttempt: .78,
-      //       onstageSuccess: .95,
-      //       harmonySuccess: .75,
-      //       onstagePlacement: {
-      //         center: .82,
-      //         side: .18,
-      //       },
-      //       trapSuccess: .6,
-      //       trapAvg: .5,
-      //     },
-      //     intake: {
-      //       ground: true,
-      //       source: false,
-      //     },
-      //     qualitative: [
-      //       {name: "Onstage Speed", rating: 5},
-      //       {name: "Harmony Speed", rating: 1},
-      //       {name: "Trap Speed", rating: 2},
-      //       {name: "Amp Speed", rating: 4},
-      //       {name: "Apeaker Speed", rating: 1},
-      //       {name: "Stage Hazard", rating: 3},
-      //       {name: "Defense Evasion", rating: 0},
-      //       {name: "Aggression", rating: 5},
-      //       {name: "Maneuverability", rating: 2},
-      //     ],
-      // })
     }, [team]);
 
 
-  console.log(data);
+  if (team == null || team == '' || (data && data.message)) {
+    return (
+      <div>
+        <form className={styles.teamInputForm}>
+          <span>{data?.message}</span>
+          <label for="team">Team: </label>
+          <input id="team" name="team" placeholder="Team #" type="number"></input>
+          <br></br>
+          <button>Go!</button>
+        </form>
+      </div>
+    )
+  }
 
   if (data == null) {
-    return(
+    return (
       <div>
         <h1>Loading...</h1>
       </div>
@@ -184,11 +153,13 @@ function TeamView() {
       </table>
     )
   }
-console.log(data)
-  return (
+
+  return <div>
+    <TopBar></TopBar>
     <div className={styles.MainDiv}>
       <div className={styles.leftColumn}>
       <h1 style={{color: Colors[0][0]}}>Team {data.team} View</h1>
+      <h3>{data.teamName}</h3>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
           <div style={{background: Colors[0][1]}} className={styles.espmBox}>{Math.round(10*(data.autoScore + data.teleScore + data.endScore))/10}</div>
@@ -364,5 +335,5 @@ console.log(data)
           </div>
       </div>
     </div>
-  )
+  </div>
 }
