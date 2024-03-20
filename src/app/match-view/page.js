@@ -57,7 +57,7 @@ function MatchView() {
         //search by match
         fetch('/api/get-teams-of-match?match=' + searchParams.get('match')).then(resp => resp.json()).then(data => {
           if (data.message) {
-            console.log(message);
+            console.log(data.message);
           } else {
             //update url with teams
             const newParams = new URLSearchParams(searchParams);
