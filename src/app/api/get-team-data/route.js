@@ -191,9 +191,9 @@ export async function GET(request) {
           {name: "Trap Speed", rating: averageQualitative('trapspeed', arr)},
           {name: "Amp Speed", rating: averageQualitative('ampspeed', arr)},
           {name: "Speaker Speed", rating: averageQualitative('speakerspeed', arr)},
-          {name: "Stage Hazard", rating: averageQualitative('stagehazard', arr)},
+          {name: "Stage Hazard", rating: 5-(averageQualitative('stagehazard', arr))},
           {name: "Defense Evasion", rating: averageQualitative('defenseevasion', arr)},
-          {name: "Aggression", rating: averageQualitative('aggression', arr)},
+          {name: "Aggression", rating: 5-(averageQualitative('aggression', arr))},
           {name: "Maneuverability", rating: averageQualitative('maneuverability', arr)},
         ]
       }
