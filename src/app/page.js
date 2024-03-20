@@ -244,39 +244,49 @@ export default function Home() {
                 <Qualitative
                   visibleName={"Amp Speed"}
                   internalName={"ampspeed"}
+                  description={"Amp Speed"}
                 />
+
                 <Qualitative
                   visibleName={"Speaker Speed"}
                   internalName={"speakerspeed"}
+                  description={"Speaker Speed"}
                 />
                 <Qualitative
                   visibleName={"Trap Speed"}
                   internalName={"trapspeed"}
+                  description={"Trap Speed"}
                 />
                 <Qualitative
                   visibleName={"Onstage Speed"}
                   internalName={"onstagespeed"}
+                  description={"Onstage Speed"}
                 />
                 <Qualitative
                   visibleName={"Harmony Speed"}
                   internalName={"harmonyspeed"}
+                  description={"Harmony Speed"}
                 />
                 <Qualitative
                   visibleName={"Maneuverability"}
                   internalName={"maneuverability"}
+                  description={"Maneuverability"}
                 />
                 <Qualitative
                   visibleName={"Defense Evasion"}
                   internalName={"defenseevasion"}
+                  description={"Defense Evasion Ability"}
                 />
                 <Qualitative
                   visibleName={"Aggression"}
                   internalName={"aggression"}
+                  description={"Aggression"}
                   symbol={"ⵔ"}
                 />
                 <Qualitative
                   visibleName={"Stage Hazard"}
                   internalName={"stagehazard"}
+                  description={"Stagehazard"}
                   symbol={"ⵔ"}
                 />
               </div>
