@@ -9,14 +9,14 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const team = searchParams.get('team')
   if (_.isNumber(+team) == false) {
-    return NextResponse.json({message: "Invalid team number"}, {status: 400});
+    return NextResponse.json({message: "ERROR: Invalid team number"}, {status: 400});
   }
 
   let data = await sql`SELECT * FROM sdr2024 WHERE team = ${team};`;
   let rows = data.rows;
 
   if (rows.length == 0) {
-    return NextResponse.json({message: "No data for team"}, {status: 404});
+    return NextResponse.json({message: "ERROR: No data for team " + team}, {status: 404});
   }
 
   //function returns a function based on column index: the returned function will summarize each column
@@ -191,9 +191,9 @@ export async function GET(request) {
           {name: "Trap Speed", rating: averageQualitative('trapspeed', arr)},
           {name: "Amp Speed", rating: averageQualitative('ampspeed', arr)},
           {name: "Speaker Speed", rating: averageQualitative('speakerspeed', arr)},
-          {name: "Stage Hazard", rating: averageQualitative('stagehazard', arr)},
+          {name: "Stage Hazard", rating: 5-(averageQualitative('stagehazard', arr))},
           {name: "Defense Evasion", rating: averageQualitative('defenseevasion', arr)},
-          {name: "Aggression", rating: averageQualitative('aggression', arr)},
+          {name: "Aggression", rating: 5-(averageQualitative('aggression', arr))},
           {name: "Maneuverability", rating: averageQualitative('maneuverability', arr)},
         ]
       }

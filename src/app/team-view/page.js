@@ -67,7 +67,7 @@ function TeamView() {
       if (team) {
         fetch("/api/get-team-data?team=" + team).then(resp => resp.json()).then(data => {
           if (data.message) {
-            console.log(data.message);
+            setData({message: data.message});
           } else {
             setData(data);
           }
@@ -76,10 +76,22 @@ function TeamView() {
     }, [team]);
 
 
-  console.log(data);
+  if (team == null || team == '' || (data && data.message)) {
+    return (
+      <div>
+        <form className={styles.teamInputForm}>
+          <span>{data?.message}</span>
+          <label for="team">Team: </label>
+          <input id="team" name="team" placeholder="Team #" type="number"></input>
+          <br></br>
+          <button>Go!</button>
+        </form>
+      </div>
+    )
+  }
 
   if (data == null) {
-    return(
+    return (
       <div>
         <h1>Loading...</h1>
       </div>
@@ -150,7 +162,7 @@ function TeamView() {
       <h3>{data.teamName}</h3>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
-          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{Math.round(10*data.autoScore + data.teleScore + data.endScore)/10}</div>
+          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{Math.round(10*(data.autoScore + data.teleScore + data.endScore))/10}</div>
           <div className={styles.espmBreakdown}>
             <div style={{background: Colors[0][3]}}>A: {Math.round(10*data.autoScore)/10}</div>
             <div style={{background: Colors[0][3]}}>T: {Math.round(10*data.teleScore)/10}</div>
