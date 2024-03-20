@@ -93,9 +93,9 @@ export async function GET() {
           teamData.qualitative.trapspeed.push(row.trapspeed);
           teamData.qualitative.ampspeed.push(row.ampspeed);
           teamData.qualitative.speakerspeed.push(row.speakerspeed);
-          teamData.qualitative.stagehazard.push(row.stagehazard);
+          teamData.qualitative.stagehazard.push(5-row.stagehazard);
           teamData.qualitative.defenseevasion.push(row.defenseevasion);
-          teamData.qualitative.aggression.push(row.aggression);
+          teamData.qualitative.aggression.push(5-row.aggression);
           teamData.qualitative.maneuverability.push(row.maneuverability);
         }
       }
