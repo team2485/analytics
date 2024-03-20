@@ -1,38 +1,25 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
+import { calcAuto, calcTele, calcEnd } from "@/util/calculations";
 
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
-const calcAuto = (record) => {
-  return (
-    record.autoampscored * 2 +
-    record.autospeakerscored * 5 +
-    (record.leave ? 2 : 0)
-  );
-};
-const calcTele = (record) => {
-  return (
-    record.teleampscored * 1 +
-    record.teleampedspeakerscored * 5 +
-    record.telenampedspeakerscored * 2
-  );
-};
-const calcEnd = (record) => {
-  return (
-    (record.endlocation == 0 ? 2 : 3) +
-    (record.harmony ? 2 : 0) +
-    record.trapscored * 5
-  );
-};
-const calcESPM = (record) => {
-  return calcAuto(record) + calcTele(record) + calcEnd(record);
-};
-
 export async function GET() {
-    let data = await sql`SELECT * FROM testmatches;`;
+    let data = await sql`SELECT * FROM sdr2024;`;
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
-    console.log(rows);
+
+    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+      }
+    }).then(resp => {
+      if (resp.status !== 200) {
+        return {teams: []};
+      }
+      return resp.json();
+    }).then(data => data.teams);
 
     //generate arrays of each value
     let responseObject = {};
@@ -42,8 +29,9 @@ export async function GET() {
         let tele = calcTele(row);
         let end = calcEnd(row);
         if (responseObject[row.team] == undefined) {
+          let frcAPITeamInfo = frcAPITeamData.filter(teamData => teamData.teamNumber == row.team);
           responseObject[row.team] = {
-            team: row.team, teamName: "[name]",
+            team: row.team, teamName: frcAPITeamInfo.length == 0 ? "🤖" : frcAPITeamInfo[0].nameShort,
             auto: [auto], tele: [tele], end: [end],
             avgNotes: {
               speaker: [row.autospeakerscored + row.telenampedspeakerscored],

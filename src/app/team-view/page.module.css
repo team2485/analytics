@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Belleza&display=swap');
+
+.MainDiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: "Belleza", sans-serif;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.matchNav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 10px;
+    gap: 5px;
+}
+
+.matchNav button {
+    border: 1px solid black;
+    padding: 3px 15px;
+    padding-bottom: 0px;
+    border-radius: 5px;
+    font-size: 45px;
+    font-family: "Teko", sans-serif;
+}
+
+.matchNav button:hover {
+    background: black !important;
+    color: yellow !important;
+}
+
+.allianceBoard {
+    display: flex;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    flex-wrap: wrap;
+}
+
+
+.lightBorderBox {
+    flex-grow: 1;
+    border-radius: 10px;
+}
+
+.lightBorderBox h1, .lightBorderBox h2 {
+    text-align: center;
+}
+
+.lightBorderBox h1 {
+    font-size: 45px;
+}
+.scoreBreakdownContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    text-align: center;
+}
+
+.espmBreakdown {
+    display: flex;
+    flex-direction: row;
+}
+
+.espmBreakdown div {
+    text-align: center;
+    flex-grow: 1;
+    border: 1px solid black;
+    padding: 5px;
+    font-size: larger;
+}
+
+.espmBreakdown div:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.espmBreakdown div:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.espmBox {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid black;
+    border-radius: 10px 10px 0 0;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.espmBox::before {
+    content: "ESPM";
+    display: block;
+    position: relative;
+    top: 0;
+    width: 80px;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 10px));
+    border: 1px solid black;
+    background: white;
+    padding: auto;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: -20px;
+    font-size: 20px;
+    font-weight: 800;
+}
+.graphTitle {
+    display: block;
+    position: relative;
+    top: 0;
+    width: auto;
+    border: 1px solid black;
+    background: white;
+    border-radius: 5px;
+    padding: 2px;
+    margin: auto;
+    font-weight: 800;
+    margin-top: 20px;
+    background-color: #eef5ff;
+}
+.graphContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 30%;
+    margin-bottom: 10px;
+}
+.radarContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 30%;
+    margin-bottom: 10px;
+}
+.graphContainer svg {
+    align-self: center;
+    transform: translateX(-20px);
+}
+.CBox {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 75px;
+    font-size: 14px;
+    justify-content: center;
+    text-align: center;
+    border-radius: 5px;
+    align-self: center;
+}
+.CBoxTitle {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.leftColumn .CBox {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 100px;
+    font-size: 14px;
+    justify-content: center;
+    text-align: center;
+    border-radius: 5px;
+}
+.CBoxValue {
+    border-top: 1px solid black;
+}
+.HBox {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    width: 200px;
+    border-radius: 5px;
+}
+.HBoxValue {
+    display: flex;
+    flex-direction: row;
+    border-left: 1px solid black;
+    font-size: 13px;
+    align-content: center;
+    width: 150px;
+    height: 33px;
+}
+.HBoxTitle{
+    display: flex;
+    text-align: center;
+    width: 50px;
+    height: 33px;
+}
+.comments {
+    display: block;
+    position: relative;
+    top: 0;
+    width: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 10px auto;
+    margin-top: -10px;
+}
+.commentsBox {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 300px;
+    align-self: center;
+    border-radius: 5px;
+    height: 50px;
+    padding-bottom: 1px;
+}
+.BigBox {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.chartContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 350px;
+    font-family: "Belleza", sans-serif;
+}
+.valueBoxes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    text-align: center;
+}
+.auto {
+    border-bottom: 4px solid lightgray;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-right: 4px solid lightgray;
+    border-left: 4px solid lightgray;
+}
+.tele {
+    padding-right: 20px;
+    padding-left: 20px;
+    border-right: 4px solid lightgray;
+    border-left: 4px solid lightgray;
+    padding-top: 20px;
+}
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 20px;
+    width: 31%;
+}
+.middleColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 33%;
+}
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-left: 20px;
+    width: 31%;
+}
+.allComments {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    transform: translateY(-10px);
+}
+.MainDiv table {
+    font-size: 14px;
+    width: 210px;
+}
+.MainDiv .rightColumn .differentTable {
+    width: auto;
+    align-self: center;
+}
+.MainDiv .trapTable {
+    width: 110px;
+}
+.CFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.rightColumn .chartContainer h4 {
+    margin-bottom: -30px;
+    transform: translateY(-10px);
+}
+.rightColumn .valueBoxes {
+    margin-top: -20px;
+}
+.MainDiv table, .MainDiv th, .MainDiv tr, .MainDiv td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.commentValue {
+    background-color: #C4EEF6;
+    transform: translateY(-10px);
+    font-family: "Belleza", sans-serif;
+    height: 30px;
+    border: 0px;
+    padding: 5px;
+    text-align: center;
+}
+@media screen and (max-width: 1150px) {
+    .MainDiv {
+        margin: 0px;
+    }
+    .scoreBreakdownContainer {
+        margin-bottom: 0px;
+    }
+    .leftColumn, .middleColumn, .rightColumn {
+        width: 100%;
+        padding: 0;
+    }
+    .leftColumn {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 4px solid lightgray;
+    }
+    .auto, .tele {
+        border: 0px solid white;
+        padding: 0;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+        border-bottom: 4px solid lightgray;
+    }
+    .graphContainer {
+        width: 325px;
+        margin: 10px auto;
+    }}

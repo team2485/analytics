@@ -49,9 +49,34 @@ function MatchView() {
     //setData based on teams selected
   useEffect(() => {
     if (searchParams && allData) {
-      let [team1, team2, team3, team4, team5, team6] = [searchParams.get("team1"), searchParams.get("team2"), searchParams.get("team3"), searchParams.get("team4"), searchParams.get("team5"), searchParams.get("team6")];
-      console.log(searchParams.get("team1"));
-      setData({team1: allData[team1], team2: allData[team2], team3: allData[team3], team4: allData[team4], team5: allData[team5], team6: allData[team6]});
+      if (searchParams.get('match') == null || searchParams.get('match') == "") {
+        //search by teams
+        let [team1, team2, team3, team4, team5, team6] = [searchParams.get("team1"), searchParams.get("team2"), searchParams.get("team3"), searchParams.get("team4"), searchParams.get("team5"), searchParams.get("team6")];
+        setData({team1: allData[team1], team2: allData[team2], team3: allData[team3], team4: allData[team4], team5: allData[team5], team6: allData[team6]});
+      } else {
+        //search by match
+        fetch('/api/get-teams-of-match?match=' + searchParams.get('match')).then(resp => resp.json()).then(data => {
+          if (data.message) {
+            console.log(message);
+          } else {
+            //update url with teams
+            const newParams = new URLSearchParams(searchParams);
+            newParams.set('team1', data.team1);
+            newParams.set('team2', data.team2);
+            newParams.set('team3', data.team3);
+            newParams.set('team4', data.team4);
+            newParams.set('team5', data.team5);
+            newParams.set('team6', data.team6);
+            newParams.delete('match');
+
+            const newUrl = `${window.location.pathname}?${newParams.toString()}`;
+            window.history.replaceState(null, 'Picklist', newUrl);
+            
+            setData({team1: allData[data.team1], team2: allData[data.team2], team3: allData[data.team3], team4: allData[data.team4], team5: allData[data.team5], team6: allData[data.team6]});
+          }
+        })
+
+      }
     }
   }, [searchParams, allData]);
 
@@ -66,39 +91,58 @@ function MatchView() {
   if (searchParams.get("go") != "go") {
     return <div>
       <form className={styles.teamForm}>
-        <label htmlFor="team1">Blue 1:</label>
-        <input id="team1" name="team1" defaultValue={searchParams.get("team1")}></input>
-        <br></br>
-        <label htmlFor="team2">Blue 2:</label>
-        <input id="team2" name="team2" defaultValue={searchParams.get("team2")}></input>
-        <br></br>
-        <label htmlFor="team3">Blue 3:</label>
-        <input id="team3" name="team3" defaultValue={searchParams.get("team3")}></input>
-        <br></br>
-        <label htmlFor="team4">Red 1:</label>
-        <input id="team4" name="team4" defaultValue={searchParams.get("team4")}></input>
-        <br></br>
-        <label htmlFor="team5">Red 2:</label>
-        <input id="team5" name="team5" defaultValue={searchParams.get("team5")}></input>
-        <br></br>
-        <label htmlFor="team6">Red 3:</label>
-        <input id="team6" name="team6" defaultValue={searchParams.get("team6")}></input>
-        <br></br>
-        <input type="hidden" name="go" value="go"></input>
+        <span>View by Teams...</span>
+        <div className={styles.horizontalBox}>
+          <div>
+            <label htmlFor="team1">Blue 1:</label>
+            <br/>
+            <input id="team1" name="team1" defaultValue={searchParams.get("team1")}></input>
+          </div>
+          <div>
+            <label htmlFor="team2">Blue 2:</label>
+            <br/>
+            <input id="team2" name="team2" defaultValue={searchParams.get("team2")}></input>
+          </div>
+          <div>
+            <label htmlFor="team3">Blue 3:</label>
+            <br/>
+            <input id="team3" name="team3" defaultValue={searchParams.get("team3")}></input>
+          </div>
+          <div>
+            <label htmlFor="team4">Red 1:</label>
+            <br/>
+            <input id="team4" name="team4" defaultValue={searchParams.get("team4")}></input>
+          </div>
+          <div>
+            <label htmlFor="team5">Red 2:</label>
+            <br/>
+            <input id="team5" name="team5" defaultValue={searchParams.get("team5")}></input>
+          </div>
+          <div>
+            <label htmlFor="team6">Red 3:</label>
+            <br/>
+            <input id="team6" name="team6" defaultValue={searchParams.get("team6")}></input>
+          </div>
+          <input type="hidden" name="go" value="go"></input>
+        </div>
+        <span>Or by Match...</span>
+        <label htmlFor="match">Match #</label>
+        <input id="match" name="match" type="number"></input>
         <button>Go!</button>
       </form>
     </div>
   }
 
   function AllianceButtons({t1, t2, t3, colors}) {
+    console.log(searchParams.toString())
     return <div className={styles.allianceBoard}>
-      <Link href={"/team-view?team=" + t1.team}>
+      <Link href={`/team-view?team=${t1.team}&${searchParams.toString()}`}>
         <button style={{background: colors[0][1]}}>{t1.team}</button>
       </Link>
-      <Link href={"/team-view?team=" + t2.team}>
+      <Link href={`/team-view?team=${t2.team}&${searchParams.toString()}`}>
       <button style={{background: colors[1][1]}}>{t2.team}</button>
       </Link>
-      <Link href={"/team-view?team=" + t3.team}>
+      <Link href={`/team-view?team=${t3.team}&${searchParams.toString()}`}>
       <button style={{background: colors[2][1]}}>{t3.team}</button>
       </Link>
     </div>
