@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import _ from 'lodash';
 
+export const revalidate = 60; //caches for 60 seconds, 1 minutes
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const matchNumber = searchParams.get("match");
