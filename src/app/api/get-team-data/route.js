@@ -4,6 +4,9 @@ import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy'
 
+export const revalidate = 300; //caches for 300 seconds, 5 minutes
+
+
 export async function GET(request) {
   //get team to analyze
   const { searchParams } = new URL(request.url)
@@ -199,8 +202,6 @@ export async function GET(request) {
       }
     })
   );
-
-  console.log(returnObject[0]);
 
   return NextResponse.json(returnObject[0], {status: 200});
 }
