@@ -167,7 +167,7 @@ export async function GET(request) {
         let onstagePlacement = {center: 0, side: 0};
         arr.forEach(row => {
           //stage
-          if (row.endlocation == 0) stage.none++;
+          if (row.endlocation == null || row.endlocation == 0) stage.none++;
           else if (row.endlocation <= 2) stage.park++;
           else if (row.endlocation == 3) stage.onstage++;
           else if (row.endlocation == 3 && harmony == true) stage.onstageHarmony++;
