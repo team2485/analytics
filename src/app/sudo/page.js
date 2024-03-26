@@ -131,9 +131,9 @@ export default function Sudo() {
       key: "breakdowncomments",
       render: (value, record) => {
         if (value !== null) {
-          return <>Yes</>
+          return <>💥</>
         } else {
-          return <>No</>
+          return <>❌</>
         }
       },
       simple: true,
