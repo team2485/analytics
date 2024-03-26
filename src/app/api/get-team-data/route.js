@@ -33,7 +33,7 @@ export async function GET(request) {
     if (['scoutname', 'generalcomments', 'breakdowncomments', 'defensecomments'].includes(index)) {
       //strings, so join them
       return (arr) => {
-        return arr.map(row => row[index]).join();
+        return arr.map(row => row[index]).join(" - ");
       }
     }
     if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
@@ -75,8 +75,34 @@ export async function GET(request) {
   }
 
   function percentValue(arr, index, value) {
-    return arr.filter(e => e[index] == value)/arr.length;
+    return (arr.filter(e => e[index] == value).length) / arr.length;
   }
+
+
+// let breakdownYes = 0;
+// let breakdownNo = 0;
+
+//   function percentBreakdown(arr) {
+//     if ((data.breakdowncomments !== null)&&(data.breakdowncomments !== ",")) {
+//       breakdownYes++;
+//     } else {
+//       breakdownNo++;
+//     }
+//     return(breakdownYes/(breakdownYes + breakdownNo));
+//   }
+  // -----
+  //   let breakdownCount = 0;
+  //   let notBreakdownCount = 0;
+  //   for(let e = 0; e < arr.length; e++) {
+  //     if (arr[e] !== null) {
+  //       breakdownCount++;
+  //     }
+  //     else if (arr[e] == null) {
+  //       notBreakdownCount++;
+  //     }
+  //   }
+  //   return(breakdownCount / (breakdownCount + notBreakdownCount));
+  // }
 
   const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
     headers: {
@@ -96,9 +122,9 @@ export async function GET(request) {
     summarize({
       team: first('team'),
       teamName: () => teamName,
-      autoScore: median('auto'),
-      teleScore: median('tele'),
-      endScore: median('end'),
+      autoScore: mean('auto'),
+      teleScore: mean('tele'),
+      endScore: mean('end'),
       matchesScouted: (a) => matchesScouted,
       espmOverTime: (arr) => {
         return tidy(arr, select(['espm', 'match']));
@@ -118,8 +144,8 @@ export async function GET(request) {
             ampAvg: median('autoampscored'),
             spkrAvg: median('autospeakerscored'),
             total: a => (median('autoampscored')(arr) + median('autospeakerscored')(arr)),
-            ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr))),
-            spkrSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
+            ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + mean('autoampfailed')(arr))),
+            spkrSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + mean('autospeakerfailed')(arr))),
           }))[0] 
         }
       },
@@ -129,10 +155,10 @@ export async function GET(request) {
           teleNotes: {
             spkrAvg: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr),
             ampAvg: median('teleampscored')(arr),
-            amplified: median('teleampedspeakerscored')(arr) / (median('teleampedspeakerscored')(arr) + median('telenampedspeakerscored')),
+            amplified: mean('teleampedspeakerscored')(arr)/(mean('teleampedspeakerscored')(arr) + mean('telenampedspeakerscored')(arr)),
             total: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('teleampscored')(arr),
-            spkrSuccess: (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr)) / (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('telespeakerfailed')(arr)),
-            ampSuccess: median('teleampscored')(arr) / (median('teleampscored')(arr) + median('teleampfailed')(arr)),
+            spkrSuccess: (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr)) / (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + mean('telespeakerfailed')(arr)),
+            ampSuccess: median('teleampscored')(arr) / (median('teleampscored')(arr) + mean('teleampfailed')(arr)),
           }
         }
       },
@@ -144,7 +170,7 @@ export async function GET(request) {
           if (row.endlocation == 0) stage.none++;
           else if (row.endlocation <= 2) stage.park++;
           else if (row.endlocation == 3) stage.onstage++;
-          else if (row.endlocation == 4) stage.onstageHarmony++;
+          else if (row.endlocation == 3 && harmony == true) stage.onstageHarmony++;
 
           //placement
           if (row.stageplacement && row.stageplacement == 1) {
@@ -166,9 +192,9 @@ export async function GET(request) {
           stage,
           onstageAttempt: n({ predicate: d => d.endlocation > 1 })(arr) / divisor,
           onstageSuccess: n({ predicate: d => d.endlocation > 2 })(arr) / n({ predicate: d => d.endlocation > 1 })(arr),
-          harmonySuccess: n({ predicate: d => d.endlocation > 3 })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
+          harmonySuccess: n({ predicate: d => d.endlocation > 2, predicate: d => d.harmony == true })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
           onstagePlacement,
-          trapSuccess: median('trapscored')(arr) / (median('trapscored')(arr) + median('trapfailed')(arr)),
+          trapSuccess: median('trapscored')(arr) / ((median('trapscored')(arr)) + (mean('trapfailed')(arr))),
           trapAvg: median('trapscored')(arr),
         }
       },

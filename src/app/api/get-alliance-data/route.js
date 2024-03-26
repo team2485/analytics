@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { calcAuto, calcTele, calcEnd } from "@/util/calculations";
+import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy';
 
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 

@@ -232,25 +232,11 @@
     width: 50px;
     height: 33px;
 }
-.comments {
-    display: block;
-    position: relative;
-    top: 0;
-    width: auto;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 2px;
-    margin: 10px auto;
-    margin-top: -10px;
-}
 .commentsBox {
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    width: 300px;
     align-self: center;
-    border-radius: 5px;
-    height: 50px;
+    justify-self: center;
     padding-bottom: 1px;
 }
 .BigBox {
@@ -315,11 +301,11 @@
 .allComments {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 10px;
     justify-content: center;
     text-align: center;
     align-content: center;
-    transform: translateY(-10px);
+    transform: translateY(-25px);
 }
 .MainDiv table {
     font-size: 14px;
