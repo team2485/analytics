@@ -6,11 +6,11 @@ import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n,
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
 export async function GET() {
-    let data = await sql`SELECT * FROM sdr2024;`;
+    let data = await sql`SELECT * FROM ocr2024;`;
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 
-    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
+    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CAOC", {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,

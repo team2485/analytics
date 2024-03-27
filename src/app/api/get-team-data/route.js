@@ -15,8 +15,8 @@ export async function GET(request) {
     return NextResponse.json({message: "ERROR: Invalid team number"}, {status: 400});
   }
 
-  let data = await sql`SELECT * FROM sdr2024 WHERE team = ${team};`;
-  let rows = data.rows;
+  let data = await sql`SELECT * FROM ocr2024 WHERE team = ${team};`;
+  const rows = data.rows;
 
   if (rows.length == 0) {
     return NextResponse.json({message: "ERROR: No data for team " + team}, {status: 404});
@@ -33,7 +33,11 @@ export async function GET(request) {
     if (['scoutname', 'generalcomments', 'breakdowncomments', 'defensecomments'].includes(index)) {
       //strings, so join them
       return (arr) => {
-        return arr.map(row => row[index]).join(" - ");
+        let joined = arr.map(row => row[index]).filter(a => a != null).join(" - ");
+        if (joined == '') {
+          return null;
+        }
+        return joined;
       }
     }
     if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
@@ -78,32 +82,6 @@ export async function GET(request) {
     return (arr.filter(e => e[index] == value).length) / arr.length;
   }
 
-
-// let breakdownYes = 0;
-// let breakdownNo = 0;
-
-//   function percentBreakdown(arr) {
-//     if ((data.breakdowncomments !== null)&&(data.breakdowncomments !== ",")) {
-//       breakdownYes++;
-//     } else {
-//       breakdownNo++;
-//     }
-//     return(breakdownYes/(breakdownYes + breakdownNo));
-//   }
-  // -----
-  //   let breakdownCount = 0;
-  //   let notBreakdownCount = 0;
-  //   for(let e = 0; e < arr.length; e++) {
-  //     if (arr[e] !== null) {
-  //       breakdownCount++;
-  //     }
-  //     else if (arr[e] == null) {
-  //       notBreakdownCount++;
-  //     }
-  //   }
-  //   return(breakdownCount / (breakdownCount + notBreakdownCount));
-  // }
-
   const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
     headers: {
       'Content-Type': 'application/json',
@@ -130,8 +108,8 @@ export async function GET(request) {
         return tidy(arr, select(['espm', 'match']));
       },
       noShow: arr => percentValue(arr, 'noshow', true),
-      breakdown: arr => percentValue(arr, 'breakdown', true),
-      lastBreakdown: arr => arr.filter(e => e.breakdown == true).reduce((a, b) => b.match, "N/A"),
+      breakdown: arr => 1-percentValue(arr, 'breakdowncomments', null),
+      lastBreakdown: arr => arr.filter(e => e.breakdowncomments !== null).reduce((a, b) => b.match, "N/A"),
       scouts: arr => rowsToArray(arr, 'scoutname'),
       generalComments: arr => rowsToArray(arr, 'generalcomments'),
       breakdownComments: arr => rowsToArray(arr, 'breakdowncomments'),
@@ -157,8 +135,8 @@ export async function GET(request) {
             ampAvg: median('teleampscored')(arr),
             amplified: mean('teleampedspeakerscored')(arr)/(mean('teleampedspeakerscored')(arr) + mean('telenampedspeakerscored')(arr)),
             total: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('teleampscored')(arr),
-            spkrSuccess: (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr)) / (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + mean('telespeakerfailed')(arr)),
-            ampSuccess: median('teleampscored')(arr) / (median('teleampscored')(arr) + mean('teleampfailed')(arr)),
+            spkrSuccess: (mean('telenampedspeakerscored')(arr) + mean('teleampedspeakerscored')(arr)) / (mean('telenampedspeakerscored')(arr) + mean('teleampedspeakerscored')(arr) + mean('telespeakerfailed')(arr)),
+            ampSuccess: mean('teleampscored')(arr) / (mean('teleampscored')(arr) + mean('teleampfailed')(arr)),
           }
         }
       },
@@ -169,14 +147,14 @@ export async function GET(request) {
           //stage
           if (row.endlocation == null || row.endlocation == 0) stage.none++;
           else if (row.endlocation <= 2) stage.park++;
+          else if (row.endlocation == 3 && row.harmony == true) stage.onstageHarmony++;
           else if (row.endlocation == 3) stage.onstage++;
-          else if (row.endlocation == 3 && harmony == true) stage.onstageHarmony++;
 
           //placement
-          if (row.stageplacement && row.stageplacement == 1) {
+          if (row.stageplacement != undefined && row.stageplacement == 1) {
             onstagePlacement.center++;
           }
-          else if (row.stageplacement && row.stageplacement == 0) {
+          else if (row.stageplacement != undefined && row.stageplacement == 0) {
             onstagePlacement.side++;
           }
         });
@@ -192,10 +170,10 @@ export async function GET(request) {
           stage,
           onstageAttempt: n({ predicate: d => d.endlocation > 1 })(arr) / divisor,
           onstageSuccess: n({ predicate: d => d.endlocation > 2 })(arr) / n({ predicate: d => d.endlocation > 1 })(arr),
-          harmonySuccess: n({ predicate: d => d.endlocation > 2, predicate: d => d.harmony == true })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
+          harmonySuccess: n({ predicate: d => d.harmony == true })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
           onstagePlacement,
-          trapSuccess: median('trapscored')(arr) / ((median('trapscored')(arr)) + (mean('trapfailed')(arr))),
-          trapAvg: median('trapscored')(arr),
+          trapSuccess: mean('trapscored')(arr) / ((mean('trapscored')(arr)) + (mean('trapfailed')(arr))),
+          trapAvg: mean('trapscored')(arr),
         }
       },
       intake: arr => {
@@ -220,9 +198,9 @@ export async function GET(request) {
           {name: "Trap Speed", rating: averageQualitative('trapspeed', arr)},
           {name: "Amp Speed", rating: averageQualitative('ampspeed', arr)},
           {name: "Speaker Speed", rating: averageQualitative('speakerspeed', arr)},
-          {name: "Stage Hazard", rating: 5-(averageQualitative('stagehazard', arr))},
+          {name: "Stage Hazard*", rating: 5-(averageQualitative('stagehazard', arr))},
           {name: "Defense Evasion", rating: averageQualitative('defenseevasion', arr)},
-          {name: "Aggression", rating: 5-(averageQualitative('aggression', arr))},
+          {name: "Aggression*", rating: 5-(averageQualitative('aggression', arr))},
           {name: "Maneuverability", rating: averageQualitative('maneuverability', arr)},
         ]
       }
