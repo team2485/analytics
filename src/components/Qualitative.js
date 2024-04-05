@@ -49,7 +49,12 @@ export default function Qualitative ({ visibleName, internalName, description, s
                     Did Not Try To Harmonize 
                 </div>
             )}
+            {rating === -1 && description == "Ability To Play Defense" && (
 
+                <div>
+                    Did Not Defend  
+                </div>
+            )}
 
             {rating === -1 && description == "Defense Evasion Ability" && (
 

@@ -273,6 +273,11 @@ export default function Home() {
                   description={"Maneuverability"}
                 />
                 <Qualitative
+                  visibleName={"Defense Played"}
+                  internalName={"defenseplayed"}
+                  description={"Ability To Play Defense"}
+                />
+                <Qualitative
                   visibleName={"Defense Evasion"}
                   internalName={"defenseevasion"}
                   description={"Defense Evasion Ability"}
