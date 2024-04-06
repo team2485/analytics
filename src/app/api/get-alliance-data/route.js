@@ -65,7 +65,7 @@ export async function GET() {
           teamData.auto.push(auto);
           teamData.tele.push(tele);
           teamData.end.push(end);
-          data.passedNotes.push(row.passednotes);
+          teamData.passedNotes.push(row.passednotes);
           teamData.avgNotes.speaker.push(row.autospeakerscored + row.telenampedspeakerscored);
           teamData.avgNotes.ampedSpeaker.push(row.teleampedspeakerscored);
           teamData.avgNotes.amp.push(row.autoampscored + row.teleampscored);
