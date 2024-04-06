@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import _ from 'lodash';
 
+export const revalidate = 60; //caches for 60 seconds, 1 minutes
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const matchNumber = searchParams.get("match");
@@ -11,7 +13,7 @@ export async function GET(request) {
     );
   }
 
-  const matchData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/schedule/CAPH?tournamentLevel=Qualification",{
+  const matchData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/schedule/CAOC?tournamentLevel=Qualification",{
       headers: {
         "Content-Type": "application/json",
         Authorization: "Basic " + process.env.FIRST_AUTH_TOKEN,

@@ -57,7 +57,7 @@ function MatchView() {
         //search by match
         fetch('/api/get-teams-of-match?match=' + searchParams.get('match')).then(resp => resp.json()).then(data => {
           if (data.message) {
-            console.log(message);
+            console.log(data.message);
           } else {
             //update url with teams
             const newParams = new URLSearchParams(searchParams);
@@ -214,7 +214,8 @@ function MatchView() {
     const endgameData = [{ x: 'None', y: teamData.endgame.none },
               { x: 'Park', y: teamData.endgame.park },
               { x: 'Onstage', y: teamData.endgame.onstage },
-              { x: 'Harmony', y: teamData.endgame.onstageHarmony }];
+              { x: 'Harmony', y: teamData.endgame.onstageHarmony },
+              { x: 'Fail', y: teamData.endgame.fail}];
 
     return <div className={styles.lightBorderBox}>
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
@@ -227,17 +228,16 @@ function MatchView() {
           <div style={{background: colors[1]}}>E: {Math.round(10*teamData.end)/10}</div>
         </div>
       </div>
-      <br></br>
-      <div className={styles.chartContainer}>
+      <div className={styles.barchartContainer}>
         <h2>Average Note Placement</h2>
-        <ResponsiveContainer width="100%">
+        <ResponsiveContainer width="100%" height={225}>
           <BarChart
             data={[{
               place: "Spkr",
               value: Math.round(10*teamData.avgNotes.speaker)/10
             },
             {
-              place: "⬆️ Spkr",
+              place: "⬆️",
               value: Math.round(10*teamData.avgNotes.ampedSpeaker)/10
             },
             {
@@ -248,12 +248,6 @@ function MatchView() {
               place: "Trap",
               value: Math.round(10*teamData.avgNotes.trap)/10
             }]}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 30,
-            }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="place" width="20"/>
@@ -263,9 +257,8 @@ function MatchView() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <br></br>
       <div className={styles.chartContainer}>
-        <h2>Endgame %</h2>
+        <h2 style={{marginBottom: "-40px"}}>Endgame %</h2>
         <VictoryPie
           padding={100}
           data={endgameData}
@@ -273,8 +266,6 @@ function MatchView() {
           labels={({ datum }) => `${datum.x}: ${Math.round(datum.y)}%`}
         />
       </div>
-      <br></br>
-      <br></br>
     </div>
   }
 
@@ -338,9 +329,9 @@ function MatchView() {
       <div className={styles.allianceGraphs}>
         <div className={styles.graphContainer}>
           <h2>Q Ratings</h2>
-          <RadarChart outerRadius={90} width={420} height={300} data={radarData}>
+          <RadarChart outerRadius={75} width={370} height={300} data={radarData}>
             <PolarGrid />
-            <PolarAngleAxis dataKey="qual" />
+            <PolarAngleAxis dataKey="qual" fontSize={14}/>
             <PolarRadiusAxis angle={10} domain={[0, 5]} />
             <Radar name={data.team1?.team || "-1"} dataKey="team1" stroke={COLORS[0][0]} fill={COLORS[0][3]} fillOpacity={0.3} />
             <Radar name={data.team2?.team || "-1"} dataKey="team2" stroke={COLORS[1][0]} fill={COLORS[1][3]} fillOpacity={0.3} />
@@ -348,9 +339,10 @@ function MatchView() {
             <Legend />
           </RadarChart>
         </div>
-        <div className={styles.graphContainer}>
+        <div className={styles.lineGraphContainer}>
           <h2>ESPM / time</h2>
-          <LineChart width={450} height={300} data={espmData}>
+          <br></br>
+          <LineChart width={380} height={275} data={espmData}>
             <XAxis dataKey="name"/>
             <YAxis/>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
@@ -361,9 +353,9 @@ function MatchView() {
         </div>
         <div className={styles.graphContainer}>
           <h2>Q Ratings</h2>
-          <RadarChart outerRadius={90} width={420} height={300} data={radarData}>
+          <RadarChart outerRadius={75} width={370} height={300} data={radarData}>
             <PolarGrid />
-            <PolarAngleAxis dataKey="qual" />
+            <PolarAngleAxis dataKey="qual" fontSize={14}/>
             <PolarRadiusAxis angle={10} domain={[0, 5]} />
             <Radar name={data.team4?.team || "-1"} dataKey="team4" stroke={COLORS[3][0]} fill={COLORS[3][3]} fillOpacity={0.3} />
             <Radar name={data.team5?.team || "-1"} dataKey="team5" stroke={COLORS[4][0]} fill={COLORS[4][3]} fillOpacity={0.3} />

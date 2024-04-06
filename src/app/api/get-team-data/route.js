@@ -4,19 +4,22 @@ import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy'
 
+export const revalidate = 300; //caches for 300 seconds, 5 minutes
+
+
 export async function GET(request) {
   //get team to analyze
   const { searchParams } = new URL(request.url)
   const team = searchParams.get('team')
   if (_.isNumber(+team) == false) {
-    return NextResponse.json({message: "Invalid team number"}, {status: 400});
+    return NextResponse.json({message: "ERROR: Invalid team number"}, {status: 400});
   }
 
-  let data = await sql`SELECT * FROM sdr2024 WHERE team = ${team};`;
-  let rows = data.rows;
+  let data = await sql`SELECT * FROM ocr2024 WHERE team = ${team};`;
+  const rows = data.rows;
 
   if (rows.length == 0) {
-    return NextResponse.json({message: "No data for team"}, {status: 404});
+    return NextResponse.json({message: "ERROR: No data for team " + team}, {status: 404});
   }
 
   //function returns a function based on column index: the returned function will summarize each column
@@ -30,7 +33,11 @@ export async function GET(request) {
     if (['scoutname', 'generalcomments', 'breakdowncomments', 'defensecomments'].includes(index)) {
       //strings, so join them
       return (arr) => {
-        return arr.map(row => row[index]).join();
+        let joined = arr.map(row => row[index]).filter(a => a != null).join(" - ");
+        if (joined == '') {
+          return null;
+        }
+        return joined;
       }
     }
     if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
@@ -72,7 +79,7 @@ export async function GET(request) {
   }
 
   function percentValue(arr, index, value) {
-    return arr.filter(e => e[index] == value)/arr.length;
+    return (arr.filter(e => e[index] == value).length) / arr.length;
   }
 
   const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
@@ -93,16 +100,16 @@ export async function GET(request) {
     summarize({
       team: first('team'),
       teamName: () => teamName,
-      autoScore: median('auto'),
-      teleScore: median('tele'),
-      endScore: median('end'),
+      autoScore: mean('auto'),
+      teleScore: mean('tele'),
+      endScore: mean('end'),
       matchesScouted: (a) => matchesScouted,
       espmOverTime: (arr) => {
         return tidy(arr, select(['espm', 'match']));
       },
       noShow: arr => percentValue(arr, 'noshow', true),
-      breakdown: arr => percentValue(arr, 'breakdown', true),
-      lastBreakdown: arr => arr.filter(e => e.breakdown == true).reduce((a, b) => b.match, "N/A"),
+      breakdown: arr => 1-percentValue(arr, 'breakdowncomments', null),
+      lastBreakdown: arr => arr.filter(e => e.breakdowncomments !== null).reduce((a, b) => b.match, "N/A"),
       scouts: arr => rowsToArray(arr, 'scoutname'),
       generalComments: arr => rowsToArray(arr, 'generalcomments'),
       breakdownComments: arr => rowsToArray(arr, 'breakdowncomments'),
@@ -115,8 +122,8 @@ export async function GET(request) {
             ampAvg: median('autoampscored'),
             spkrAvg: median('autospeakerscored'),
             total: a => (median('autoampscored')(arr) + median('autospeakerscored')(arr)),
-            ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + median('autoampfailed')(arr))),
-            spkrSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + median('autospeakerfailed')(arr))),
+            ampSuccess: a => (median('autoampscored')(arr) / (median('autoampscored')(arr) + mean('autoampfailed')(arr))),
+            spkrSuccess: a => (median('autospeakerscored')(arr) / (median('autospeakerscored')(arr) + mean('autospeakerfailed')(arr))),
           }))[0] 
         }
       },
@@ -126,10 +133,10 @@ export async function GET(request) {
           teleNotes: {
             spkrAvg: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr),
             ampAvg: median('teleampscored')(arr),
-            amplified: median('teleampedspeakerscored')(arr) / (median('teleampedspeakerscored')(arr) + median('telenampedspeakerscored')),
+            amplified: mean('teleampedspeakerscored')(arr)/(mean('teleampedspeakerscored')(arr) + mean('telenampedspeakerscored')(arr)),
             total: median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('teleampscored')(arr),
-            spkrSuccess: (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr)) / (median('telenampedspeakerscored')(arr) + median('teleampedspeakerscored')(arr) + median('telespeakerfailed')(arr)),
-            ampSuccess: median('teleampscored')(arr) / (median('teleampscored')(arr) + median('teleampfailed')(arr)),
+            spkrSuccess: (mean('telenampedspeakerscored')(arr) + mean('teleampedspeakerscored')(arr)) / (mean('telenampedspeakerscored')(arr) + mean('teleampedspeakerscored')(arr) + mean('telespeakerfailed')(arr)),
+            ampSuccess: mean('teleampscored')(arr) / (mean('teleampscored')(arr) + mean('teleampfailed')(arr)),
           }
         }
       },
@@ -138,16 +145,16 @@ export async function GET(request) {
         let onstagePlacement = {center: 0, side: 0};
         arr.forEach(row => {
           //stage
-          if (row.endlocation == 0) stage.none++;
+          if (row.endlocation == null || row.endlocation == 0) stage.none++;
           else if (row.endlocation <= 2) stage.park++;
+          else if (row.endlocation == 3 && row.harmony == true) stage.onstageHarmony++;
           else if (row.endlocation == 3) stage.onstage++;
-          else if (row.endlocation == 4) stage.onstageHarmony++;
 
           //placement
-          if (row.stageplacement && row.stageplacement == 1) {
+          if (row.stageplacement != undefined && row.stageplacement == 1) {
             onstagePlacement.center++;
           }
-          else if (row.stageplacement && row.stageplacement == 0) {
+          else if (row.stageplacement != undefined && row.stageplacement == 0) {
             onstagePlacement.side++;
           }
         });
@@ -163,10 +170,10 @@ export async function GET(request) {
           stage,
           onstageAttempt: n({ predicate: d => d.endlocation > 1 })(arr) / divisor,
           onstageSuccess: n({ predicate: d => d.endlocation > 2 })(arr) / n({ predicate: d => d.endlocation > 1 })(arr),
-          harmonySuccess: n({ predicate: d => d.endlocation > 3 })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
+          harmonySuccess: n({ predicate: d => d.harmony == true })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
           onstagePlacement,
-          trapSuccess: median('trapscored')(arr) / (median('trapscored')(arr) + median('trapfailed')(arr)),
-          trapAvg: median('trapscored')(arr),
+          trapSuccess: mean('trapscored')(arr) / ((mean('trapscored')(arr)) + (mean('trapfailed')(arr))),
+          trapAvg: mean('trapscored')(arr),
         }
       },
       intake: arr => {
@@ -191,16 +198,14 @@ export async function GET(request) {
           {name: "Trap Speed", rating: averageQualitative('trapspeed', arr)},
           {name: "Amp Speed", rating: averageQualitative('ampspeed', arr)},
           {name: "Speaker Speed", rating: averageQualitative('speakerspeed', arr)},
-          {name: "Stage Hazard", rating: averageQualitative('stagehazard', arr)},
+          {name: "Stage Hazard*", rating: 5-(averageQualitative('stagehazard', arr))},
           {name: "Defense Evasion", rating: averageQualitative('defenseevasion', arr)},
-          {name: "Aggression", rating: averageQualitative('aggression', arr)},
+          {name: "Aggression*", rating: 5-(averageQualitative('aggression', arr))},
           {name: "Maneuverability", rating: averageQualitative('maneuverability', arr)},
         ]
       }
     })
   );
-
-  console.log(returnObject[0]);
 
   return NextResponse.json(returnObject[0], {status: 200});
 }

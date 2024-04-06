@@ -13,7 +13,7 @@ export async function POST(req){
    //if noshow add row
    if(body.noshow){
       console.log('no show!');
-      let resp = await sql`INSERT INTO sdr2024 (ScoutName, ScoutTeam, Team, Match, NoShow) VALUES(${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.noshow})`;
+      let resp = await sql`INSERT INTO ocr2024 (ScoutName, ScoutTeam, Team, Match, NoShow) VALUES(${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.noshow})`;
       return NextResponse.json({message: "Success!"}, {status: 201});
    }
 

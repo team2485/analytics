@@ -62,24 +62,60 @@ function TeamView() {
     ["#9F5EB5", "#C284D7", "#DBA2ED", "#F3D8FB"],
   ]
     //get data
-    useEffect(() => {
-      //TODO: Get Data (from localstorage if cached recently)
-      if (team) {
-        fetch("/api/get-team-data?team=" + team).then(resp => resp.json()).then(data => {
+    function fetchTeamData(team) {
+      fetch("/api/get-team-data?team=" + team)
+        .then(response => {
+          // if (!response.ok) {
+          //   throw new Error("Network response was not ok");
+          // }
+          return response.json();
+        })
+        .then(data => {
           if (data.message) {
-            console.log(data.message);
+            setData({ message: data.message });
           } else {
             setData(data);
           }
+        })
+        .catch(error => {
+          console.error("Fetch error:", error);
         });
+    }
+    useEffect(() => {//run when team changes
+      if (team) {
+        fetchTeamData(team);
       }
     }, [team]);
+    // useEffect(() => {
+    //   //TODO: Get Data (from localstorage if cached recently)
+    //   if (team) {
+    //     fetch("/api/get-team-data?team=" + team).then(resp => resp.json()).then(data => {                                      
+    //        if (data.message) {
+    //           setData({message: data.message});
+    //           } else {
+    //         setData(data);
+    //       }
+    //     });
+    //   }
+    // }, [team]);
 
 
-  console.log(data);
+  if (team == null || team == '' || (data && data.message)) {
+    return (
+      <div>
+        <form className={styles.teamInputForm}>
+          <span>{data?.message}</span>
+          <label for="team">Team: </label>
+          <input id="team" name="team" placeholder="Team #" type="number"></input>
+          <br></br>
+          <button>Go!</button>
+        </form>
+      </div>
+    )
+  }
 
   if (data == null) {
-    return(
+    return (
       <div>
         <h1>Loading...</h1>
       </div>
@@ -113,9 +149,11 @@ function TeamView() {
 
   function Comments({title, value, color1, color2}) {
     return (
-      <div style={{backgroundColor: color2}} className={styles.commentsBox}>
-        <p style={{backgroundColor: color1}} className={styles.comments}>{title}</p>
-        <input className={styles.commentValue} value={value}></input>
+      <div className={styles.commentsBox}>
+        <table style={{width: "350px"}}>
+          <tr style={{backgroundColor: color1}}>{title}</tr>
+          <tr style={{backgroundColor: color2}}><td>{value}</td></tr>
+        </table>
       </div>
     )
   }
@@ -142,6 +180,7 @@ function TeamView() {
     )
   }
 
+
   return <div>
     <TopBar></TopBar>
     <div className={styles.MainDiv}>
@@ -150,7 +189,7 @@ function TeamView() {
       <h3>{data.teamName}</h3>
       <div className={styles.lightBorderBox}>
         <div className={styles.scoreBreakdownContainer}>
-          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{Math.round(10*data.autoScore + data.teleScore + data.endScore)/10}</div>
+          <div style={{background: Colors[0][1]}} className={styles.espmBox}>{Math.round(10*(data.autoScore + data.teleScore + data.endScore))/10}</div>
           <div className={styles.espmBreakdown}>
             <div style={{background: Colors[0][3]}}>A: {Math.round(10*data.autoScore)/10}</div>
             <div style={{background: Colors[0][3]}}>T: {Math.round(10*data.teleScore)/10}</div>
@@ -174,14 +213,14 @@ function TeamView() {
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={Math.round(1000*data.breakdown)/10+"%"}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Matches Scouted"} value={data.matchesScouted}></CBox>
-        <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={(data.scouts).join(", ")}></HBox>
+        <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={data.scouts}></HBox>
       </div>
       <br></br>
       <br></br>
       <div className={styles.allComments}>
-        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"General Comments"} value={(data.generalComments).join(", ")}></Comments>
-        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown Comments"} value={(data.breakdownComments).join(", ")}></Comments>
-        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Defense Comments"} value={(data.defenseComments).join(", ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"General Comments"} value={data.generalComments}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown Comments"} value={data.breakdownComments}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Defense Comments"} value={data.defenseComments}></Comments>
       </div>
       </div>
       <div className={styles.middleColumn}>
@@ -306,8 +345,8 @@ function TeamView() {
               <td style={{backgroundColor: Colors[3][2], width: "50px"}}>Source</td>
             </tr>
             <tr>
-              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px", height: "30px"}}><input type="checkbox" checked={data.intake.ground}></input></td>
-              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px", height: "30px"}}><input type="checkbox" checked={data.intake.source}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px", height: "30px"}}><input id="groundcheck" type="checkbox" readOnly checked={data.intake.ground}></input></td>
+              <td className={styles.intakeCheck} style={{backgroundColor: Colors[3][3], width: "50px", height: "30px"}}><input id="sourcecheck" type="checkbox" readOnly checked={data.intake.source}></input></td>
             </tr>
           </table>
           <CBox color1={Colors[3][2]} color2={Colors[3][3]} title={"Harmony"} value={Math.round(1000*data.endgame.harmonySuccess)/10+"%"}></CBox>
@@ -320,6 +359,7 @@ function TeamView() {
               <PolarRadiusAxis angle={10} domain={[0, 5]} />
               <Radar name={data.team} dataKey="rating" stroke={Colors[3][1]} fill={Colors[3][1]} fillOpacity={0.3} strokeWidth="3" />
             </RadarChart>
+            <p>*Inverted so outside is good</p>
           </div>
       </div>
     </div>

@@ -127,11 +127,11 @@ export default function Sudo() {
     "ScoutTeam",
     {
       title: "Breakdown",
-      dataIndex: "breakdown",
-      key: "breakdown",
+      dataIndex: "breakdowncomments",
+      key: "breakdowncomments",
       render: (value, record) => {
-        if (value == true) {
-          return <>💥</>
+        if (value !== null) {
+          return <>Yes</>
         } else {
           return <>No</>
         }

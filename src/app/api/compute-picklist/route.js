@@ -6,10 +6,10 @@ import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 export async function POST(request) {
   const requestBody = await request.json(); // e.g.   [ [ 'ESPM', '0' ], [ 'Maneuverability', '0' ] ]
 
-  let data = await sql`SELECT * FROM sdr2024;`;
+  let data = await sql`SELECT * FROM ocr2024;`;
   let rows = data.rows;
 
-  const frcAPITeamRankings = await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CAPH", {
+  const frcAPITeamRankings = await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CAOC", {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,

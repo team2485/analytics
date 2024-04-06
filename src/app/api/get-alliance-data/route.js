@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { calcAuto, calcTele, calcEnd } from "@/util/calculations";
+import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy';
 
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
 export async function GET() {
-    let data = await sql`SELECT * FROM sdr2024;`;
+    let data = await sql`SELECT * FROM ocr2024;`;
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 
-    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
+    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CAOC", {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
@@ -41,9 +42,10 @@ export async function GET() {
             },
             endgame: {
               none: row.endlocation <= 0 || row.endlocation > 4 ? 1 : 0,
-              park: row.endlocation == 1 || row.endlocation == 2 ? 1 : 0,
+              park: row.endlocation == 1 ? 1 : 0,
               onstage: row.endlocation == 3 ? 1 : 0,
               onstageHarmony: row.endlocation == 4 ? 1 : 0,
+              fail: row.endlocation == 2 ? 1 : 0,
             },
             qualitative: {
               onstagespeed: [row.onstagespeed],
@@ -80,9 +82,9 @@ export async function GET() {
           teamData.qualitative.trapspeed.push(row.trapspeed);
           teamData.qualitative.ampspeed.push(row.ampspeed);
           teamData.qualitative.speakerspeed.push(row.speakerspeed);
-          teamData.qualitative.stagehazard.push(row.stagehazard);
+          teamData.qualitative.stagehazard.push(5-row.stagehazard);
           teamData.qualitative.defenseevasion.push(row.defenseevasion);
-          teamData.qualitative.aggression.push(row.aggression);
+          teamData.qualitative.aggression.push(5-row.aggression);
           teamData.qualitative.maneuverability.push(row.maneuverability);
         }
       }
