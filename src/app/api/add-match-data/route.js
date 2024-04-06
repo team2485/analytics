@@ -13,7 +13,7 @@ export async function POST(req){
    //if noshow add row
    if(body.noshow){
       console.log('no show!');
-      let resp = await sql`INSERT INTO ocr2024 (ScoutName, ScoutTeam, Team, Match, NoShow) VALUES(${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.noshow})`;
+      let resp = await sql`INSERT INTO champs2024 (ScoutName, ScoutTeam, Team, Match, NoShow) VALUES(${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.noshow})`;
       return NextResponse.json({message: "Success!"}, {status: 201});
    }
 
@@ -31,7 +31,7 @@ export async function POST(req){
       return NextResponse.json({message: "Invalid Endgame Data!"}, {status: 400});
    }
    //check qualitative
-   if(!(_.isNumber(body.maneuverability)&&_.isNumber(body.aggression)&&_.isNumber(body.defenseevasion)&&_.isNumber(body.speakerspeed)&&_.isNumber(body.ampspeed)&&_.isBoolean(body.gndintake)&&_.isBoolean(body.srcintake)&&_.isNumber(body.stagehazard)&&_.isNumber(body.trapspeed)&&_.isNumber(body.onstagespeed)&&_.isNumber(body.harmonyspeed)&&_.isNumber(body.defenseplayed))){
+   if(!(_.isNumber(body.maneuverability)&&_.isNumber(body.aggression)&&_.isNumber(body.defenseevasion)&&_.isNumber(body.speakerspeed)&&_.isNumber(body.ampspeed)&&_.isBoolean(body.gndintake)&&_.isBoolean(body.srcintake)&&_.isNumber(body.stagehazard)&&_.isNumber(body.trapspeed)&&_.isNumber(body.onstagespeed)&&_.isNumber(body.harmonyspeed)&&_.isNumber(body.defenserating))){
       return NextResponse.json({message: "Invalid Qualitative Data!"}, {status: 400});
    }
    //check comments
@@ -40,7 +40,7 @@ export async function POST(req){
    }
 
    //add row
-   let resp = await sql`INSERT INTO sdr2024 (ScoutName, ScoutTeam, Team, Match, Breakdown, NoShow, Leave, AutoAmpScored, AutoAmpFailed, AutoSpeakerScored, AutoSpeakerFailed, PassedNotes, TeleAmpScored, TeleAmpFailed, TeleNAmpedSpeakerScored, TeleAmpedSpeakerScored, TeleSpeakerFailed, EndLocation, StagePlacement, Harmony, TrapScored, TrapFailed, Maneuverability, Aggression, DefensePlayed, DefenseEvasion, SpeakerSpeed, AmpSpeed, GndIntake, SrcIntake, StageHazard, TrapSpeed, OnStageSpeed, HarmonySpeed, GeneralComments, BreakdownComments, DefenseComments)
-   VALUES (${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.breakdown}, ${body.noshow}, ${body.leave}, ${body.autoampscored}, ${body.autoampfailed}, ${body.autospeakerscored}, ${body.autospeakerfailed}, ${body.passednotes}, ${body.teleampscored}, ${body.teleampfailed}, ${body.telenampedspeakerscored}, ${body.teleampedspeakerscored}, ${body.telespeakerfailed}, ${body.endlocation}, ${body.stageplacement}, ${body.harmony}, ${body.trapscored}, ${body.trapfailed}, ${body.maneuverability}, ${body.aggression}, ${body.defenseplayed}, ${body.defenseevasion}, ${body.speakerspeed}, ${body.ampspeed}, ${body.gndintake}, ${body.srcintake}, ${body.stagehazard}, ${body.trapspeed}, ${body.onstagespeed}, ${body.harmonyspeed}, ${body.generalcomments}, ${body.breakdowncomments}, ${body.defensecomments})`;
+   let resp = await sql`INSERT INTO champs2024 (ScoutName, ScoutTeam, Team, Match, Breakdown, NoShow, Leave, AutoAmpScored, AutoAmpFailed, AutoSpeakerScored, AutoSpeakerFailed, PassedNotes, TeleAmpScored, TeleAmpFailed, TeleNAmpedSpeakerScored, TeleAmpedSpeakerScored, TeleSpeakerFailed, EndLocation, StagePlacement, Harmony, TrapScored, TrapFailed, Maneuverability, Aggression, DefenseRating, DefenseEvasion, SpeakerSpeed, AmpSpeed, GndIntake, SrcIntake, StageHazard, TrapSpeed, OnStageSpeed, HarmonySpeed, GeneralComments, BreakdownComments, DefenseComments)
+   VALUES (${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.breakdown}, ${body.noshow}, ${body.leave}, ${body.autoampscored}, ${body.autoampfailed}, ${body.autospeakerscored}, ${body.autospeakerfailed}, ${body.passednotes}, ${body.teleampscored}, ${body.teleampfailed}, ${body.telenampedspeakerscored}, ${body.teleampedspeakerscored}, ${body.telespeakerfailed}, ${body.endlocation}, ${body.stageplacement}, ${body.harmony}, ${body.trapscored}, ${body.trapfailed}, ${body.maneuverability}, ${body.aggression}, ${body.defenserating}, ${body.defenseevasion}, ${body.speakerspeed}, ${body.ampspeed}, ${body.gndintake}, ${body.srcintake}, ${body.stagehazard}, ${body.trapspeed}, ${body.onstagespeed}, ${body.harmonyspeed}, ${body.generalcomments}, ${body.breakdowncomments}, ${body.defensecomments})`;
    return NextResponse.json({message: "Success!"}, {status: 201});
 }
