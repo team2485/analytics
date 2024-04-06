@@ -88,10 +88,12 @@ export async function POST(request) {
       tele: calcTele,
       end: calcEnd,
       espm: (d) => d.auto + d.tele + d.end,
+      speaker: (d) => d.autospeakerscored + d.telenampedspeakerscored + d.teleampedspeakerscored,
+      amp: (d) => d.autoampscored + d.teleampscored,
       speed: calcSpeed,
       movement: calcMovement,
     }),
-    select(['team', 'auto', 'tele', 'end', 'espm', 'speed', 'movement'])
+    select(['team', 'auto', 'tele', 'end', 'espm', 'speaker', 'amp', 'speed', 'movement'])
   );
   
   //calculate maxes
@@ -103,6 +105,8 @@ export async function POST(request) {
       tele: d => d.tele/maxes.tele,
       end: d => d.end/maxes.end,
       espm: d => d.espm/maxes.espm,
+      speaker: d => d.speaker/maxes.speaker,
+      amp: d => d.amp/maxes.amp,
       speed: d => d.speed/maxes.speed,
       movement: d => d.movement/maxes.movement,
       score: d => {
