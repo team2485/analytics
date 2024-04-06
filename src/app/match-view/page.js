@@ -17,12 +17,12 @@ function MatchView() {
   const [data, setData] = useState(false);
   const searchParams = useSearchParams();
   const COLORS = [
-    ["#B7F7F2", "#A1E7E1", "#75C6BF", "#5EB5AE"],
-    ["#8AB8FD", "#7D99FF", "#6184DD", "#306BDD"],
-    ["#E1BFFA", "#E1A6FE", "#CA91F2", "#A546DF"],
-    ["#FFC6F6", "#ECA6E0", "#ED75D9", "#C342AE"],
-    ["#FABFC4", "#FEA6AD", "#F29199", "#E67983"],
-    ["#FFE3D3", "#EBB291", "#E19A70", "#D7814F"],
+    ["#B7F7F2", "#A1E7E1", "#75C6BF", "#58ada6", "#458782"],
+    ["#8AB8FD", "#7D99FF", "#6184DD", "#306BDD", "#2755b0"],
+    ["#E1BFFA", "#E1A6FE", "#CA91F2", "#b273d9", "#A546DF"],
+    ["#FFC6F6", "#ECA6E0", "#ED75D9", "#db51c5", "#C342AE"],
+    ["#FABFC4", "#FEA6AD", "#F29199", "#E67983", "#db606b"],
+    ["#FFE3D3", "#EBB291", "#E19A70", "#D7814F", "#c26d3c"],
   ];
 
   const defaultTeam = {
@@ -37,7 +37,8 @@ function MatchView() {
       amp: 0,
       trap: 0,
     },
-    endgame: { none: 100, park: 0, onstage: 0, onstageHarmony: 0},
+    passedNotes: 9,
+    endgame: { none: 100, park: 0, onstage: 0, onstageHarmony: 0, fail: 0,},
     qualitative: { onstagespeed: 0, harmonyspeed: 0, trapspeed: 0, ampspeed: 0, speakerspeed: 0, stagehazard: 0, defenseevasion: 0, aggression: 0, maneuverability: 0}
   }
 
@@ -212,10 +213,10 @@ function MatchView() {
     };
 
     const endgameData = [{ x: 'None', y: teamData.endgame.none },
+              { x: 'Fail', y: teamData.endgame.fail},
               { x: 'Park', y: teamData.endgame.park },
               { x: 'Onstage', y: teamData.endgame.onstage },
-              { x: 'Harmony', y: teamData.endgame.onstageHarmony },
-              { x: 'Fail', y: teamData.endgame.fail}];
+              { x: 'Harmony', y: teamData.endgame.onstageHarmony },];
 
     return <div className={styles.lightBorderBox}>
       <h1 style={{color: colors[3]}}>{teamData.team}</h1>
@@ -247,6 +248,10 @@ function MatchView() {
             {
               place: "Trap",
               value: Math.round(10*teamData.avgNotes.trap)/10
+            },
+            {
+              place: "Pass",
+              value: Math.round(10*teamData.passedNotes)/10
             }]}
           >
             <CartesianGrid strokeDasharray="3 3" />

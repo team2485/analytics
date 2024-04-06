@@ -40,6 +40,7 @@ export async function GET() {
               amp: [row.autoampscored + row.teleampscored],
               trap: [row.trapscored],
             },
+            passedNotes: [row.passednotes],
             endgame: {
               none: row.endlocation <= 0 || row.endlocation > 4 ? 1 : 0,
               park: row.endlocation == 1 ? 1 : 0,
@@ -64,16 +65,19 @@ export async function GET() {
           teamData.auto.push(auto);
           teamData.tele.push(tele);
           teamData.end.push(end);
+          data.passedNotes.push(row.passednotes);
           teamData.avgNotes.speaker.push(row.autospeakerscored + row.telenampedspeakerscored);
           teamData.avgNotes.ampedSpeaker.push(row.teleampedspeakerscored);
           teamData.avgNotes.amp.push(row.autoampscored + row.teleampscored);
           teamData.avgNotes.trap.push(row.trapscored);
           if (row.endlocation == 1) {
             teamData.endgame.park++;
-          } else if (row.endlocation == 2 || row.endlocation == 3) {
+          } else if (row.endlocation == 3) {
             teamData.endgame.onstage++; 
           } else if (row.endlocation == 4) {
             teamData.endgame.onstageHarmony++;
+          } else if (row.endlocation == 2) {
+            teamData.endgame.fail++;
           } else {
             teamData.endgame.none++;
           }
@@ -107,16 +111,17 @@ export async function GET() {
       teamObject.auto = average(teamObject.auto);
       teamObject.tele = average(teamObject.tele);
       teamObject.end = average(teamObject.end);
+      teamObject.passedNotes = average(teamObject.passedNotes);
       teamObject.avgNotes.speaker = average(teamObject.avgNotes.speaker);
       teamObject.avgNotes.ampedSpeaker = average(teamObject.avgNotes.ampedSpeaker);
       teamObject.avgNotes.amp = average(teamObject.avgNotes.amp);
       teamObject.avgNotes.trap = average(teamObject.avgNotes.trap);
-      let {none, park, onstage, onstageHarmony} = teamObject.endgame;
-      let locationSum = none + park + onstage + onstageHarmony;
+      let {none, park, onstage, onstageHarmony, fail} = teamObject.endgame;
+      let locationSum = none + park + onstage + onstageHarmony + fail;
       if (locationSum ==  0) {
-        teamObject.endgame = {none: 100, park: 0, onstage: 0, onstageHarmony: 0}
+        teamObject.endgame = {none: 100, park: 0, onstage: 0, onstageHarmony: 0, fail: 0,}
       } else {
-        teamObject.endgame = {none: Math.round(100*none/locationSum), park: Math.round(100*park/locationSum), onstage: Math.round(100*onstage/locationSum), onstageHarmony: Math.round(100*onstageHarmony/locationSum)}
+        teamObject.endgame = {none: Math.round(100*none/locationSum), park: Math.round(100*park/locationSum), onstage: Math.round(100*onstage/locationSum), onstageHarmony: Math.round(100*onstageHarmony/locationSum), fail: Math.round(100*fail/locationSum)}
       }
       teamObject.qualitative.onstagespeed = average(teamObject.qualitative.onstagespeed);
       teamObject.qualitative.harmonyspeed = average(teamObject.qualitative.harmonyspeed);
