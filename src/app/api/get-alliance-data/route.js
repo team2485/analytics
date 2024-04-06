@@ -44,7 +44,7 @@ export async function GET() {
               none: row.endlocation <= 0 || row.endlocation > 4 ? 1 : 0,
               park: row.endlocation == 1 ? 1 : 0,
               onstage: row.endlocation == 3 ? 1 : 0,
-              onstageHarmony: row.endlocation == 3 ? 1 : 0,
+              onstageHarmony: row.endlocation == 4 ? 1 : 0,
               fail: row.endlocation == 2 ? 1 : 0,
             },
             qualitative: {
