@@ -182,6 +182,11 @@ export default function Home() {
             <div className={styles.Tele}>
               <Header headerName={"TeleOp"} />
               <div className={styles.TeleNotes}>
+                <NumericInput
+                    noteType={"Success"}
+                    visibleName={"Passed Notes"}
+                    internalName={"passednotes"}
+                  />
                 <SubHeader subHeaderName={"Speaker"} />
                 <div className={styles.HBox}>
                   <NumericInput
