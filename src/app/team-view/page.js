@@ -165,13 +165,13 @@ function TeamView() {
           <col span="1" style={{backgroundColor: color1}}></col>
           <col span="2" style={{backgroundColor: color3}}></col>
         </colgroup>
-        <th style={{backgroundColor: "white", borderLeftColor: "white", borderTopColor: "white"}}></th><th style={{backgroundColor: color2}}>{HC1}</th><th style={{backgroundColor: color2}}>{HC2}</th>
-        <tr>
-          <td>{HR1}</td>
+        <th style={{height: "20px", backgroundColor: "white", borderLeftColor: "white", borderTopColor: "white"}}></th><th style={{backgroundColor: color2}}>{HC1}</th><th style={{backgroundColor: color2}}>{HC2}</th>
+        <tr style={{height: "20px"}}>
+          <td >{HR1}</td>
           <td>{R1C1}</td>
           <td>{R1C2}</td>
         </tr>
-        <tr>
+        <tr style={{height: "20px"}}>
           <td>{HR2}</td>
           <td>{R2C1}</td>
           <td>{R2C2}</td>
@@ -271,6 +271,7 @@ function TeamView() {
             <div className={styles.CFlex} >
               <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"⬆️Notes"} value={Math.round(1000*data.tele.teleNotes.amplified)/10+"%"}></CBox>
               <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"Total Notes"} value={Math.round(10*data.tele.teleNotes.total)/10}></CBox>
+              <CBox color1={Colors[2][2]} color2={Colors[2][3]} title={"Passed Notes"} value={Math.round(10*data.passedNotes)/10}></CBox>
             </div>
             <BigBox HC1={"Success"} 
               HC2={"Avg Notes"} 

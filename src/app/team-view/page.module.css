@@ -83,7 +83,6 @@
 
 
 .lightBorderBox {
-    flex-grow: 1;
     border-radius: 10px;
 }
 
@@ -242,6 +241,8 @@
 .BigBox {
     border: 1px solid black;
     border-radius: 5px;
+    table-layout: fixed;
+    align-self: center;
 }
 .chartContainer {
     display: flex;

@@ -37,7 +37,7 @@ function MatchView() {
       amp: 0,
       trap: 0,
     },
-    passedNotes: 9,
+    passedNotes: 0,
     endgame: { none: 100, park: 0, onstage: 0, onstageHarmony: 0, fail: 0,},
     qualitative: { onstagespeed: 0, harmonyspeed: 0, trapspeed: 0, ampspeed: 0, speakerspeed: 0, stagehazard: 0, defenseevasion: 0, aggression: 0, maneuverability: 0}
   }
