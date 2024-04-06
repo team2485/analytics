@@ -65,9 +65,9 @@ function TeamView() {
     function fetchTeamData(team) {
       fetch("/api/get-team-data?team=" + team)
         .then(response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
+          // if (!response.ok) {
+          //   throw new Error("Network response was not ok");
+          // }
           return response.json();
         })
         .then(data => {
@@ -81,7 +81,11 @@ function TeamView() {
           console.error("Fetch error:", error);
         });
     }
-    fetchTeamData(team);
+    useEffect(() => {//run when team changes
+      if (team) {
+        fetchTeamData(team);
+      }
+    }, [team]);
     // useEffect(() => {
     //   //TODO: Get Data (from localstorage if cached recently)
     //   if (team) {
@@ -206,7 +210,7 @@ function TeamView() {
         </div>
       <div className={styles.valueBoxes}>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"No Show"} value={Math.round(1000*data.noShow)/10+"%"}></CBox>
-        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={data.breakdown}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={Math.round(1000*data.breakdown)/10+"%"}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Matches Scouted"} value={data.matchesScouted}></CBox>
         <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={data.scouts}></HBox>
@@ -355,6 +359,7 @@ function TeamView() {
               <PolarRadiusAxis angle={10} domain={[0, 5]} />
               <Radar name={data.team} dataKey="rating" stroke={Colors[3][1]} fill={Colors[3][1]} fillOpacity={0.3} strokeWidth="3" />
             </RadarChart>
+            <p>*Inverted so outside is good</p>
           </div>
       </div>
     </div>
