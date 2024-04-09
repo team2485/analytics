@@ -149,7 +149,7 @@ export async function GET(request) {
           if (row.endlocation == null || row.endlocation == 0) stage.none++;
           else if (row.endlocation <= 2) stage.park++;
           else if (row.endlocation == 3 && row.harmony == true) stage.onstageHarmony++;
-          else if (row.endlocation == 3) stage.onstage++;
+          else if (row.endlocation == 3 && row.harmony == false) stage.onstage++;
 
           //placement
           if (row.stageplacement != undefined && row.stageplacement == 1) {
@@ -171,7 +171,6 @@ export async function GET(request) {
           stage,
           onstageAttempt: n({ predicate: d => d.endlocation > 1 })(arr) / divisor,
           onstageSuccess: n({ predicate: d => d.endlocation > 2 })(arr) / n({ predicate: d => d.endlocation > 1 })(arr),
-          harmonySuccess: n({ predicate: d => d.harmony == true })(arr) / n({ predicate: d => d.endlocation > 2 })(arr),
           onstagePlacement,
           trapSuccess: mean('trapscored')(arr) / ((mean('trapscored')(arr)) + (mean('trapfailed')(arr))),
           trapAvg: mean('trapscored')(arr),

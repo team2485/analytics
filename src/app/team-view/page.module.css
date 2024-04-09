@@ -280,24 +280,24 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     padding-right: 20px;
-    width: 31%;
+    width: 30%;
 }
 .middleColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     width: 33%;
 }
 .rightColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     padding-left: 20px;
-    width: 31%;
+    width: 32%;
 }
 .allComments {
     display: flex;
