@@ -210,17 +210,18 @@ function TeamView() {
         </div>
       <div className={styles.valueBoxes}>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"No Show"} value={Math.round(1000*data.noShow)/10+"%"}></CBox>
+        <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Defense"} value={Math.round(1000*data.defensePercent)/10+"%"}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown"} value={Math.round(1000*data.breakdown)/10+"%"}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Last Breakdown"} value={"Match " + data.lastBreakdown}></CBox>
         <CBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Matches Scouted"} value={data.matchesScouted}></CBox>
-        <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={(data.scouts).join(" - ")}></HBox>
+        <HBox color1={Colors[0][2]} color2={Colors[0][3]} title={"Scouts"} value={(data.scouts).join(" | ")}></HBox>
       </div>
       <br></br>
       <br></br>
       <div className={styles.allComments}>
-        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"General Comments"} value={(data.generalComments).join(" - ")}></Comments>
-        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown Comments"} value={(data.breakdownComments).join(" - ")}></Comments>
-        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Defense Comments"} value={(data.defenseComments).join(" - ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"General Comments"} value={(data.generalComments).join(" | ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Breakdown Comments"} value={(data.breakdownComments).join(" | ")}></Comments>
+        <Comments color1={Colors[0][2]} color2={Colors[0][3]} title={"Defense Comments"} value={(data.defenseComments).join(" | ")}></Comments>
       </div>
       </div>
       <div className={styles.middleColumn}>
