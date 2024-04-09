@@ -105,7 +105,7 @@ function TeamView() {
       <div>
         <form className={styles.teamInputForm}>
           <span>{data?.message}</span>
-          <label for="team">Team: </label>
+          <label htmlFor="team">Team: </label>
           <input id="team" name="team" placeholder="Team #" type="number"></input>
           <br></br>
           <button>Go!</button>
