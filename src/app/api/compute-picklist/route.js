@@ -35,7 +35,7 @@ export async function POST(request) {
         return arr.map(row => row[index]).join();
       }
     }
-    if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
+    if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed', 'defenserating'].includes(index)) {
       //qual, so exclude -1
       return (arr) => {
         let qualValues = arr.filter(row => row[index] != -1 && row[index] != null).map(row => row[index]);
@@ -44,10 +44,11 @@ export async function POST(request) {
         for (let val of qualValues) {
           sum+=val;
         }
-        return sum/qualValues.length;
+        let result = sum/qualValues.length;
+        return result == NaN ? 0 : result;
       }
     }
-    //numbers, so average them (unless -1)
+    //numbers, so average them
     return mean(index);
   }
   
@@ -92,8 +93,9 @@ export async function POST(request) {
       amp: (d) => d.autoampscored + d.teleampscored,
       speed: calcSpeed,
       movement: calcMovement,
+      defense: (d) => d.defenseRating
     }),
-    select(['team', 'auto', 'tele', 'end', 'espm', 'speaker', 'amp', 'speed', 'movement'])
+    select(['team', 'auto', 'tele', 'end', 'espm', 'speaker', 'amp', 'speed', 'movement', 'defense'])
   );
   
   //calculate maxes
@@ -109,6 +111,7 @@ export async function POST(request) {
       amp: d => d.amp/maxes.amp,
       speed: d => d.speed/maxes.speed,
       movement: d => d.movement/maxes.movement,
+      defense: d => d.defnese/maxes.defense,
       score: d => {
         let sum = 0;
         requestBody.forEach(weightPair => {

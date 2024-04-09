@@ -112,6 +112,8 @@ export default function Picklist() {
           <td><input id="tele" type="number" value={weights.tele || 0} name="tele" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="movement">Movement:</label></td>
           <td><input id="movement" type="number" value={weights.movement || 0} name="movement" onChange={handleWeightChange}></input></td>
+          <td><label htmlFor="defense">Defense:</label></td>
+          <td><input id="defense" type="number" value={weights.defense || 0} name="defense" onChange={handleWeightChange}></input></td>
         </tr>
       </tbody>
     </table>
@@ -198,6 +200,7 @@ export default function Picklist() {
                 <th>Spkr</th>
                 <th>Speed</th>
                 <th>Mvt</th>
+                <th>Defense</th>
                 <th>Rating</th>
               </tr>
             </thead>
@@ -223,6 +226,7 @@ export default function Picklist() {
                       <td style={{ backgroundColor: valueToColor(teamData.speaker) }}>{roundToThree(teamData.speaker)}</td>
                       <td style={{ backgroundColor: valueToColor(teamData.speed) }}>{roundToThree(teamData.speed)}</td>
                       <td style={{ backgroundColor: valueToColor(teamData.movement) }}>{roundToThree(teamData.movement)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.defense) }}>{roundToThree(teamData.defense)}</td>
                       <td>
                         {teamRatings[teamData.team] !== true &&
                           <button onClick={() => handleThumbsUp(teamData.team)}>✅</button>
