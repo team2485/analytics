@@ -71,11 +71,13 @@ export default function Home() {
       } 
     }
     //check team and match
-    let valid = await fetch("/api/check-team-and-match?team="+data.team+"&match="+data.match, {method: "GET"})
-    .then((resp) => resp.json())
-    .then((data) => data.valid)
-    if (data.valid == false) {
-        return NextResponse.json({message: "Check Match and Team Number!"}, {status: 400});
+    let valid = await fetch("/api/get-valid-team?team=" + data.team + "&match=" + data.match)
+      .then((resp) => resp.json())
+      .then((data) => data.valid)
+    if (valid == false) {
+      alert("Invalid Team and Match Combination!");
+      submitButton.disabled = false;
+      return;
     }
 
     //confirm and submit
