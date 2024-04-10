@@ -9,6 +9,14 @@ export async function POST(req){
    if (!(_.isString(body.scoutname) && _.isNumber(body.scoutteam) && _.isNumber(body.team) && _.isNumber(body.match))) {
       return NextResponse.json({message: "Invalid Pre-Match Data!"}, {status: 400});
    }
+   
+   //check team and match
+   let valid = await fetch("/api/check-team-and-match")
+      .then((resp) => resp.json())
+      .then((data) => data.valid)
+      if (data.valid == false) {
+         return NextResponse.json({message: "Check Match and Team Number!"}, {status: 400});
+      }
 
    //if noshow add row
    if(body.noshow){
