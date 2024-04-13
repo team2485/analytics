@@ -96,22 +96,24 @@ export default function Picklist() {
           <td><input id="espm" type="number" value={weights.espm || 0} name="espm" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="end">End:</label></td>
           <td><input id="end" type="number" value={weights.end || 0} name="end" onChange={handleWeightChange}></input></td>
-          {/* <td><label htmlFor="amp">Amp:</label></td>
-          <td><input id="amp" type="number" value={weights.amp || 0} name="amp" onChange={handleWeightChange}></input></td> */}
+          <td><label htmlFor="amp">Amp:</label></td>
+          <td><input id="amp" type="number" value={weights.amp || 0} name="amp" onChange={handleWeightChange}></input></td>
         </tr>
         <tr>
           <td><label htmlFor="auto">Auto:</label></td>
           <td><input id="auto" type="number" value={weights.auto || 0} name="auto" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="speed">Speed:</label></td>
           <td><input id="speed" type="number" value={weights.speed || 0} name="speed" onChange={handleWeightChange}></input></td>
-          {/* <td><label htmlFor="speaker">Speaker:</label></td>
-          <td><input id="speaker" type="number" value={weights.speaker || 0} name="speaker" onChange={handleWeightChange}></input></td> */}
+          <td><label htmlFor="speaker">Speaker:</label></td>
+          <td><input id="speaker" type="number" value={weights.speaker || 0} name="speaker" onChange={handleWeightChange}></input></td>
         </tr>
         <tr>
           <td><label htmlFor="tele">Tele:</label></td>
           <td><input id="tele" type="number" value={weights.tele || 0} name="tele" onChange={handleWeightChange}></input></td>
           <td><label htmlFor="movement">Movement:</label></td>
           <td><input id="movement" type="number" value={weights.movement || 0} name="movement" onChange={handleWeightChange}></input></td>
+          <td><label htmlFor="defense">Defense:</label></td>
+          <td><input id="defense" type="number" value={weights.defense || 0} name="defense" onChange={handleWeightChange}></input></td>
         </tr>
       </tbody>
     </table>
@@ -194,10 +196,11 @@ export default function Picklist() {
                 <th>Auto</th>
                 <th>Tele</th>
                 <th>End</th>
-                {/* <th>Amp</th>
-                <th>Spkr</th> */}
+                <th>Amp</th>
+                <th>Spkr</th>
                 <th>Speed</th>
                 <th>Mvt</th>
+                <th>Defense</th>
                 <th>Rating</th>
               </tr>
             </thead>
@@ -219,10 +222,11 @@ export default function Picklist() {
                       <td style={{ backgroundColor: valueToColor(teamData.auto) }}>{roundToThree(teamData.auto)}</td>
                       <td style={{ backgroundColor: valueToColor(teamData.tele) }}>{roundToThree(teamData.tele)}</td>
                       <td style={{ backgroundColor: valueToColor(teamData.end) }}>{roundToThree(teamData.end)}</td>
-                      {/* <td style={{ backgroundColor: valueToColor(teamData.amp) }}>{roundToThree(teamData.amp)}</td>
-                      <td style={{ backgroundColor: valueToColor(teamData.speaker) }}>{roundToThree(teamData.speaker)}</td> */}
+                      <td style={{ backgroundColor: valueToColor(teamData.amp) }}>{roundToThree(teamData.amp)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.speaker) }}>{roundToThree(teamData.speaker)}</td>
                       <td style={{ backgroundColor: valueToColor(teamData.speed) }}>{roundToThree(teamData.speed)}</td>
                       <td style={{ backgroundColor: valueToColor(teamData.movement) }}>{roundToThree(teamData.movement)}</td>
+                      <td style={{ backgroundColor: valueToColor(teamData.defense) }}>{roundToThree(teamData.defense)}</td>
                       <td>
                         {teamRatings[teamData.team] !== true &&
                           <button onClick={() => handleThumbsUp(teamData.team)}>✅</button>

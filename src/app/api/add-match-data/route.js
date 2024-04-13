@@ -40,6 +40,8 @@ export async function POST(req){
    }
 
    //add row
+  
+  
    let resp = await sql`INSERT INTO champs2024 (ScoutName, ScoutTeam, Team, Match, Breakdown, NoShow, Leave, AutoAmpScored, AutoAmpFailed, AutoSpeakerScored, AutoSpeakerFailed, PassedNotes, TeleAmpScored, TeleAmpFailed, TeleNAmpedSpeakerScored, TeleAmpedSpeakerScored, TeleSpeakerFailed, EndLocation, StagePlacement, Harmony, TrapScored, TrapFailed, Maneuverability, Aggression, DefenseRating, DefenseEvasion, SpeakerSpeed, AmpSpeed, GndIntake, SrcIntake, StageHazard, TrapSpeed, OnStageSpeed, HarmonySpeed, GeneralComments, BreakdownComments, DefenseComments)
    VALUES (${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.breakdown}, ${body.noshow}, ${body.leave}, ${body.autoampscored}, ${body.autoampfailed}, ${body.autospeakerscored}, ${body.autospeakerfailed}, ${body.passednotes}, ${body.teleampscored}, ${body.teleampfailed}, ${body.telenampedspeakerscored}, ${body.teleampedspeakerscored}, ${body.telespeakerfailed}, ${body.endlocation}, ${body.stageplacement}, ${body.harmony}, ${body.trapscored}, ${body.trapfailed}, ${body.maneuverability}, ${body.aggression}, ${body.defenserating}, ${body.defenseevasion}, ${body.speakerspeed}, ${body.ampspeed}, ${body.gndintake}, ${body.srcintake}, ${body.stagehazard}, ${body.trapspeed}, ${body.onstagespeed}, ${body.harmonyspeed}, ${body.generalcomments}, ${body.breakdowncomments}, ${body.defensecomments})`;
    return NextResponse.json({message: "Success!"}, {status: 201});

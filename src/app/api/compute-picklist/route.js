@@ -35,19 +35,20 @@ export async function POST(request) {
         return arr.map(row => row[index]).join();
       }
     }
-    if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed'].includes(index)) {
+    if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed', 'defenserating'].includes(index)) {
       //qual, so exclude -1
       return (arr) => {
-        let qualValues = arr.filter(row => row[index] != -1 && row[index] != null).map(row => row[index]);
+        let qualValues = arr.filter(row => row[index] != -1 && row[index] != null && row[index] != undefined).map(row => row[index]);
         if (qualValues.length == 0) return -1;
         let sum = 0;
         for (let val of qualValues) {
           sum+=val;
         }
-        return sum/qualValues.length;
+        let result = sum/qualValues.length;
+        return result == NaN ? 0 : result;
       }
     }
-    //numbers, so average them (unless -1)
+    //numbers, so average them
     return mean(index);
   }
   
@@ -88,10 +89,13 @@ export async function POST(request) {
       tele: calcTele,
       end: calcEnd,
       espm: (d) => d.auto + d.tele + d.end,
+      speaker: (d) => d.autospeakerscored + d.telenampedspeakerscored + d.teleampedspeakerscored,
+      amp: (d) => d.autoampscored + d.teleampscored,
       speed: calcSpeed,
       movement: calcMovement,
+      defense: (d) => Math.max(d.defenserating, 0)
     }),
-    select(['team', 'auto', 'tele', 'end', 'espm', 'speed', 'movement'])
+    select(['team', 'auto', 'tele', 'end', 'espm', 'speaker', 'amp', 'speed', 'movement', 'defense'])
   );
   
   //calculate maxes
@@ -103,8 +107,11 @@ export async function POST(request) {
       tele: d => d.tele/maxes.tele,
       end: d => d.end/maxes.end,
       espm: d => d.espm/maxes.espm,
+      speaker: d => d.speaker/maxes.speaker,
+      amp: d => d.amp/maxes.amp,
       speed: d => d.speed/maxes.speed,
       movement: d => d.movement/maxes.movement,
+      defense: d => d.defense/maxes.defense,
       score: d => {
         let sum = 0;
         requestBody.forEach(weightPair => {
