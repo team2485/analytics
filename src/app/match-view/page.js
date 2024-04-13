@@ -173,8 +173,8 @@ function MatchView() {
     const teamMelodyNotes = (team) => Math.floor(team.avgNotes.speaker + team.avgNotes.ampedSpeaker + team.avgNotes.amp);
     const allianceNotes = teamMelodyNotes(teams[0]) + teamMelodyNotes(teams[1]) + teamMelodyNotes(teams[2]);
     let RP_MELODY = RGBColors.red;
-    if (allianceNotes >= 18) RP_MELODY = RGBColors.green;
-    else if (allianceNotes >= 15) RP_MELODY = RGBColors.yellow;
+    if (allianceNotes >= 25) RP_MELODY = RGBColors.green;
+    else if (allianceNotes >= 21) RP_MELODY = RGBColors.yellow;
 
     //ensemble = 2 teams will probably go onstage & alliance is estimated to get more than 10 points
     const goesOnstage = (team) => (team.endgame.onstage + team.endgame.onstageHarmony) > 50;

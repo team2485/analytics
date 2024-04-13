@@ -32,7 +32,7 @@ export default function Picklist() {
           urlAlliances[allianceNumber] = [];
         }
         urlAlliances[allianceNumber][parseInt(teamPosition) - 1] = value;
-        urlTeamsToExclude[((allianceNumber - 1) * 3) + (teamPosition-1)] = +value;
+        urlTeamsToExclude[((allianceNumber - 1) * 4) + (teamPosition-1)] = +value;
       }
     }
     setAllianceData(urlAlliances);
@@ -123,20 +123,25 @@ export default function Picklist() {
     const firstValue = allianceData ? allianceData[0] : '';
     const secondValue = allianceData ? allianceData[1] : '';
     const thirdValue = allianceData ? allianceData[2] : '';
+    const fourthValue = allianceData ? allianceData[3] : '';
     return (
       <tr>
         <td>A{allianceNumber}</td>
         <td><label htmlFor={`A${allianceNumber}T1`}></label><input name={`A${allianceNumber}T1`} type="number" defaultValue={firstValue}
           onBlur={e => {
-            handleAllianceChange(allianceNumber, [e.target.value, secondValue, thirdValue]);
+            handleAllianceChange(allianceNumber, [e.target.value, secondValue, thirdValue, fourthValue]);
           }}></input></td>
         <td><label htmlFor={`A${allianceNumber}T2`}></label><input name={`A${allianceNumber}T2`} type="number" defaultValue={secondValue}
           onBlur={e => {
-            handleAllianceChange(allianceNumber, [firstValue, e.target.value, thirdValue])
+            handleAllianceChange(allianceNumber, [firstValue, e.target.value, thirdValue, fourthValue])
           }}></input></td>
         <td><label htmlFor={`A${allianceNumber}T3`}></label><input name={`A${allianceNumber}T3`} type="number" defaultValue={thirdValue}
           onBlur={e => {
-            handleAllianceChange(allianceNumber, [firstValue, secondValue, e.target.value])
+            handleAllianceChange(allianceNumber, [firstValue, secondValue, e.target.value, fourthValue])
+          }}></input></td>
+        <td><label htmlFor={`A${allianceNumber}T4`}></label><input name={`A${allianceNumber}T4`} type="number" defaultValue={fourthValue}
+          onBlur={e => {
+            handleAllianceChange(allianceNumber, [firstValue, secondValue, thirdValue, e.target.value])
           }}></input></td>
       </tr>
     )
@@ -272,6 +277,7 @@ export default function Picklist() {
                   <th>T1</th>
                   <th>T2</th>
                   <th>T3</th>
+                  <th>T4</th>
                 </tr>
               </thead>
               <tbody>
