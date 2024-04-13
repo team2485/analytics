@@ -54,6 +54,7 @@ export async function GET() {
               ampspeed: [row.ampspeed],
               speakerspeed: [row.speakerspeed],
               stagehazard: [row.stagehazard],
+              defenserating: [row.defenserating],
               defenseevasion: [row.defenseevasion],
               aggression: [row.aggression],
               maneuverability: [row.maneuverability],
@@ -86,6 +87,7 @@ export async function GET() {
           teamData.qualitative.ampspeed.push(row.ampspeed);
           teamData.qualitative.speakerspeed.push(row.speakerspeed);
           teamData.qualitative.stagehazard.push(5-row.stagehazard);
+          teamData.qualitative.defenserating.push(row.defenserating);
           teamData.qualitative.defenseevasion.push(row.defenseevasion);
           teamData.qualitative.aggression.push(5-row.aggression);
           teamData.qualitative.maneuverability.push(row.maneuverability);
@@ -128,6 +130,7 @@ export async function GET() {
       teamObject.qualitative.ampspeed = average(teamObject.qualitative.ampspeed);
       teamObject.qualitative.speakerspeed = average(teamObject.qualitative.speakerspeed);
       teamObject.qualitative.stagehazard = average(teamObject.qualitative.stagehazard);
+      teamObject.qualitative.defenserating = average(teamObject.qualitative.defenserating);
       teamObject.qualitative.defenseevasion = average(teamObject.qualitative.defenseevasion);
       teamObject.qualitative.aggression = average(teamObject.qualitative.aggression);
       teamObject.qualitative.maneuverability = average(teamObject.qualitative.maneuverability);

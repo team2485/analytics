@@ -24,7 +24,7 @@ export async function GET(request) {
 
   //function returns a function based on column index: the returned function will summarize each column
   function byAveragingNumbers(index) {
-    if (['breakdown', 'leave', 'noshow', 'harmony', 'gndintake', 'srcintake'].includes(index)) {
+    if (['breakdown', 'leave', 'noshow', 'defense', 'harmony', 'gndintake', 'srcintake'].includes(index)) {
       //booleans, so OR them
       return (arr) => {
         return arr.some(row => row[index] == true);
@@ -34,7 +34,7 @@ export async function GET(request) {
       //strings, so join them
       return (arr) => {
         let joined = arr.map(row => row[index]).filter(a => a != null).join(" - ");
-        if (joined == '') {
+        if (arr.map(row => row[index]).filter(a => a != null).length == 0) {
           return null;
         }
         return joined;
@@ -66,10 +66,10 @@ export async function GET(request) {
   //calculate auto, tele, end, espm
   teamTable = tidy(teamTable,
     mutate({
-      auto: calcAuto,
-      tele: calcTele,
-      end: calcEnd,
-      espm: (rec) => rec.auto + rec.tele + rec.end
+      auto: rec => calcAuto(rec) || 0,
+      tele: rec => calcTele(rec) || 0,
+      end: rec => calcEnd(rec) || 0,
+      espm: (rec) => rec.auto + rec.tele + rec.end || 0
     }), 
     arrange([asc('match')])
   );
@@ -79,7 +79,8 @@ export async function GET(request) {
   }
 
   function percentValue(arr, index, value) {
-    return (arr.filter(e => e[index] == value).length) / arr.length;
+    console.log({index, arr});
+    return (arr.filter(e => e[index] === value).length) / arr.length;
   }
 
   const teamName = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?teamNumber=" + team, {
@@ -108,6 +109,7 @@ export async function GET(request) {
         return tidy(arr, select(['espm', 'match']));
       },
       noShow: arr => percentValue(arr, 'noshow', true),
+      defensePercent: arr => 1-percentValue(arr, 'defensecomments', null),
       breakdown: arr => 1-percentValue(arr, 'breakdowncomments', null),
       lastBreakdown: arr => arr.filter(e => e.breakdowncomments !== null).reduce((a, b) => b.match, "N/A"),
       scouts: arr => rowsToArray(arr, 'scoutname'),
@@ -199,6 +201,7 @@ export async function GET(request) {
           {name: "Amp Speed", rating: averageQualitative('ampspeed', arr)},
           {name: "Speaker Speed", rating: averageQualitative('speakerspeed', arr)},
           {name: "Stage Hazard*", rating: 5-(averageQualitative('stagehazard', arr))},
+          {name: "Defense Played", rating: averageQualitative('defenserating', arr)},
           {name: "Defense Evasion", rating: averageQualitative('defenseevasion', arr)},
           {name: "Aggression*", rating: 5-(averageQualitative('aggression', arr))},
           {name: "Maneuverability", rating: averageQualitative('maneuverability', arr)},
@@ -209,3 +212,5 @@ export async function GET(request) {
 
   return NextResponse.json(returnObject[0], {status: 200});
 }
+
+console.log('defensecomments');

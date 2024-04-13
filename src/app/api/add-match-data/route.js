@@ -38,7 +38,7 @@ export async function POST(req){
    if((_.isString(body.generalcomments) == false) || ((_.isString(body.breakdowncomments) || _.isNull(body.breakdowncomments)) == false) || ((_.isString(body.defensecomments) || _.isNull(body.defensecomments)) == false)) {
       return NextResponse.json({message: "Invalid Comments!"}, {status: 400});
    }
-
+console.log(body.defensecomments)
    //add row
   
   

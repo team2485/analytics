@@ -39,7 +39,7 @@ function MatchView() {
     },
     passedNotes: 0,
     endgame: { none: 100, park: 0, onstage: 0, onstageHarmony: 0, fail: 0,},
-    qualitative: { onstagespeed: 0, harmonyspeed: 0, trapspeed: 0, ampspeed: 0, speakerspeed: 0, stagehazard: 0, defenseevasion: 0, aggression: 0, maneuverability: 0}
+    qualitative: { onstagespeed: 0, harmonyspeed: 0, trapspeed: 0, ampspeed: 0, speakerspeed: 0, stagehazard: 0, defenserating: 0, defenseevasion: 0, aggression: 0, maneuverability: 0}
   }
 
   //get data
@@ -300,7 +300,7 @@ function MatchView() {
   ];
   //getting radar data
   let radarData = [];
-  for (let qual of ['onstagespeed', 'harmonyspeed', 'trapspeed', 'ampspeed', 'speakerspeed', 'stagehazard', 'defenseevasion', 'aggression', 'maneuverability']) {
+  for (let qual of ['onstagespeed', 'harmonyspeed', 'trapspeed', 'ampspeed', 'speakerspeed', 'stagehazard', 'defenserating', 'defenseevasion', 'aggression', 'maneuverability']) {
     radarData.push({qual, 
       team1: data?.team1?.qualitative[qual] || 0,
       team2: data?.team2?.qualitative[qual] || 0,
