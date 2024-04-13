@@ -83,7 +83,6 @@
 
 
 .lightBorderBox {
-    flex-grow: 1;
     border-radius: 10px;
 }
 
@@ -242,6 +241,8 @@
 .BigBox {
     border: 1px solid black;
     border-radius: 5px;
+    table-layout: fixed;
+    align-self: center;
 }
 .chartContainer {
     display: flex;
@@ -262,41 +263,41 @@
 }
 .auto {
     border-bottom: 4px solid lightgray;
-    padding-bottom: 20px;
-    padding-right: 20px;
-    padding-left: 20px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
     border-right: 4px solid lightgray;
     border-left: 4px solid lightgray;
 }
 .tele {
-    padding-right: 20px;
-    padding-left: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
     border-right: 4px solid lightgray;
     border-left: 4px solid lightgray;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 .leftColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     padding-right: 20px;
-    width: 31%;
+    width: 32%;
 }
 .middleColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
-    width: 33%;
+    justify-content: start;
+    width: 32%;
 }
 .rightColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
     padding-left: 20px;
-    width: 31%;
+    width: 32%;
 }
 .allComments {
     display: flex;

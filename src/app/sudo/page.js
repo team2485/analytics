@@ -131,9 +131,9 @@ export default function Sudo() {
       key: "breakdowncomments",
       render: (value, record) => {
         if (value !== null) {
-          return <>Yes</>
+          return <>💥</>
         } else {
-          return <>No</>
+          return <>❌</>
         }
       },
       simple: true,
@@ -224,11 +224,18 @@ export default function Sudo() {
   useEffect(() => {
     fetch("/api/get-data")
       .then((resp) => resp.json())
-      .then((data) =>
-        setData(
-          data.rows.sort((a, b) => (a.id < b.id ? 1 : a.id > b.id ? -1 : 0))
-        )
-      );
+      .then((data) => {
+        let sortedAndColoredData = data.rows.sort((a, b) => {
+          if (a.match > b.match) return -1;
+          if (a.match < b.match) return 1;
+          if (a.team > b.team) return 1;
+          if (a.team < b.team) return -1;
+          return a.id - b.id;
+        });
+        //todo: add alliance colors & sorting
+        console.log(sortedAndColoredData);
+        setData(sortedAndColoredData)
+      });
   }, []);
 
   columns = columns.map((col) => {

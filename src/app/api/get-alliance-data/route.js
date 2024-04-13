@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 import { calcAuto, calcTele, calcEnd } from "@/util/calculations";
-import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy';
 
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
@@ -10,7 +9,7 @@ export async function GET() {
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 
-    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CAOC", {
+    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
@@ -44,8 +43,8 @@ export async function GET() {
             endgame: {
               none: row.endlocation <= 0 || row.endlocation > 4 ? 1 : 0,
               park: row.endlocation == 1 ? 1 : 0,
-              onstage: row.endlocation == 3 ? 1 : 0,
-              onstageHarmony: row.endlocation == 4 ? 1 : 0,
+              onstage: row.endlocation == 3 && row.harmony == false ? 1 : 0,
+              onstageHarmony: row.endlocation == 3 && row.harmony == true ? 1 : 0,
               fail: row.endlocation == 2 ? 1 : 0,
             },
             qualitative: {
@@ -72,9 +71,9 @@ export async function GET() {
           teamData.avgNotes.trap.push(row.trapscored);
           if (row.endlocation == 1) {
             teamData.endgame.park++;
-          } else if (row.endlocation == 3) {
+          } else if (row.endlocation == 3 && row.harmony == false) {
             teamData.endgame.onstage++; 
-          } else if (row.endlocation == 4) {
+          } else if (row.endlocation == 3 && row.harmony == true) {
             teamData.endgame.onstageHarmony++;
           } else if (row.endlocation == 2) {
             teamData.endgame.fail++;

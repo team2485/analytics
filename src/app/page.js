@@ -279,7 +279,7 @@ export default function Home() {
                 />
                 <Qualitative
                   visibleName={"Defense Played"}
-                  internalName={"defenseplayed"}
+                  internalName={"defenserating"}
                   description={"Ability To Play Defense"}
                 />
                 <Qualitative
