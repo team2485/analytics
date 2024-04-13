@@ -39,7 +39,7 @@ export default function Home() {
     setDefense(checked);
   }
   
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     //disable submit
     let submitButton = document.querySelector("#submit");//todo: get changed to a useRef
@@ -69,6 +69,17 @@ export default function Home() {
         submitButton.disabled = false;
         return;
       } 
+    }
+    //check team and match
+    if (data.match < 200) {
+      let valid = await fetch("/api/get-valid-team?team=" + data.team + "&match=" + data.match)
+        .then((resp) => resp.json())
+        .then((data) => data.valid)
+      if (valid == false) {
+        alert("Invalid Team and Match Combination!");
+        submitButton.disabled = false;
+        return;
+      }
     }
 
     //confirm and submit
