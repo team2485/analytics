@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy'
 
-export const revalidate = 0; //caches for 300 seconds, 5 minutes
+export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
 
 export async function GET(request) {
