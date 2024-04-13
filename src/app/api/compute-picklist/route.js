@@ -38,7 +38,7 @@ export async function POST(request) {
     if (['maneuverability', 'aggression', 'defenseevasion', 'speakerspeed', 'ampspeed', 'stagehazard', 'trapspeed' , 'onstagespeed', 'harmonyspeed', 'defenserating'].includes(index)) {
       //qual, so exclude -1
       return (arr) => {
-        let qualValues = arr.filter(row => row[index] != -1 && row[index] != null).map(row => row[index]);
+        let qualValues = arr.filter(row => row[index] != -1 && row[index] != null && row[index] != undefined).map(row => row[index]);
         if (qualValues.length == 0) return -1;
         let sum = 0;
         for (let val of qualValues) {
@@ -93,7 +93,7 @@ export async function POST(request) {
       amp: (d) => d.autoampscored + d.teleampscored,
       speed: calcSpeed,
       movement: calcMovement,
-      defense: (d) => d.defenseRating
+      defense: (d) => Math.max(d.defenserating, 0)
     }),
     select(['team', 'auto', 'tele', 'end', 'espm', 'speaker', 'amp', 'speed', 'movement', 'defense'])
   );
@@ -111,7 +111,7 @@ export async function POST(request) {
       amp: d => d.amp/maxes.amp,
       speed: d => d.speed/maxes.speed,
       movement: d => d.movement/maxes.movement,
-      defense: d => d.defnese/maxes.defense,
+      defense: d => d.defense/maxes.defense,
       score: d => {
         let sum = 0;
         requestBody.forEach(weightPair => {
