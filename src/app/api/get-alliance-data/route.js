@@ -6,7 +6,7 @@ import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n,
 export const revalidate = 300; //caches for 300 seconds, 5 minutes
 
 export async function GET() {
-    let data = await sql`SELECT * FROM ocr2024;`;
+    let data = await sql`SELECT * FROM champs2024;`;
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 
