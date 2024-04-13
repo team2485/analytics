@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { calcAuto, calcTele, calcEnd, calcESPM } from "@/util/calculations";
 import { tidy, mutate, mean, select, summarizeAll, groupBy, summarize, first, n, median, total, arrange, asc} from '@tidyjs/tidy'
 
-export const revalidate = 300; //caches for 300 seconds, 5 minutes
+export const revalidate = 0; //caches for 300 seconds, 5 minutes
 
 
 export async function GET(request) {
@@ -66,10 +66,10 @@ export async function GET(request) {
   //calculate auto, tele, end, espm
   teamTable = tidy(teamTable,
     mutate({
-      auto: calcAuto,
-      tele: calcTele,
-      end: calcEnd,
-      espm: (rec) => rec.auto + rec.tele + rec.end
+      auto: rec => calcAuto(rec) || 0,
+      tele: rec => calcTele(rec) || 0,
+      end: rec => calcEnd(rec) || 0,
+      espm: (rec) => rec.auto + rec.tele + rec.end || 0
     }), 
     arrange([asc('match')])
   );
