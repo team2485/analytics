@@ -9,7 +9,8 @@ function calcTele(record) {
   return (
     record.teleampscored * 1 +
     record.teleampedspeakerscored * 5 +
-    record.telenampedspeakerscored * 2
+    record.telenampedspeakerscored * 2 +
+    record.passednotes * 2
   );
 };
 function calcEnd(record) {
