@@ -9,17 +9,17 @@ export async function POST(request) {
   let data = await sql`SELECT * FROM champs2024;`;
   let rows = data.rows;
 
-  const frcAPITeamRankings = await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CAOC", {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
-    }
-  }).then(resp => {
-    if (resp.status !== 200) {
-      return {Rankings: []};
-    }
-    return resp.json();
-  }).then(data => data.Rankings);
+  const frcAPITeamRankings = []; // await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CAOC", {
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+  //   }
+  // }).then(resp => {
+  //   if (resp.status !== 200) {
+  //     return {Rankings: []};
+  //   }
+  //   return resp.json();
+  // }).then(data => data.Rankings);
 
   //function returns a function based on column index: the returned function will summarize each column
   function byAveragingNumbers(index) {

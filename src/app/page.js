@@ -71,16 +71,16 @@ export default function Home() {
       } 
     }
     //check team and match
-    if (data.match < 200) {
-      let valid = await fetch("/api/get-valid-team?team=" + data.team + "&match=" + data.match)
-        .then((resp) => resp.json())
-        .then((data) => data.valid)
-      if (valid == false) {
-        alert("Invalid Team and Match Combination!");
-        submitButton.disabled = false;
-        return;
-      }
-    }
+    // if (data.match < 200) {
+    //   let valid = await fetch("/api/get-valid-team?team=" + data.team + "&match=" + data.match)
+    //     .then((resp) => resp.json())
+    //     .then((data) => data.valid)
+    //   if (valid == false) {
+    //     alert("Invalid Team and Match Combination!");
+    //     submitButton.disabled = false;
+    //     return;
+    //   }
+    // }
 
     //confirm and submit
     if (confirm("Are you sure you want to submit?") == true) {

@@ -9,17 +9,17 @@ export async function GET() {
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 
-    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
-      }
-    }).then(resp => {
-      if (resp.status !== 200) {
-        return {teams: []};
-      }
-      return resp.json();
-    }).then(data => data.teams);
+    const frcAPITeamData = []; //await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,
+    //   }
+    // }).then(resp => {
+    //   if (resp.status !== 200) {
+    //     return {teams: []};
+    //   }
+    //   return resp.json();
+    // }).then(data => data.teams);
 
     //generate arrays of each value
     let responseObject = {};
