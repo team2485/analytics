@@ -9,7 +9,7 @@ export async function POST(request) {
   let data = await sql`SELECT * FROM champs2024;`;
   let rows = data.rows;
 
-  const frcAPITeamRankings = await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CUR", {
+  const frcAPITeamRankings = await fetch("https://frc-api.firstinspires.org/v3.0/2024/rankings/CURIE", {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,

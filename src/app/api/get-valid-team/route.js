@@ -4,7 +4,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url)
     const team = searchParams.get("team");
     const match = searchParams.get("match");
-    const matchScheduleForTeam = await fetch("https://frc-api.firstinspires.org/v3.0/2024/schedule/CUR?tournamentLevel=Qualification", {   
+    const matchScheduleForTeam = await fetch("https://frc-api.firstinspires.org/v3.0/2024/schedule/CURIE?tournamentLevel=Qualification", {   
         headers: {
             "Authorization" : "Basic " + process.env.FIRST_AUTH_TOKEN,
         }
