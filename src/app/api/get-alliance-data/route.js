@@ -9,7 +9,7 @@ export async function GET() {
     //turn data into... {[team]: {team: #, teamName: "", ...}}
     const rows = data.rows;
 
-    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CASD", {
+    const frcAPITeamData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/teams?eventCode=CUR", {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Basic ' + process.env.FIRST_AUTH_TOKEN,

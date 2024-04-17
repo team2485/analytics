@@ -13,7 +13,7 @@ export async function GET(request) {
     );
   }
 
-  const matchData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/schedule/CAOC?tournamentLevel=Qualification",{
+  const matchData = await fetch("https://frc-api.firstinspires.org/v3.0/2024/schedule/CUR?tournamentLevel=Qualification",{
       headers: {
         "Content-Type": "application/json",
         Authorization: "Basic " + process.env.FIRST_AUTH_TOKEN,
