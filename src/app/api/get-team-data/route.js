@@ -52,6 +52,13 @@ export async function GET(request) {
         return sum/qualValues.length;
       }
     }
+    if (index == "endlocation") {
+      return (arr) => {
+        let endlocations = arr.map(row => row[index]);
+        endlocations.sort();
+        return endlocations[Math.floor(endlocations.length/2)];
+      }
+    }
     //numbers, so average them (unless -1)
     return mean(index);
   }
