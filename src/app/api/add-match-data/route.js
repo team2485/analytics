@@ -5,12 +5,12 @@ import _ from 'lodash';
 export async function POST(req){
    let body = await req.json();
    console.log(body);
-   //check pre-match
+   //check pre-match 
    if (!(_.isString(body.scoutname) && _.isNumber(body.scoutteam) && _.isNumber(body.team) && _.isNumber(body.match))) {
       return NextResponse.json({message: "Invalid Pre-Match Data!"}, {status: 400});
    }
    
-   //if noshow add row :) HI!
+   //if noshow add row :)
    if(body.noshow){
       console.log('no show!');
       let resp = await sql`INSERT INTO champs2024 (ScoutName, ScoutTeam, Team, Match, NoShow) VALUES(${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.noshow})`;
