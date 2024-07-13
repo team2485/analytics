@@ -10,7 +10,7 @@ export async function POST(req){
       return NextResponse.json({message: "Invalid Pre-Match Data!"}, {status: 400});
    }
    
-   //if noshow add row :)
+   //if noshow add row :)  :(
    if(body.noshow){
       console.log('no show!');
       let resp = await sql`INSERT INTO champs2024 (ScoutName, ScoutTeam, Team, Match, NoShow) VALUES(${body.scoutname}, ${body.scoutteam}, ${body.team}, ${body.match}, ${body.noshow})`;
