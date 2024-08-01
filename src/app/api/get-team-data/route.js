@@ -15,7 +15,7 @@ export async function GET(request) {
     return NextResponse.json({message: "ERROR: Invalid team number"}, {status: 400});
   }
 
-  let data = await sql`SELECT * FROM champs2024 WHERE team = ${team};`;
+  let data = await sql`SELECT * FROM batb2024 WHERE team = ${team};`;
   const rows = data.rows;
 
   if (rows.length == 0) {
